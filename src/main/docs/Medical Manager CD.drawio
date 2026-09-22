@@ -1,0 +1,266 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="YWXoZrdsP-VAZgdsiASf">
+    <mxGraphModel dx="2500" dy="1031" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-2" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;i&gt;User(abstract)&lt;/i&gt;&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" width="140" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-3" value="&lt;font face=&quot;Times New Roman&quot;&gt;-userId: String&lt;br&gt;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-username: String&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-password: String&amp;nbsp;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-name: String&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-email: String&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-2">
+          <mxGeometry y="20" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-4" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-2">
+          <mxGeometry y="110" width="140" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-5" value="&lt;font face=&quot;Times New Roman&quot;&gt;+login(): boolean +logout(): void +editProfile(): void&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-2">
+          <mxGeometry y="120" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-93" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Times New Roman;endArrow=block;endFill=0;exitX=0.524;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.427;entryY=1.039;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-46" target="eBuTWOurZr6ynv7kjyRJ-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110.00298701298696" y="290.02" as="sourcePoint" />
+            <mxPoint x="110" y="190" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="110" y="250" />
+              <mxPoint x="110" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-119" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;exitX=0.006;exitY=0.103;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.458;entryY=-0.031;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-49" target="eBuTWOurZr6ynv7kjyRJ-77">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-270" y="420" as="targetPoint" />
+            <mxPoint x="-70" y="340" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="-9" y="330" />
+              <mxPoint x="-313" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-120" value="&lt;font face=&quot;Times New Roman&quot;&gt;uses&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-119">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-46" value="&lt;font face=&quot;Times New Roman&quot;&gt;MedicalManager&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="260" width="230" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-47" value="&lt;font face=&quot;Times New Roman&quot;&gt;-managerId: String&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-46">
+          <mxGeometry y="20" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-48" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-46">
+          <mxGeometry y="50" width="230" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-49" value="&lt;font face=&quot;Times New Roman&quot;&gt;+createDepartment(d: Department): void +updateDepartment(d: Department): void +designRoster(r: ShiftRoster): void +modifyRoster(r: ShiftRoster): void +viewReport(type: String): Report&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-46">
+          <mxGeometry y="60" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-95" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-50" target="eBuTWOurZr6ynv7kjyRJ-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-50" value="&lt;font face=&quot;Times New Roman&quot;&gt;Doctor&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="392" y="555" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-51" value="&lt;font face=&quot;Times New Roman&quot;&gt;-doctorId: String&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-specialization: String&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-50">
+          <mxGeometry y="20" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-52" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-50">
+          <mxGeometry y="60" width="140" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-53" value="&lt;font face=&quot;Times New Roman&quot;&gt;+logConsultation(): void&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-50">
+          <mxGeometry y="70" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-55" value="&lt;font face=&quot;Times New Roman&quot;&gt;Department&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="92" y="540" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-56" value="&lt;font face=&quot;Times New Roman&quot;&gt;-departmentId: String&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;-name: String&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;-specialty: String&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-55">
+          <mxGeometry y="20" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-57" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-55">
+          <mxGeometry y="80" width="180" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-58" value="&lt;font face=&quot;Times New Roman&quot;&gt;+addDoctor(doc: Doctor): void +removeDoctor(doc: Doctor): void&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-55">
+          <mxGeometry y="90" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-60" value="&lt;font face=&quot;Times New Roman&quot;&gt;ShiftRoster&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="751" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-61" value="&lt;font face=&quot;Times New Roman&quot;&gt;-rosterId: String&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-weekStartDate: Date&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-60">
+          <mxGeometry y="20" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-62" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-60">
+          <mxGeometry y="60" width="180" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-63" value="&lt;font face=&quot;Times New Roman&quot;&gt;+assignDoctor(doc, shift): void +removeDoctor(doc: Doctor): void&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-60">
+          <mxGeometry y="70" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-111" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;entryX=0.485;entryY=1.042;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-64" target="eBuTWOurZr6ynv7kjyRJ-53">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="461.74" y="728" as="sourcePoint" />
+            <mxPoint x="461.74" y="658" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="462" y="687" />
+              <mxPoint x="460" y="687" />
+              <mxPoint x="460" y="649" />
+              <mxPoint x="460" y="649" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-112" value="&lt;font face=&quot;Times New Roman&quot;&gt;assigned to&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-111">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-135" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-111">
+          <mxGeometry x="0.8279" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-136" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-111">
+          <mxGeometry x="-0.7564" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-64" value="&lt;font face=&quot;Times New Roman&quot;&gt;Shift&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="392" y="745" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-65" value="&lt;font face=&quot;Times New Roman&quot;&gt;-shiftId: String&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-startTime: Time&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-endTime: Time&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-shiftType: String&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-64">
+          <mxGeometry y="20" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-66" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-64">
+          <mxGeometry y="90" width="140" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-77" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;i&gt;Report(abstract)&lt;/i&gt;&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-377" y="470" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-78" value="&lt;font face=&quot;Times New Roman&quot;&gt;-reportId: String&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;-generatedDate: Date&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-77">
+          <mxGeometry y="20" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-79" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-77">
+          <mxGeometry y="60" width="140" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-80" value="&lt;font face=&quot;Times New Roman&quot;&gt;+generateReport(): void&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-77">
+          <mxGeometry y="70" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-85" value="&lt;font face=&quot;Times New Roman&quot;&gt;HospitalMetricsReport&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-254" y="678" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-87" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-85">
+          <mxGeometry y="20" width="210" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;entryX=0.312;entryY=1.152;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.004;exitY=0.39;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-89">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-360" y="690" as="sourcePoint" />
+            <mxPoint x="-320.31999999999994" y="563.02" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-379" y="690" />
+              <mxPoint x="-320" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-89" value="&lt;font face=&quot;Times New Roman&quot;&gt;RevenueSummaryReport&lt;/font&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-590" y="680" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-91" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="eBuTWOurZr6ynv7kjyRJ-89">
+          <mxGeometry y="20" width="210" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-99" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.584;entryY=0.015;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" target="eBuTWOurZr6ynv7kjyRJ-55">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="197.00000000000023" y="430" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-100" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-99">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-101" value="&lt;font face=&quot;Times New Roman&quot;&gt;0..*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-99">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-102" value="&lt;font face=&quot;Times New Roman&quot;&gt;manages&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-99">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-123" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-99">
+          <mxGeometry x="-0.7407" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-124" value="&lt;font face=&quot;Times New Roman&quot;&gt;0..*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-99">
+          <mxGeometry x="0.6492" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-107" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;exitX=0.278;exitY=1.006;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-49" target="eBuTWOurZr6ynv7kjyRJ-60">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="470" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="55" y="431" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-129" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-107">
+          <mxGeometry x="-0.9164" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-130" value="&lt;font face=&quot;Times New Roman&quot;&gt;creates&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-107">
+          <mxGeometry x="0.0211" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-131" value="&lt;font face=&quot;Times New Roman&quot;&gt;0..*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-107">
+          <mxGeometry x="0.9129" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-125" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;entryX=0.312;entryY=1.152;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-85">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-280" y="720" as="sourcePoint" />
+            <mxPoint x="-300" y="563" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-254" y="690" />
+              <mxPoint x="-300" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-126" value="" style="endArrow=diamondThin;html=1;rounded=0;entryX=0.982;entryY=0.686;entryDx=0;entryDy=0;endFill=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="392" y="599.42" as="sourcePoint" />
+            <mxPoint x="272.76" y="600.58" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="324" y="599.42" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-127" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-126">
+          <mxGeometry x="0.9048" y="-1" relative="1" as="geometry">
+            <mxPoint x="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-128" value="&lt;font face=&quot;Times New Roman&quot;&gt;0..*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-126">
+          <mxGeometry x="-0.9169" y="1" relative="1" as="geometry">
+            <mxPoint x="-8" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-132" value="" style="endArrow=diamondThin;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=-0.003;exitY=0.357;exitDx=0;exitDy=0;endFill=1;exitPerimeter=0;" edge="1" parent="1" source="eBuTWOurZr6ynv7kjyRJ-65" target="eBuTWOurZr6ynv7kjyRJ-61">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="830" as="sourcePoint" />
+            <mxPoint x="240" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-133" value="&lt;font face=&quot;Times New Roman&quot;&gt;1&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-132">
+          <mxGeometry x="0.7743" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eBuTWOurZr6ynv7kjyRJ-134" value="&lt;font face=&quot;Times New Roman&quot;&gt;1..*&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="eBuTWOurZr6ynv7kjyRJ-132">
+          <mxGeometry x="-0.8353" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

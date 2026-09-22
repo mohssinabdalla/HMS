@@ -1,0 +1,228 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Combined Hospital System - Class Diagram" id="combined-cd-1">
+    <mxGraphModel dx="4504" dy="2177" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cls-User" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;User&lt;/b&gt; &lt;i&gt;(abstract)&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;# userId: String&lt;br&gt;# username: String&lt;br&gt;- password: String&lt;br&gt;# fullName: String&lt;br&gt;# email: String&lt;br&gt;# phoneNumber: String&lt;br&gt;# role: String&lt;hr size=&quot;1&quot;/&gt;+ login(username, password): boolean&lt;br&gt;+ logout(): void&lt;br&gt;+ getProfile(): String&lt;br&gt;+ updateOwnProfile(): void &lt;i&gt;(abstract)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="210" width="200" x="-1892" y="-1300" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-AuthService" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;AuthService&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(no attributes)&lt;hr size=&quot;1&quot;/&gt;+ login(username, password): User&lt;br&gt;+ logout(User): void&lt;br&gt;- validateCredentials(username, password): boolean" vertex="1">
+          <mxGeometry height="120" width="280" x="-1599" y="-1255" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Admin" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Admin&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- department: String&lt;hr size=&quot;1&quot;/&gt;+ createUser(User): boolean&lt;br&gt;+ updateUser(target: User, requester: User): boolean&lt;br&gt;+ deleteUser(userId): boolean&lt;br&gt;+ viewUser(userId): User&lt;br&gt;+ assignDoctorToManager(Doctor, MedicalManager): boolean&lt;br&gt;+ allocateAsset(HospitalAsset): boolean&lt;br&gt;+ configureConsultationRate(ConsultationRate): boolean&lt;br&gt;+ manageInsuranceNetwork(InsuranceNetwork): boolean" vertex="1">
+          <mxGeometry height="200" width="300" x="-2720" y="-800" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Doctor" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Doctor&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- doctorId: String&lt;br&gt;- specialization: String&lt;hr size=&quot;1&quot;/&gt;+ viewSchedule(): void&lt;br&gt;+ logVitalSigns(): void&lt;br&gt;+ writeMedicalRecords(): void&lt;br&gt;+ issuePrescription(): void&lt;br&gt;+ requestLabTest(): void&lt;br&gt;+ logConsultation(): void" vertex="1">
+          <mxGeometry height="170" width="160" x="-1583" y="-785" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Patient" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Patient&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- patientId: String&lt;br&gt;- dateOfBirth: String&lt;hr size=&quot;1&quot;/&gt;+ bookAppointment(): void&lt;br&gt;+ viewMedicalHistory(): void&lt;br&gt;+ submitFeedback(): void" vertex="1">
+          <mxGeometry height="130" width="160" x="-2171" y="-765" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-MedicalManager" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;MedicalManager&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- managerId: String&lt;hr size=&quot;1&quot;/&gt;+ createDepartment(Department): void&lt;br&gt;+ updateDepartment(Department): void&lt;br&gt;+ designRoster(ShiftRoster): void&lt;br&gt;+ modifyRoster(ShiftRoster): void&lt;br&gt;+ viewReport(type: String): Report" vertex="1">
+          <mxGeometry height="150" width="220" x="-798.5" y="-777" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-HospitalAsset" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;HospitalAsset&lt;/b&gt; &lt;i&gt;(abstract)&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;# assetId: String&lt;br&gt;# location: String&lt;br&gt;# status: String&lt;br&gt;# capacity: int&lt;hr size=&quot;1&quot;/&gt;+ checkAvailability(): boolean&lt;br&gt;+ updateStatus(String): void&lt;br&gt;+ getDetails(): String &lt;i&gt;(abstract)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="150" width="170" x="-2706" y="-505" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-ConsultationRate" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;ConsultationRate&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- rateId: String&lt;br&gt;- departmentId: String&lt;br&gt;- doctorLevel: String&lt;br&gt;- baseAmount: double&lt;br&gt;- effectiveDate: Date&lt;hr size=&quot;1&quot;/&gt;+ getRate(): double&lt;br&gt;+ updateRate(double): boolean" vertex="1">
+          <mxGeometry height="150" width="185" x="-2445" y="-505" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-InsuranceNetwork" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;InsuranceNetwork&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- networkId: String&lt;br&gt;- providerName: String&lt;br&gt;- coveragePercentage: double&lt;br&gt;- status: String&lt;hr size=&quot;1&quot;/&gt;+ addNetwork(): boolean&lt;br&gt;+ removeNetwork(): boolean&lt;br&gt;+ updateCoverage(double): boolean" vertex="1">
+          <mxGeometry height="150" width="200" x="-2990" y="-505" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-DoctorAssignment" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;DoctorAssignment&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- assignmentId: String&lt;br&gt;- doctorId: String&lt;br&gt;- managerId: String&lt;br&gt;- assignedDate: Date&lt;br&gt;- status: String&lt;hr size=&quot;1&quot;/&gt;+ assign(doctorId, managerId): boolean&lt;br&gt;+ reassign(doctorId, newManagerId): boolean&lt;br&gt;+ getAssignedManager(doctorId): String" vertex="1">
+          <mxGeometry height="170" width="240" x="-1230" y="-370" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-ConsultationRoom" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;ConsultationRoom&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- roomType: String&lt;hr size=&quot;1&quot;/&gt;(inherits HospitalAsset methods)" vertex="1">
+          <mxGeometry height="80" width="170" x="-2807" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Ward" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;Ward&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- bedCount: int&lt;br&gt;- wardType: String&lt;hr size=&quot;1&quot;/&gt;(inherits HospitalAsset methods)" vertex="1">
+          <mxGeometry height="90" width="160" x="-2990" y="-290" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Lab" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;Lab&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- labType: String&lt;hr size=&quot;1&quot;/&gt;(inherits HospitalAsset methods)" vertex="1">
+          <mxGeometry height="80" width="170" x="-2430" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-ImagingRoom" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;ImagingRoom&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- imagingType: String&lt;hr size=&quot;1&quot;/&gt;(inherits HospitalAsset methods)" vertex="1">
+          <mxGeometry height="80" width="160" x="-2613" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Appointment" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Appointment&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- appointmentId: String&lt;br&gt;- dateTime: String&lt;br&gt;- status: String&lt;hr size=&quot;1&quot;/&gt;+ bookSlot(): void&lt;br&gt;+ cancel(): void" vertex="1">
+          <mxGeometry height="130" width="130" x="-1862" y="-767" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-MedicalRecord" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;MedicalRecord&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- recordId: String&lt;br&gt;- diagnosis: String&lt;hr size=&quot;1&quot;/&gt;+ viewDetails(): void" vertex="1">
+          <mxGeometry height="100" width="120" x="-1857" y="-540" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-VitalSign" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;VitalSign&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- vitalId: String&lt;br&gt;- bloodPressure: String&lt;br&gt;- heartRate: String&lt;br&gt;- temperature: String&lt;hr size=&quot;1&quot;/&gt;+ recordVitals(): void" vertex="1">
+          <mxGeometry height="130" width="130" x="-1650" y="-555" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Prescription" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Prescription&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- prescriptionId: String&lt;br&gt;- medicationList: String&lt;hr size=&quot;1&quot;/&gt;+ viewDetails(): void" vertex="1">
+          <mxGeometry height="110" width="130" x="-1862" y="-950" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-LabRequest" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;LabRequest&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- requestId: String&lt;br&gt;- testType: String&lt;br&gt;- status: String&lt;hr size=&quot;1&quot;/&gt;+ submitRequest(): void" vertex="1">
+          <mxGeometry height="120" width="130" x="-1449" y="-550" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Feedback" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Feedback&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- feedbackId: String&lt;br&gt;- rating: int&lt;br&gt;- comment: String&lt;hr size=&quot;1&quot;/&gt;+ submit(): void" vertex="1">
+          <mxGeometry height="120" width="120" x="-2151" y="-550" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Department" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Department&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- departmentId: String&lt;br&gt;- name: String&lt;br&gt;- specialty: String&lt;hr size=&quot;1&quot;/&gt;+ addDoctor(doc: Doctor): void&lt;br&gt;+ removeDoctor(doc: Doctor): void" vertex="1">
+          <mxGeometry height="130" width="185" x="-1202.5" y="-960" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-ShiftRoster" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;ShiftRoster&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- rosterId: String&lt;br&gt;- weekStartDate: Date&lt;hr size=&quot;1&quot;/&gt;+ assignDoctor(doc, shift): void&lt;br&gt;+ removeDoctor(doc: Doctor): void" vertex="1">
+          <mxGeometry height="120" width="185" x="-1105" y="-757" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Shift" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Shift&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- shiftId: String&lt;br&gt;- startTime: Time&lt;br&gt;- endTime: Time&lt;br&gt;- shiftType: String&lt;hr size=&quot;1&quot;/&gt;&amp;nbsp;" vertex="1">
+          <mxGeometry height="120" width="100" x="-1326" y="-760" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-Report" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Report&lt;/b&gt; &lt;i&gt;(abstract)&lt;/i&gt;&lt;hr size=&quot;1&quot;/&gt;- reportId: String&lt;br&gt;- generatedDate: Date&lt;hr size=&quot;1&quot;/&gt;+ generateReport(): void &lt;i&gt;(abstract)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="110" width="185" x="-781" y="-545" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-HospitalMetricsReport" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;HospitalMetricsReport&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(no attributes)&lt;hr size=&quot;1&quot;/&gt;&amp;nbsp;" vertex="1">
+          <mxGeometry height="80" width="145" x="-836" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="cls-RevenueSummaryReport" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=10;" value="&lt;b&gt;RevenueSummaryReport&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(no attributes)&lt;hr size=&quot;1&quot;/&gt;&amp;nbsp;" vertex="1">
+          <mxGeometry height="80" width="145" x="-651" y="-280" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-1" edge="1" parent="1" source="cls-Admin" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="cls-User">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2570" y="-1059.86" />
+              <mxPoint x="-1842" y="-1059.86" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-2" edge="1" parent="1" source="cls-Doctor" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="cls-User">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1503" y="-1020" />
+              <mxPoint x="-1792" y="-1020" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-3" edge="1" parent="1" source="cls-Patient" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="cls-User">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2090" y="-765" />
+              <mxPoint x="-2090" y="-1020" />
+              <mxPoint x="-1792" y="-1020" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-4" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" target="cls-User">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-644.5" y="-1060" />
+              <mxPoint x="-1742" y="-1060" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-5" edge="1" parent="1" source="cls-AuthService" style="endArrow=open;endFill=0;html=1;dashed=1;" target="cls-User" value="uses">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-6" edge="1" parent="1" source="cls-ConsultationRoom" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-HospitalAsset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-7" edge="1" parent="1" source="cls-Ward" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-HospitalAsset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-8" edge="1" parent="1" source="cls-Lab" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-HospitalAsset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-9" edge="1" parent="1" source="cls-ImagingRoom" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-HospitalAsset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-10" edge="1" parent="1" source="cls-HospitalMetricsReport" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-Report">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-11" edge="1" parent="1" source="cls-RevenueSummaryReport" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-Report">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-12" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-HospitalAsset" value="1   allocates   1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-13" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-ConsultationRate" value="1   configures   1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-14" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-InsuranceNetwork" value="1   manages   1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-15" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cls-DoctorAssignment" value="1   creates   1..*">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2210" y="-699.86" />
+              <mxPoint x="-2210" y="-289.86" />
+              <mxPoint x="-1230" y="-289.86" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-16" edge="1" parent="1" source="cls-DoctorAssignment" style="endArrow=none;html=1;dashed=1;fontSize=10;entryX=1;entryY=1;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="cls-Doctor" value="0..*   assigns   1">
+          <mxGeometry relative="1" x="-0.5919" y="-1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="-1110" y="-614.94" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-17" edge="1" parent="1" source="cls-DoctorAssignment" style="endArrow=none;html=1;dashed=1;fontSize=10;entryX=0;entryY=0.75;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="cls-MedicalManager" value="0..*   assigns to   1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-990" y="-290" />
+              <mxPoint x="-871" y="-290" />
+              <mxPoint x="-871" y="-664.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-18" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   has   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-19" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-MedicalRecord" value="1   writes   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-20" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="cls-VitalSign" value="1   logs   0..*">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1343.5555555555566" y="-615" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-21" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Prescription" value="1   issues   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-22" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="cls-LabRequest" value="1   requests   0..*">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1381" y="-785" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-23" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="cls-Shift" value="1   assigned to   0..*">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1341" y="-706.6341463414633" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-24" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   books   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-25" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-MedicalRecord" value="1   views   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-26" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-Prescription" value="1   views   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-27" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Feedback" value="1   submits   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-28" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" target="cls-Department" value="1   manages   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-29" edge="1" parent="1" source="cls-Department" style="endArrow=none;html=1;fontSize=10;entryX=1.015;entryY=0.274;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="cls-Doctor" value="1   employs   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-30" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;" target="cls-ShiftRoster" value="1   designs   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-31" edge="1" parent="1" source="cls-ShiftRoster" style="startArrow=diamondThin;startFill=1;endArrow=none;html=1;fontSize=10;" target="cls-Shift" value="1   contains   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-32" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;" target="cls-Report" value="1   creates   0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
