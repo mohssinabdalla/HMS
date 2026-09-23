@@ -2,6 +2,7 @@ package service;
 
 import model.User;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  * Handles login/logout for ALL roles. Kept separate from User itself
@@ -20,7 +21,14 @@ public class AuthService {
 
     public User login(String username, String password) {
         User user = userDirectory.get(username);
-        if (user != null && user.checkPassword(password)) {
+//        if(user != null &&  user.checkPassword(passowrd)){
+//            JOptionPane.showMessageDialog(null, "Login Successful", "success",JOptionPane.INFORMATION_MESSAGE);
+//        }
+//        else if(user ==  null){        
+//            JOptionPane.showMessageDialog(null, "User dont exsist!", "Faild", JOptionPane.ERROR_MESSAGE); 
+//        }
+        if (user ==  null){System.out.println("User dont exsist!");}
+        else if (user != null && user.checkPassword(password)) {
             return user;
         }
         return null; // caller (GUI) should show "invalid credentials"
