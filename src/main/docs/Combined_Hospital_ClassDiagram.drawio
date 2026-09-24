@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Combined Hospital System - Class Diagram" id="combined-cd-1">
-    <mxGraphModel dx="5284" dy="2654" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="4040" dy="1892" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="1500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,7 +10,7 @@
         <mxCell id="cls-AuthService" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;AuthService&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;(no attributes)&lt;hr size=&quot;1&quot;/&gt;+ login(username, password): User&lt;br&gt;+ logout(User): void&lt;br&gt;- validateCredentials(username, password): boolean" vertex="1">
           <mxGeometry height="120" width="280" x="-1599" y="-1270" as="geometry" />
         </mxCell>
-        <mxCell id="cls-Admin" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Admin&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- department: String&lt;hr size=&quot;1&quot;/&gt;+ createUser(User): boolean&lt;br&gt;+ updateUser(target: User, requester: User): boolean&lt;br&gt;+ deleteUser(userId): boolean&lt;br&gt;+ viewUser(userId): User&lt;br&gt;+ assignDoctorToManager(Doctor, MedicalManager): boolean&lt;br&gt;+ allocateAsset(HospitalAsset): boolean&lt;br&gt;+ configureConsultationRate(ConsultationRate): boolean&lt;br&gt;+ manageInsuranceNetwork(InsuranceNetwork): boolean" vertex="1">
+        <mxCell id="cls-Admin" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Admin&lt;/b&gt;&lt;hr size=&quot;1&quot;&gt;- department: String&lt;div&gt;- AuditLog: aduitLog&lt;br&gt;&lt;hr size=&quot;1&quot;&gt;+ createUser(User): boolean&lt;br&gt;+ updateUser(target: User, requester: User): boolean&lt;br&gt;+ deleteUser(userId): boolean&lt;br&gt;+ viewUser(userId): User&lt;br&gt;+ assignDoctorToManager(Doctor, MedicalManager): boolean&lt;br&gt;+ allocateAsset(HospitalAsset): boolean&lt;br&gt;+ configureConsultationRate(ConsultationRate): boolean&lt;br&gt;+ manageInsuranceNetwork(InsuranceNetwork): boolean&lt;/div&gt;" vertex="1">
           <mxGeometry height="185" width="310" x="-2720" y="-800" as="geometry" />
         </mxCell>
         <mxCell id="cls-Doctor" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=6;spacingBottom=6;fontSize=11;" value="&lt;b&gt;Doctor&lt;/b&gt;&lt;hr size=&quot;1&quot;/&gt;- doctorId: String&lt;br&gt;- specialization: String&lt;hr size=&quot;1&quot;/&gt;+ viewSchedule(): void&lt;br&gt;+ logVitalSigns(): void&lt;br&gt;+ writeMedicalRecords(): void&lt;br&gt;+ issuePrescription(): void&lt;br&gt;+ requestLabTest(): void&lt;br&gt;+ logConsultation(): void" vertex="1">
@@ -136,16 +136,18 @@
         <mxCell id="edge-11" edge="1" parent="1" source="cls-RevenueSummaryReport" style="endArrow=block;endFill=0;endSize=16;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="cls-Report">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-12" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-HospitalAsset" value="1   allocates   1..*">
+        <mxCell id="edge-12" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-HospitalAsset" value="1&lt;div&gt;&amp;nbsp;allocates &amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;1..*&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-13" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-ConsultationRate" value="1   configures   1..*">
+        <mxCell id="edge-13" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-ConsultationRate" value="1&lt;div&gt;&amp;nbsp;configures &amp;gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;1..*&lt;/div&gt;">
+          <mxGeometry relative="1" x="-0.0013" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-14" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-InsuranceNetwork" value="1&amp;nbsp;&lt;div&gt;&amp;nbsp;manages&amp;gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;1..*&lt;/div&gt;&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-14" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;" target="cls-InsuranceNetwork" value="1   manages   1..*">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="edge-15" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cls-DoctorAssignment" value="1   creates   1..*">
+        <mxCell id="edge-15" edge="1" parent="1" source="cls-Admin" style="endArrow=none;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cls-DoctorAssignment" value="1   creates &amp;gt; 1..*">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="-2190" y="-700" />
@@ -171,21 +173,21 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="edge-18" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   has   0..*">
+        <mxCell id="edge-18" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   has &amp;gt;&amp;nbsp; &amp;nbsp;0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-19" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-MedicalRecord" value="1   writes   0..*">
+        <mxCell id="edge-19" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-MedicalRecord" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;1&amp;nbsp;&lt;div&gt;&amp;nbsp;writes &amp;gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;0..*&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-20" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="cls-VitalSign" value="1   logs   0..*">
+        <mxCell id="edge-20" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="cls-VitalSign" value="1&amp;nbsp;&lt;div&gt;&amp;nbsp;logs &amp;gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;0..*&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="-1343.5555555555566" y="-615" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="edge-21" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Prescription" value="1   issues   0..*">
+        <mxCell id="edge-21" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;" target="cls-Prescription" value="1&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;div&gt;&amp;nbsp;issues&amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 0..*&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-22" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="cls-LabRequest" value="1   requests   0..*">
+        <mxCell id="edge-22" edge="1" parent="1" source="cls-Doctor" style="endArrow=none;html=1;fontSize=10;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="cls-LabRequest" value="1&amp;nbsp;&lt;div&gt;&amp;nbsp;requests &amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;0..*&lt;/span&gt;&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="-1381" y="-785" as="sourcePoint" />
           </mxGeometry>
@@ -195,28 +197,28 @@
             <mxPoint x="-1341" y="-706.6341463414633" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="edge-24" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   books   0..*">
+        <mxCell id="edge-24" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Appointment" value="1   books &amp;gt;&amp;nbsp; &amp;nbsp;0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-25" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-MedicalRecord" value="1   views   0..*">
+        <mxCell id="edge-25" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-MedicalRecord" value="1&amp;nbsp;&lt;div&gt;&amp;nbsp;views &amp;gt;&amp;nbsp;&lt;/div&gt;&lt;div&gt;0..*&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-26" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-Prescription" value="1   views   0..*">
+        <mxCell id="edge-26" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;dashed=1;fontSize=10;" target="cls-Prescription" value="1   views &amp;gt;&amp;nbsp; &amp;nbsp;0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-27" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Feedback" value="1   submits   0..*">
+        <mxCell id="edge-27" edge="1" parent="1" source="cls-Patient" style="endArrow=none;html=1;fontSize=10;" target="cls-Feedback" value="1&amp;nbsp;&lt;div&gt;&amp;nbsp;submits &amp;gt;&lt;/div&gt;&lt;div&gt;0..*&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="edge-28" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" target="cls-Department" value="1   manages   0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-29" edge="1" parent="1" source="cls-Department" style="endArrow=none;html=1;fontSize=10;entryX=1.015;entryY=0.274;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="cls-Doctor" value="1   employs   0..*">
+        <mxCell id="edge-29" edge="1" parent="1" source="cls-Department" style="endArrow=none;html=1;fontSize=10;entryX=1.015;entryY=0.274;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="cls-Doctor" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 1&amp;nbsp;&lt;div&gt;&amp;nbsp;employs &amp;gt;&lt;/div&gt;&lt;div&gt;0..*&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="edge-30" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;" target="cls-ShiftRoster" value="1   designs   0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-31" edge="1" parent="1" source="cls-ShiftRoster" style="startArrow=diamondThin;startFill=1;endArrow=none;html=1;fontSize=10;" target="cls-Shift" value="1   contains   0..*">
+        <mxCell id="edge-31" edge="1" parent="1" source="cls-ShiftRoster" style="startArrow=diamondThin;startFill=1;endArrow=none;html=1;fontSize=10;" target="cls-Shift" value="1   contains &amp;gt; 0..*">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="edge-32" edge="1" parent="1" source="cls-MedicalManager" style="endArrow=none;html=1;fontSize=10;" target="cls-Report" value="1   creates   0..*">
