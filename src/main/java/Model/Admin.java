@@ -14,7 +14,7 @@ public class Admin extends User {
         this.department = department;
         this.auditLog = new AuditLog();
     }
-
+ 
     public String getDepartment() { return department; }
 
     @Override

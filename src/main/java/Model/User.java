@@ -34,7 +34,7 @@ public abstract class User {
     public String getPhoneNumber() { return phoneNumber; }
     public String getRole() { return role; }
 
-    // ---- Shared behavior ----
+    // Shared behavior
     public String getProfile() {
         return "ID: " + userId + " | Name: " + fullName + " | Role: " + role
                 + " | Email: " + email + " | Phone: " + phoneNumber;
