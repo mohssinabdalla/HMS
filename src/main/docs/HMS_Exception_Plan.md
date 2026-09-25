@@ -36,13 +36,15 @@ the user IS logged in, they're just not permitted into that specific screen/acti
 ```java
 package com.mycompany.hms.exception;
 
-public class InvalidCredentialsException extends HMSException {
+
+-[*] public class InvalidCredentialsException extends HMSException {
     public InvalidCredentialsException(String message) {
         super(message);
     }
 }
 
-public class UnauthorizedAccessException extends HMSException {
+
+-[*] public class UnauthorizedAccessException extends HMSException {
     // Thrown when a logged-in user attempts an action or opens a GUI
     // screen their role isn't permitted to reach.
     // Examples:
@@ -62,18 +64,21 @@ public class UnauthorizedAccessException extends HMSException {
 **Files: `UserManagementExceptions.java`, `AssetExceptions.java`, `BillingExceptions.java`, `AssignmentExceptions.java`**
 
 ```java
-package com.mycompany.hms.exception;
+-[] package com.mycompany.hms.exception;
 
 // -- UserManagementExceptions.java --
-public class DuplicateUserException extends HMSException {
+
+-[*] public class DuplicateUserException extends HMSException {
     public DuplicateUserException(String message) { super(message); }
 }
 
-public class UserNotFoundException extends HMSException {
+
+-[*] public class UserNotFoundException extends HMSException {
     public UserNotFoundException(String message) { super(message); }
 }
 
-public class SelfActionRestrictionException extends HMSException {
+
+-[*] public class SelfActionRestrictionException extends HMSException {
     // e.g. Admin attempting to edit/delete a DIFFERENT Admin account
     public SelfActionRestrictionException(String message) { super(message); }
 }
@@ -83,11 +88,13 @@ public class SelfActionRestrictionException extends HMSException {
 package com.mycompany.hms.exception;
 
 // -- AssetExceptions.java --
-public class AssetNotFoundException extends HMSException {
+
+-[*] public class AssetNotFoundException extends HMSException {
     public AssetNotFoundException(String message) { super(message); }
 }
 
-public class AssetUnavailableException extends HMSException {
+
+-[*] public class AssetUnavailableException extends HMSException {
     // Allocating a room/ward/lab/imaging room already occupied
     public AssetUnavailableException(String message) { super(message); }
 }
@@ -97,16 +104,19 @@ public class AssetUnavailableException extends HMSException {
 package com.mycompany.hms.exception;
 
 // -- BillingExceptions.java --
-public class InvalidConsultationRateException extends HMSException {
+
+-[*] public class InvalidConsultationRateException extends HMSException {
     // e.g. negative or zero baseAmount
     public InvalidConsultationRateException(String message) { super(message); }
 }
 
-public class DuplicateInsuranceNetworkException extends HMSException {
+
+-[*] public class DuplicateInsuranceNetworkException extends HMSException {
     public DuplicateInsuranceNetworkException(String message) { super(message); }
 }
 
-public class InsuranceNetworkNotFoundException extends HMSException {
+
+-[*] public class InsuranceNetworkNotFoundException extends HMSException {
     public InsuranceNetworkNotFoundException(String message) { super(message); }
 }
 ```
@@ -115,12 +125,14 @@ public class InsuranceNetworkNotFoundException extends HMSException {
 package com.mycompany.hms.exception;
 
 // -- AssignmentExceptions.java --
-public class DoctorAlreadyAssignedException extends HMSException {
+
+-[*] public class DoctorAlreadyAssignedException extends HMSException {
     // Assigning a doctor who already has an active manager assignment
     public DoctorAlreadyAssignedException(String message) { super(message); }
 }
 
-public class AssignmentNotFoundException extends HMSException {
+
+-[*] public class AssignmentNotFoundException extends HMSException {
     public AssignmentNotFoundException(String message) { super(message); }
 }
 ```

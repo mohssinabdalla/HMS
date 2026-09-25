@@ -1,0 +1,4 @@
+A001,admin1,admin123,Raja Kumar,admin1@apu.edu,0123456789,Admin
+D001,drchen,doctor123,Dr Chen,chen@apu.edu,0123456780,Doctor
+P001,patient1,patient123,Ali Hassan,ali@apu.edu,0123456781,Patient
+M001,manager1,manager123,Siti Aisha,siti@apu.edu,0123456782,MedicalManager
