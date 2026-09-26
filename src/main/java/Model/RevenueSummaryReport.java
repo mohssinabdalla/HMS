@@ -14,4 +14,14 @@ public class RevenueSummaryReport extends Report {
         System.out.println("Generated Date: " + this.dateGenerated);
         System.out.println("Summary: Total Consultation Fees, Insurance Claims Processed, Net Revenue.");
     }
+    
+    public String getReportDetails() {
+        return """
+               === Revenue Summary Report ===
+               Report ID: %s
+               Generated Date: %s
+               
+               Summary: Total Consultation Fees, Insurance Claims, Monthly Revenue.
+               """.formatted(this.reportId, this.dateGenerated);
+    }
 }
