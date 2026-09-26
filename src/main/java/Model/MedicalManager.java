@@ -18,6 +18,10 @@ public class MedicalManager extends User {
         super(userId, username, password, fullName, email, phoneNumber, "MedicalManager");
         this.managerId = managerId;
     }
+    public MedicalManager(String userId, String username, String password, String fullName, String email, String phoneNumber) {
+        super(userId, username, password, fullName, email, phoneNumber, "MedicalManager");
+        this.managerId = managerId;
+    }
 
     @Override
     public boolean updateOwnProfile(String fullName, String email, String phoneNumber) {
@@ -28,6 +32,8 @@ public class MedicalManager extends User {
         return true;
     }
 
+    @Override
+      public void loadExtraFields(String[] extraFields){};
     public void createDepartment(Department newDept) {
         if (newDept == null) return;
         
