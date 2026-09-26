@@ -4,6 +4,14 @@
  */
 package controller;
 
+import exceptions.DataFileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import model.User;
+import service.AuthService;
+import service.UserFileLoader;
+
 /**
  *
  * @author hp
@@ -11,12 +19,14 @@ package controller;
 public class LoginScreen extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginScreen.class.getName());
-
+    private AuthService authService;
     /**
      * Creates new form LoginScreen
      */
     public LoginScreen() {
         initComponents();
+        authService = buildAuthService();
+        passwordTf.addActionListener(e -> loginBtn.doClick());
     }
 
     /**
@@ -28,22 +38,135 @@ public class LoginScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        UserNameLb = new javax.swing.JLabel();
+        passworlb = new javax.swing.JLabel();
+        userType = new javax.swing.JLabel();
+        loginBtn = new javax.swing.JButton();
+        userNameTf = new javax.swing.JTextField();
+        userTypeDropdown = new javax.swing.JComboBox<>();
+        passwordTf = new javax.swing.JPasswordField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jLabel1.setText("Login");
+        jLabel1.setMaximumSize(new java.awt.Dimension(500, 400));
+        jLabel1.setMinimumSize(new java.awt.Dimension(500, 400));
+
+        UserNameLb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        UserNameLb.setText("User Name:");
+        UserNameLb.setMaximumSize(new java.awt.Dimension(500, 400));
+        UserNameLb.setMinimumSize(new java.awt.Dimension(500, 400));
+
+        passworlb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        passworlb.setText("Password:");
+        passworlb.setMaximumSize(new java.awt.Dimension(500, 400));
+        passworlb.setMinimumSize(new java.awt.Dimension(500, 400));
+
+        userType.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        userType.setText("User Type:");
+        userType.setMaximumSize(new java.awt.Dimension(500, 400));
+        userType.setMinimumSize(new java.awt.Dimension(500, 400));
+
+        loginBtn.setText("Login");
+        loginBtn.addActionListener(this::loginBtnActionPerformed);
+
+        userTypeDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Doctor", "Patient", "MedicalManager" }));
+        userTypeDropdown.addActionListener(this::userTypeDropdownActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(155, 155, 155)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(loginBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(userType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passworlb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(UserNameLb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(userNameTf)
+                            .addComponent(userTypeDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(passwordTf))))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(UserNameLb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(passworlb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
+                        .addComponent(userType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(userNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(userTypeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(29, 29, 29)
+                .addComponent(loginBtn)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void userTypeDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTypeDropdownActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userTypeDropdownActionPerformed
+
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        String username = userNameTf.getText().trim();
+        String password = new String(passwordTf.getPassword());
+        String selectedType = (String) userTypeDropdown.getSelectedItem();   
+        
+        User loggedInUser = authService.login(username, password, selectedType);
+        
+        if (loggedInUser instanceof model.Admin) {
+            controller.AdminControllers.AdminDashboard_1 dashboard = new controller.AdminControllers.AdminDashboard_1((model.Admin) loggedInUser);
+            dashboard.setVisible(true);
+            this.dispose();
+        } else if (loggedInUser instanceof model.Patient) {
+            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+            dashboard.setVisible(true);
+            this.dispose();}
+            else {
+            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
+        }
+    }//GEN-LAST:event_loginBtnActionPerformed
+    
+    private AuthService buildAuthService() {
+        Map<String, Map<String, User>> allUsers = new HashMap<>();
+        
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "C:\\Users\\rinsr\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+
+        return new AuthService(allUsers);
+    }
+    
+    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role) {
+        try {
+            allUsers.put(role, UserFileLoader.loadUsersFromFile(filePath, role));
+        } catch (DataFileNotFoundException e) {
+            System.out.println("Warning: " + e.getMessage());
+            allUsers.put(role, new HashMap<>());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -70,5 +193,13 @@ public class LoginScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel UserNameLb;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton loginBtn;
+    private javax.swing.JPasswordField passwordTf;
+    private javax.swing.JLabel passworlb;
+    private javax.swing.JTextField userNameTf;
+    private javax.swing.JLabel userType;
+    private javax.swing.JComboBox<String> userTypeDropdown;
     // End of variables declaration//GEN-END:variables
 }

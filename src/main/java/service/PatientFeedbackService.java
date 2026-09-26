@@ -15,10 +15,7 @@ public class PatientFeedbackService {
 
     private static final String FEEDBACK_FILE = "data/feedback.txt";
 
-    private AuditLog auditLog;
-
     public PatientFeedbackService() {
-        auditLog = new AuditLog();
     }
 
     /**
@@ -35,13 +32,6 @@ public class PatientFeedbackService {
 
             bw.write(feedback.toFileString());
             bw.newLine();
-
-            auditLog.logAction(
-                    patientId,
-                    "SUBMIT_FEEDBACK",
-                    "Feedback",
-                    "Feedback ID: " + feedback.getFeedbackId()
-            );
 
             return true;
 

@@ -14,8 +14,21 @@ public class Admin extends User {
         this.department = department;
         this.auditLog = new AuditLog();
     }
- 
+
     public String getDepartment() { return department; }
+
+    public void setDepartment(String department) { this.department = department; }
+
+    /**
+     * Admin ' s only extra column is department (index 0 of whatever ' s left
+     * after the 6 shared columns).
+     */
+    @Override
+    public void loadExtraFields(String[] extraFields) {
+        if (extraFields.length > 0) {
+            this.department = extraFields[0];
+        }
+    }
 
     @Override
     public boolean updateOwnProfile(String fullName, String email, String phoneNumber) {

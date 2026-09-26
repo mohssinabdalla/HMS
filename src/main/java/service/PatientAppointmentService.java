@@ -16,15 +16,12 @@ public class PatientAppointmentService {
             "data/appointments.txt";
 
     private List<Appointment> appointments;
-    private AuditLog auditLog;
 
     /**
      * Creates the service and loads existing appointments.
      */
     public PatientAppointmentService() {
         appointments = new ArrayList<>();
-        auditLog = new AuditLog();
-
         loadAppointments();
     }
 
@@ -45,16 +42,6 @@ public class PatientAppointmentService {
         appointments.add(appointment);
 
         saveAppointments();
-
-        auditLog.logAction(
-                appointment.getPatientId(),
-                "BOOK_APPOINTMENT",
-                "Appointment",
-                "Booked appointment "
-                + appointment.getAppointmentId()
-                + " with doctor "
-                + appointment.getDoctorId()
-        );
 
         return true;
     }
@@ -116,18 +103,6 @@ public class PatientAppointmentService {
 
         saveAppointments();
 
-        auditLog.logAction(
-                appointment.getPatientId(),
-                "RESCHEDULE_APPOINTMENT",
-                "Appointment",
-                "Rescheduled appointment "
-                + appointment.getAppointmentId()
-                + " to "
-                + newDate
-                + " "
-                + newTime
-        );
-
         return true;
     }
 
@@ -150,14 +125,6 @@ public class PatientAppointmentService {
         appointment.cancel();
 
         saveAppointments();
-
-        auditLog.logAction(
-                appointment.getPatientId(),
-                "CANCEL_APPOINTMENT",
-                "Appointment",
-                "Cancelled appointment "
-                + appointment.getAppointmentId()
-        );
 
         return true;
     }
