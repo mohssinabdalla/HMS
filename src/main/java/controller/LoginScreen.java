@@ -134,11 +134,15 @@ public class LoginScreen extends javax.swing.JFrame {
         
         User loggedInUser = authService.login(username, password, selectedType);
         
-        if (loggedInUser instanceof model.Patient) {
-            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+        if (loggedInUser instanceof model.Admin) {
+            controller.AdminControllers.AdminDashboard_1 dashboard = new controller.AdminControllers.AdminDashboard_1((model.Admin) loggedInUser);
             dashboard.setVisible(true);
             this.dispose();
-        } else {
+        } else if (loggedInUser instanceof model.Patient) {
+            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+            dashboard.setVisible(true);
+            this.dispose();}
+            else {
             JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         }
     }//GEN-LAST:event_loginBtnActionPerformed

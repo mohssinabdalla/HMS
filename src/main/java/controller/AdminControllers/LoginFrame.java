@@ -1,4 +1,4 @@
-package controller;
+package controller.AdminControllers;
 
 import exceptions.DataFileNotFoundException;
 import model.User;
@@ -76,23 +76,23 @@ public class LoginFrame extends JFrame {
     }
 
     /**
-     * Loads all 4 roles files into one combined structure and builds AuthService.
+     * Loads all 4 roles' files into one combined structure and builds AuthService.
      * Each role's file is loaded independently, so if one file is missing, we still
      * want the app to start (with that one role unable to log in) rather than crash
      * entirely — so each load is wrapped in its own try-catch.
      */
-    private AuthService buildAuthService(){
+    private AuthService buildAuthService() {
         Map<String, Map<String, User>> allUsers = new HashMap<>();
 
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+        loadRoleSafely(allUsers, "data/doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "data/patients.txt", "Patient");
+        loadRoleSafely(allUsers, "data/medicalManagers.txt", "MedicalManager");
 
         return new AuthService(allUsers);
     }
 
-    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role){
+    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role) {
         try {
             Map<String, User> roleMap = UserFileLoader.loadUsersFromFile(filePath, role);
             allUsers.put(role, roleMap);
@@ -121,10 +121,15 @@ public class LoginFrame extends JFrame {
             return;
         }
 
-        JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
-        // TODO: open the correct role-specific screen here, e.g.:
-        // if (loggedInUser instanceof Admin) { new AdminDashboard((Admin) loggedInUser).setVisible(true); }
-        // this.dispose();
+        // Route to the correct role-specific screen. Only Admin is built so far —
+        // Doctor/Patient/MedicalManager dashboards are TODO for their respective owners.
+        if (loggedInUser instanceof model.Admin) {
+            this.dispose();
+            SwingUtilities.invokeLater(() -> new AdminDashboard_1((model.Admin) loggedInUser).setVisible(true));
+        } else {
+            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")! "
+                    + "\n(A dedicated screen for this role isn't built yet.)");
+        }
     }
 
     public static void main(String[] args) {
