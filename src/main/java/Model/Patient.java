@@ -74,7 +74,8 @@ public class Patient extends User {
 
         return true;
     }
-
+    @Override
+    public void loadExtraFields(String[] extraFields){}
     // -------------------------
     // Patient Operations
     // -------------------------

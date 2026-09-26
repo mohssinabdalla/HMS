@@ -38,6 +38,9 @@ public class Doctor extends User {
     }
 
     // Update doctor profile
+        @Override
+    public void loadExtraFields(String[] extraFields){}
+    
     @Override
     public boolean updateOwnProfile(String fullName,
                                      String email,
