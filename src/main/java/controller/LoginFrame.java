@@ -84,10 +84,10 @@ public class LoginFrame extends JFrame {
     private AuthService buildAuthService(){
         Map<String, Map<String, User>> allUsers = new HashMap<>();
 
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
-        loadRoleSafely(allUsers, "data/doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "data/patients.txt", "Patient");
-        loadRoleSafely(allUsers, "data/medicalManagers.txt", "MedicalManager");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 
         return new AuthService(allUsers);
     }
