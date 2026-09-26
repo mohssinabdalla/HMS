@@ -4,6 +4,14 @@
  */
 package controller;
 
+import exceptions.DataFileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import model.User;
+import service.AuthService;
+import service.UserFileLoader;
+
 /**
  *
  * @author hp
@@ -11,12 +19,14 @@ package controller;
 public class LoginScreen extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginScreen.class.getName());
-
+    private AuthService authService;
     /**
      * Creates new form LoginScreen
      */
     public LoginScreen() {
         initComponents();
+        authService = buildAuthService();
+        passwordTf.addActionListener(e -> loginBtn.doClick());
     }
 
     /**
@@ -60,6 +70,7 @@ public class LoginScreen extends javax.swing.JFrame {
         userType.setMinimumSize(new java.awt.Dimension(500, 400));
 
         loginBtn.setText("Login");
+        loginBtn.addActionListener(this::loginBtnActionPerformed);
 
         userTypeDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Doctor", "Patient", "MedicalManager" }));
         userTypeDropdown.addActionListener(this::userTypeDropdownActionPerformed);
@@ -116,6 +127,43 @@ public class LoginScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_userTypeDropdownActionPerformed
 
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        String username = userNameTf.getText().trim();
+        String password = new String(passwordTf.getPassword());
+        String selectedType = (String) userTypeDropdown.getSelectedItem();   
+        
+        User loggedInUser = authService.login(username, password, selectedType);
+        
+        if (loggedInUser == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid username or password for the selected user type.",
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+         JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
+    }//GEN-LAST:event_loginBtnActionPerformed
+    
+    private AuthService buildAuthService() {
+        Map<String, Map<String, User>> allUsers = new HashMap<>();
+        
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+
+        return new AuthService(allUsers);
+    }
+    
+    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role) {
+        try {
+            allUsers.put(role, UserFileLoader.loadUsersFromFile(filePath, role));
+        } catch (DataFileNotFoundException e) {
+            System.out.println("Warning: " + e.getMessage());
+            allUsers.put(role, new HashMap<>());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
