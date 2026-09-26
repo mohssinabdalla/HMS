@@ -134,14 +134,13 @@ public class LoginScreen extends javax.swing.JFrame {
         
         User loggedInUser = authService.login(username, password, selectedType);
         
-        if (loggedInUser == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Invalid username or password for the selected user type.",
-                    "Login Failed", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (loggedInUser instanceof model.Patient) {
+            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+            dashboard.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         }
-        
-         JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
     }//GEN-LAST:event_loginBtnActionPerformed
     
     private AuthService buildAuthService() {
@@ -149,7 +148,7 @@ public class LoginScreen extends javax.swing.JFrame {
         
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "C:\\Users\\rinsr\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 
         return new AuthService(allUsers);
