@@ -1,11 +1,13 @@
 package controller;
 
+import exceptions.DataFileNotFoundException;
 import model.User;
 import service.AuthService;
 import service.UserFileLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginFrame extends JFrame {
@@ -16,9 +18,7 @@ public class LoginFrame extends JFrame {
     private AuthService authService;
 
     public LoginFrame() {
-        // Load users.txt into memory and hand it to AuthService
-        Map<String, User> userDirectory = UserFileLoader.loadUsers("data/users.txt");
-        authService = new AuthService(userDirectory);
+        authService = buildAuthService();
 
         setTitle("Login");
         setSize(500, 400);
@@ -75,23 +75,49 @@ public class LoginFrame extends JFrame {
         add(panel);
     }
 
+    /**
+     * Loads all 4 roles' files into one combined structure and builds AuthService.
+     * Each role's file is loaded independently, so if one file is missing, we still
+     * want the app to start (with that one role unable to log in) rather than crash
+     * entirely — so each load is wrapped in its own try-catch.
+     */
+    private AuthService buildAuthService() {
+        Map<String, Map<String, User>> allUsers = new HashMap<>();
+
+        loadRoleSafely(allUsers, "data/admins.txt", "Admin");
+        loadRoleSafely(allUsers, "data/doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "data/patients.txt", "Patient");
+        loadRoleSafely(allUsers, "data/medicalManagers.txt", "MedicalManager");
+
+        return new AuthService(allUsers);
+    }
+
+    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role)  {
+        try {
+            Map<String, User> roleMap = UserFileLoader.loadUsersFromFile(filePath, role);
+            allUsers.put(role, roleMap);
+        } catch (DataFileNotFoundException e) {
+            // Missing file for this role — log it, but let the app keep starting.
+            // Logging in as this role just won't work until the file exists.
+            System.out.println("Warning: " + e.getMessage());
+            allUsers.put(role, new HashMap<>()); // empty map, not null — avoids NullPointerException later
+        }
+    }
+
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
         String selectedType = (String) userTypeDropdown.getSelectedItem();
 
-        User loggedInUser = authService.login(username, password);
+        // login() now only searches inside the selected role's data — no separate
+        // role-mismatch check needed afterward, since a wrong role simply won't
+        // find the username at all within that role's map.
+        User loggedInUser = authService.login(username, password, selectedType);
 
         if (loggedInUser == null) {
-            JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Check the selected role matches the account's actual role
-        if (!loggedInUser.getRole().equals(selectedType)) {
             JOptionPane.showMessageDialog(this,
-                    "This account is registered as " + loggedInUser.getRole() + ", not " + selectedType + ".",
-                    "Role Mismatch", JOptionPane.ERROR_MESSAGE);
+                    "Invalid username or password for the selected user type.",
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
