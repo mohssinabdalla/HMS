@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * UPDATED: userDirectory Map of Maps — outer key is the role
  * ("Admin", "Doctor", ...), inner map is username -> User, matching the
- * one-file-per-role structure. Since the login screen's dropdown already
+ * one-file-per-role structure. Since the login screen's drop down already
  * tells us the role before checking credentials, login() now takes role
  * as a parameter and only searches within that one role's data — a Doctor's
  * username and a Patient's username never need to be compared against
@@ -27,7 +27,7 @@ public class AuthService {
     public User login(String username, String password, String role) {
         Map<String, User> roleMap = userDirectory.get(role);
         if (roleMap == null) {
-            return null; // I want it to throw user dont exist exception
+            return null;} 
 
         User user = roleMap.get(username);
         if (user != null && user.checkPassword(password)) {
@@ -35,8 +35,5 @@ public class AuthService {
         }
         return null; // caller (GUI) should show "invalid credentials"
     }
+   }
 
-    public void logout(User user) {
-        System.out.println(user.getUsername() + " logged out.");
-    }
-}

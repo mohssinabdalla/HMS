@@ -9,5 +9,5 @@ package exceptions;
  * @author hp
  */
 public class UserNotFoundException extends HMSException {
-      public UserNotFoundException(String message) { super(message); }
+      public UserNotFoundException(String message) { super("User doesn't exist !"); }
 }

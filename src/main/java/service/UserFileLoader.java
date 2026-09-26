@@ -1,6 +1,6 @@
 package service;
 
-import exception.DataFileNotFoundException;
+import exceptions.DataFileNotFoundException;
 import model.Admin;
 import model.Doctor;
 import model.MedicalManager;
@@ -41,8 +41,7 @@ public class UserFileLoader {
             User user;
             switch (role) {
                 case "Admin":
-                    String department = p.length > 6 ? p[6] : "";
-                    user = new Admin(userId, username, password, fullName, email, phoneNumber, department);
+                    user = new Admin(userId, username, password, fullName, email, phoneNumber, "");
                     break;
                 case "Doctor":
                     user = new Doctor(userId, username, password, fullName, email, phoneNumber);
@@ -55,6 +54,13 @@ public class UserFileLoader {
                     break;
                 default:
                     continue; // unknown role, skip
+            }
+
+            // Whatever columns exist after the shared 6, hand them to the object
+            // itself to interpret — the loader doesn't need to know what they mean.
+            if (p.length > 6) {
+                String[] extraFields = java.util.Arrays.copyOfRange(p, 6, p.length);
+                user.loadExtraFields(extraFields);
             }
 
             directory.put(username, user);

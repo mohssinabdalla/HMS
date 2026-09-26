@@ -14,6 +14,9 @@ public class Doctor extends User {
         super(userId, username, password, fullName, email, phoneNumber, "Doctor");
     }
 
+        @Override
+    public void loadExtraFields(String[] extraFields){}
+    
     @Override
     public boolean updateOwnProfile(String fullName, String email, String phoneNumber) {
         this.fullName = fullName;

@@ -34,7 +34,7 @@ public abstract class User {
     public String getPhoneNumber() { return phoneNumber; }
     public String getRole() { return role; }
 
-    // Shared behavior
+    // ---- Shared behavior ----
     public String getProfile() {
         return "ID: " + userId + " | Name: " + fullName + " | Role: " + role
                 + " | Email: " + email + " | Phone: " + phoneNumber;
@@ -56,6 +56,16 @@ public abstract class User {
      * so each subclass MUST provide its own implementation. This is polymorphism in action.
      */
     public abstract boolean updateOwnProfile(String fullName, String email, String phoneNumber);
+
+    /**
+     * Every role has DIFFERENT extra columns beyond the 6 shared ones (Admin's
+     * department, a future Doctor's specialty, etc.) — so instead of the file
+     * loader hardcoding "column 7 means X for this role", each subclass parses
+     * its OWN extra fields here. The loader just hands over whatever columns
+     * are left after the shared ones, without needing to know what they mean.
+     * Stub roles with no extra fields yet can leave this empty.
+     */
+    public abstract void loadExtraFields(String[] extraFields);
 
     /**
      * Serializes this user into one CSV line for storage in users.txt.

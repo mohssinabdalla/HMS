@@ -32,6 +32,8 @@ public class MedicalManager extends User {
         return true;
     }
 
+    @Override
+      public void loadExtraFields(String[] extraFields){};
     public void createDepartment(Department newDept) {
         if (newDept == null) return;
         

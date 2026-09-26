@@ -76,15 +76,15 @@ public class LoginFrame extends JFrame {
     }
 
     /**
-     * Loads all 4 roles' files into one combined structure and builds AuthService.
+     * Loads all 4 roles files into one combined structure and builds AuthService.
      * Each role's file is loaded independently, so if one file is missing, we still
      * want the app to start (with that one role unable to log in) rather than crash
      * entirely — so each load is wrapped in its own try-catch.
      */
-    private AuthService buildAuthService() {
+    private AuthService buildAuthService(){
         Map<String, Map<String, User>> allUsers = new HashMap<>();
 
-        loadRoleSafely(allUsers, "data/admins.txt", "Admin");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
         loadRoleSafely(allUsers, "data/doctors.txt", "Doctor");
         loadRoleSafely(allUsers, "data/patients.txt", "Patient");
         loadRoleSafely(allUsers, "data/medicalManagers.txt", "MedicalManager");
@@ -92,7 +92,7 @@ public class LoginFrame extends JFrame {
         return new AuthService(allUsers);
     }
 
-    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role)  {
+    private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role){
         try {
             Map<String, User> roleMap = UserFileLoader.loadUsersFromFile(filePath, role);
             allUsers.put(role, roleMap);
