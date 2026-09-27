@@ -81,7 +81,7 @@ public class MMProfileDialog extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Full Name:");
 
-        txtName.setText("Dr. Alex Smith");
+        txtName.setText("Siti Aisha");
 
         btnUpdateProfile.setBackground(new java.awt.Color(46, 204, 113));
         btnUpdateProfile.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -98,6 +98,10 @@ public class MMProfileDialog extends javax.swing.JDialog {
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText("Email:");
+
+        txtPhone.setText("0123456784");
+
+        txtEmail.setText("siti@apu.edu");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

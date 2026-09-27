@@ -1,9 +1,8 @@
 package controller.MedicalManager;
 
-import controller.MedicalManager.MMProfileDialog;
-import controller.MedicalManager.DepartmentDialog;
 import model.MedicalManager;
 import javax.swing.JOptionPane;
+import exceptions.ReportExceptions.ReportGenerationException;
 
 public class MedicalManagerInterface extends javax.swing.JFrame {
     
@@ -107,7 +106,7 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
         );
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel1.setText("Medical Manager Control Panel");
+        jLabel1.setText("Medical Manager Dashboard");
 
         lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
@@ -120,10 +119,12 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(88, 88, 88)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(86, 86, 86)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(86, 86, 86)
                             .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
@@ -201,17 +202,81 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
     }
 
     private void showMetricsReport() {
-        JOptionPane.showMessageDialog(this,
-            "=== Hospital Metrics Report ===\nReport ID: REP-M01\nGenerated Date: 2026-09-26\n\nMetrics: Total Patient Admissions, Occupancy Rate, Active Shift Count.",
-            "Hospital Metrics Report",
-            JOptionPane.INFORMATION_MESSAGE);
+        try {
+            String reportContent = generateMetricsReportData();
+            JOptionPane.showMessageDialog(
+                this,
+                reportContent,
+                "Hospital Metrics Report",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (ReportGenerationException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                e.getMessage(),
+                "Report Generation Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+    
+    private String generateMetricsReportData() throws ReportGenerationException {
+        if (currentManager == null) {
+            currentManager = new model.MedicalManager("M001", "manager1", "pass", "Dr. Manager", "manager@hospital.com", "0123456789");
+        }
+
+        return """
+               === Hospital Metrics Report ===
+               Report ID: REP-M01
+               Generated Date: 2026-09-26
+
+               • Total Patient Admissions: %d
+               • Occupancy Rate: %.1f%%
+               • Active Shift Count: %d
+               """.formatted(
+                   currentManager.getTotalPatientAdmissions(),
+                   currentManager.getOccupancyRate(),
+                   currentManager.getActiveShiftCount()
+               );
     }
 
     private void showRevenueReport() {
-        JOptionPane.showMessageDialog(this,
-            "=== Revenue Summary Report ===\nReport ID: REP-R01\nGenerated Date: 2026-09-26\n\nSummary: Total Consultation Fees, Insurance Claims, Monthly Revenue.",
-            "Revenue Summary Report",
-            JOptionPane.INFORMATION_MESSAGE);
+        try {
+            String reportContent = generateRevenueReportData();
+            JOptionPane.showMessageDialog(
+                this,
+                reportContent,
+                "Revenue Summary Report",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (ReportGenerationException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                e.getMessage(),
+                "Report Generation Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private String generateRevenueReportData() throws ReportGenerationException {
+        if (currentManager == null) {
+            currentManager = new model.MedicalManager("M001", "manager1", "pass", "Dr. Manager", "manager@hospital.com", "0123456789");
+        }
+
+        return """
+               === Revenue Summary Report ===
+               Report ID: REP-R01
+               Generated Date: 2026-09-26
+
+               • Total Consultation Fees: $%.2f
+               • Insurance Claims: $%.2f
+               • Monthly Revenue: $%.2f
+               """.formatted(
+                   currentManager.getTotalConsultationFees(),
+                   currentManager.getInsuranceClaims(),
+                   currentManager.getMonthlyRevenue()
+               );
     }
 
     private void handleLogout() {
@@ -221,9 +286,11 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
             "Logout", 
             JOptionPane.INFORMATION_MESSAGE
         );
+
+        // Return to the login screen
+        new controller.LoginScreen().setVisible(true); // Adjust package name if LoginScreen is in a different package
         this.dispose();
     }
-
     
     public static void main(String args[]) {
         try {

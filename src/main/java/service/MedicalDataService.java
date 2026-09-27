@@ -102,4 +102,40 @@ public class MedicalDataService {
             System.out.println("Error rewriting file: " + ex.getMessage());
         }
     }
+    
+    public static boolean departmentExists(String deptId) {
+        // Check if department ID exists in departments.txt or memory list
+        for (Department dept : getAllDepartments()) {
+            if (dept.getDepartmentId().equalsIgnoreCase(deptId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static List<Department> getAllDepartments() {
+        List<Department> list = new ArrayList<>();
+        File deptFile = new File(DEPT_FILE);
+        if (!deptFile.exists()) {
+            return list;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(deptFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] cols = line.split(",");
+                if (cols.length >= 2) {
+                    String id = cols[0].trim();
+                    String name = cols[1].trim();
+                    String desc = cols.length > 2 ? cols[2].trim() : "";
+                    list.add(new Department(id, name, desc));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading departments file: " + e.getMessage());
+        }
+
+        return list;
+    }
+    
 }

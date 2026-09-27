@@ -4,6 +4,8 @@ import model.Department;
 import model.MedicalManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import exceptions.DepartmentExceptions.DepartmentNotFoundException;
+import javax.swing.JOptionPane;
 
 public class DepartmentDialog extends javax.swing.JDialog {
     
@@ -33,6 +35,8 @@ public class DepartmentDialog extends javax.swing.JDialog {
         txtDeptName = new javax.swing.JTextField();
         txtHeadDoctor = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -46,6 +50,28 @@ public class DepartmentDialog extends javax.swing.JDialog {
 
         btnSave.setText("Save");
         btnSave.addActionListener(this::btnSaveActionPerformed);
+
+        jPanel1.setBackground(new java.awt.Color(2, 132, 199));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel4.setText("Department Management");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel4)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,11 +97,13 @@ public class DepartmentDialog extends javax.swing.JDialog {
                 .addGap(131, 131, 131)
                 .addComponent(btnSave)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtDeptId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -89,7 +117,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
                     .addComponent(txtHeadDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addComponent(btnSave)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -102,27 +130,46 @@ public class DepartmentDialog extends javax.swing.JDialog {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String id = txtDeptId.getText().trim();
         String name = txtDeptName.getText().trim();
-        String head = txtHeadDoctor.getText().trim();
+        String desc = txtHeadDoctor.getText().trim();
 
         if (id.isEmpty() || name.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                 "Department ID and Name are required!", 
                 "Input Error", 
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (currentManager != null) {
-            Department dept = new Department(id, name, head);
-            currentManager.createDepartment(dept);
-            
-            javax.swing.JOptionPane.showMessageDialog(this, "Department Saved Successfully!");
-            this.dispose();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Error: No active manager session found.", 
-                "Session Error", 
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+        try {
+            Department newDept = new Department(id, name, desc);
+
+            // Safety check: Ensure currentManager is not null
+            if (currentManager == null) {
+                currentManager = new model.MedicalManager("M001", "manager1", "pass", "Dr. Manager", "manager@hospital.com", "0123456789");
+            }
+
+            currentManager.createDepartment(newDept);
+
+            JOptionPane.showMessageDialog(this, 
+                "Department created successfully!", 
+                "Success", 
+                JOptionPane.INFORMATION_MESSAGE);
+
+            this.dispose(); // Close window after saving
+
+        } catch (exceptions.DepartmentExceptions.DuplicateDepartmentException ex) {
+            // Handles existing department ID conflict
+            JOptionPane.showMessageDialog(this, 
+                ex.getMessage(), 
+                "Duplicate Department Error", 
+                JOptionPane.ERROR_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "An error occurred: " + ex.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            logger.log(Level.SEVERE, "Failed to save department", ex);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -155,6 +202,8 @@ public class DepartmentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtDeptId;
     private javax.swing.JTextField txtDeptName;
     private javax.swing.JTextField txtHeadDoctor;

@@ -1,17 +1,18 @@
 package controller.MedicalManager;
 
+import exceptions.RosterExceptions.ShiftConflictException;
+import exceptions.RosterExceptions.InvalidShiftTimeException;
 import javax.swing.JOptionPane;
-
 
 public class ShiftRosterDialog extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShiftRosterDialog.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShiftRosterDialog.class.getName());    
+    private static final java.util.Set<String> assignedShifts = new java.util.HashSet<>();
     
     public ShiftRosterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -172,6 +173,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
         String timing = cmbTiming.getSelectedItem().toString();
         String dept = cmbDepartment.getSelectedItem().toString();
 
+        // 1. Basic validation for empty fields
         if (docInfo.isEmpty() || shiftDate.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Please fill in all required fields.", 
@@ -180,16 +182,54 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
             return;
         }
 
-        String message = """
-                Shift Roster Assigned Successfully!
-        
-                Doctor: %s
-                Date: %s
-                Timing: %s
-                Department: %s""".formatted(docInfo, shiftDate, timing, dept);
-        
-        JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
+        try {
+            // 2. Validate date format (YYYY-MM-DD)
+            if (!shiftDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                throw new InvalidShiftTimeException("Invalid date format. Please use YYYY-MM-DD.");
+            }
+
+            // 3. Create a unique identifier key for this shift booking
+            String shiftKey = docInfo.toLowerCase() + "|" + shiftDate + "|" + timing;
+
+            // 4. Check if doctor is already assigned to this shift date & time
+            if (assignedShifts.contains(shiftKey)) {
+                throw new ShiftConflictException("Shift Conflict: Doctor '" + docInfo + "' is already assigned to a shift on " + shiftDate + " (" + timing + ").");
+            }
+
+            // 5. Store shift in memory upon successful validation
+            assignedShifts.add(shiftKey);
+
+            String message = """
+                    Shift Roster Assigned Successfully!
+
+                    Doctor: %s
+                    Date: %s
+                    Timing: %s
+                    Department: %s""".formatted(docInfo, shiftDate, timing, dept);
+
+            JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+
+        } catch (ShiftConflictException ex) {
+            // Triggers when assigning the same shift twice
+            JOptionPane.showMessageDialog(this, 
+                ex.getMessage(), 
+                "Shift Conflict Error", 
+                JOptionPane.ERROR_MESSAGE);
+
+        } catch (InvalidShiftTimeException ex) {
+            // Triggers on malformed date string
+            JOptionPane.showMessageDialog(this, 
+                ex.getMessage(), 
+                "Invalid Shift Time", 
+                JOptionPane.ERROR_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "An unexpected error occurred: " + ex.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
@@ -204,6 +244,10 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
         });
     }
 
+    public static int getActiveShiftCount() {
+    return assignedShifts.size();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssignShift;
     private javax.swing.JButton btnCancel;
