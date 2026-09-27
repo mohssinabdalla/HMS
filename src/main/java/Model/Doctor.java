@@ -1,11 +1,14 @@
 package model;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import service.FileHelper;
+import exceptions.DataFileNotFoundException;
+import exceptions.InvalidVitalSignException;
+import exceptions.InvalidPrescriptionException;
+import exceptions.LabRequestNotFoundException;
+import exceptions.RecordNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Doctor extends User {
 
@@ -13,17 +16,23 @@ public class Doctor extends User {
     private String specialization;
 
     public Doctor(String userId, String username, String password,
-                  String fullName, String email, String phoneNumber,
-                  String doctorId, String specialization) {
+                  String fullName, String email, String phoneNumber) {
 
         super(userId, username, password, fullName, email,
                 phoneNumber, "Doctor");
 
-        this.doctorId = doctorId;
-        this.specialization = specialization;
+        this.doctorId = userId;
+        this.specialization = "";
     }
+    @Override
+    public void loadExtraFields(String[] extraFields) {
 
-    // Getter
+        if (extraFields.length > 0) {
+            specialization = extraFields[0];
+        }
+    }
+    //getter
+
     public String getDoctorId() {
         return doctorId;
     }
@@ -31,232 +40,414 @@ public class Doctor extends User {
     public String getSpecialization() {
         return specialization;
     }
+    //setter
 
-    // Setter
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
 
-    // Update doctor profile
-        @Override
-    public void loadExtraFields(String[] extraFields){}
+    // Update Profile
     
+    
+
     @Override
     public boolean updateOwnProfile(String fullName,
-                                     String email,
-                                     String phoneNumber) {
+                                    String email,
+                                    String phoneNumber) {
 
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
 
-        // Temporary: only updates the object in memory
-        return true;
+        try {
+
+            List<String> lines =
+                    FileHelper.readAllLines("data/users.txt");
+
+            List<String> updated =
+                    new ArrayList<>();
+
+            for (String line : lines) {
+
+                if (line.startsWith(userId + ",")) {
+                    updated.add(toFileString());
+                } else {
+                    updated.add(line);
+                }
+            }
+
+            return FileHelper.writeAllLines(
+                    "data/users.txt",
+                    updated
+            );
+
+        } catch (DataFileNotFoundException e) {
+
+            System.out.println(
+                    "Users file not found: "
+                    + e.getMessage()
+            );
+
+            return false;
+        }
     }
 
-    // View doctor schedule
+    
+    // View Schedule
+    
+
     public String viewSchedule() {
 
-        return "TEMPORARY SCHEDULE\n\n"
-                + "Monday    09:00 - 13:00   Ward A\n"
-                + "Wednesday 14:00 - 18:00   Cardiology Clinic";
+        try {
+
+            List<String> lines =
+                    FileHelper.readAllLines("data/shifts.txt");
+                    
+
+            String result = "";
+                    
+
+            for (String line : lines) {
+                if (line.contains(doctorId)) {
+                    result += line + "\n";
+                            
+                }
+            }
+
+            return result;
+
+        } catch (DataFileNotFoundException e) {
+
+            return "";
+        }
     }
 
-    // Log patient vital signs
+    
+    // Log Vital Sign
+    
+
     public boolean logVitalSigns(
             String patientId,
             String bloodPressure,
             String heartRate,
-            String temperature) {
+            String temperature)
+            throws InvalidVitalSignException {
+
+        int hr = //hr = hearRate
+                parseIntOrThrow(
+                        heartRate,
+                        "heart rate"
+                );
+
+        double temp =
+                parseDoubleOrThrow(
+                        temperature,
+                        "temperature"
+                );
+
+        if (hr < 30 || hr > 220) {
+
+            throw new InvalidVitalSignException(
+                    "Invalid Heart Rate: "
+                    + heartRate
+            );
+        }
+
+        if (temp < 30.0 || temp > 43.0) {
+
+            throw new InvalidVitalSignException(
+                    "Invalid Temperature: "
+                    + temperature
+            );
+        }
+
+        if (bloodPressure == null ||
+                !bloodPressure.matches(
+                        "\\d{2,3}/\\d{2,3}")) {
+                
+
+            throw new InvalidVitalSignException(
+                    "Blood pressure must be like 120/80, got: "
+                    + bloodPressure
+            );
+        }
+
+        VitalSign vital = new VitalSign(
+                nextId("data/vitals.txt", "v"),
+                patientId,
+                doctorId,
+                bloodPressure,
+                heartRate,
+                temperature
+        );
+
+        return FileHelper.appendLine(
+                "data/vitals.txt",
+                vital.toFileLine()
+        );
+    }
+
+    private int parseIntOrThrow(
+            String value,
+            String fieldName)
+            throws InvalidVitalSignException {
 
         try {
 
-            int hr = Integer.parseInt(heartRate);
-            double temp = Double.parseDouble(temperature);
-
-            // Validate heart rate
-            if (hr < 30 || hr > 220) {
-                return false;
-            }
-
-            // Validate temperature
-            if (temp < 30.0 || temp > 43.0) {
-                return false;
-            }
-
-            // Validate blood pressure
-            if (bloodPressure == null ||
-                    !bloodPressure.matches("\\d{2,3}/\\d{2,3}")) {
-                return false;
-            }
+            return Integer.parseInt(value);
 
         } catch (NumberFormatException e) {
 
-            return false;
+            throw new InvalidVitalSignException(
+                    "Invalid "
+                    + fieldName
+                    + ": "
+                    + value
+            );
         }
-
-        appendTemp(
-                "data/vitals.txt",
-                String.join(",",
-                        "V001",
-                        patientId,
-                        doctorId,
-                        bloodPressure,
-                        heartRate,
-                        temperature)
-        );
-
-        return true;
     }
 
-    // Write medical record
-    public boolean writeMedicalRecords(
-            String patientId,
-            String diagnosis) {
+    private double parseDoubleOrThrow(
+            String value,
+            String fieldName)
+            throws InvalidVitalSignException {
+
+        try {
+
+            return Double.parseDouble(value);
+
+        } catch (NumberFormatException e) {
+
+            throw new InvalidVitalSignException(
+                    "Invalid "
+                    + fieldName
+                    + ": "
+                    + value
+            );
+        }
+    }
+
+    
+    // Medical Record
+    
+
+    public boolean writeMedicalRecords(String patientId, String diagnosis) {
 
         if (patientId == null || patientId.isBlank()) {
+
             return false;
         }
 
         if (diagnosis == null || diagnosis.isBlank()) {
+
             return false;
         }
 
-        appendTemp(
-                "data/medicalrecords.txt",
-                String.join(",",
-                        "MR001",
-                        patientId,
-                        doctorId,
-                        diagnosis)
+        MedicalRecord record = new MedicalRecord(
+                
+                nextId("data/medicalrecords.txt","MR"),
+                patientId,
+                doctorId,
+                diagnosis
         );
 
-        return true;
+        return FileHelper.appendLine(
+                "data/medicalrecords.txt",
+                record.toFileLine()
+        );
     }
 
-    // Issue prescription
-    public boolean issuePrescription(
-            String patientId,
-            String medicationList) {
+    
+    // Issue Prescription
+   
+
+    public boolean issuePrescription(String patientId, String medicationList)
+            throws InvalidPrescriptionException {
 
         if (patientId == null || patientId.isBlank()) {
-            return false;
+
+            throw new InvalidPrescriptionException("Patient ID cannot be empty.");
         }
 
         if (medicationList == null || medicationList.isBlank()) {
-            return false;
+
+            throw new InvalidPrescriptionException("Medication list cannot be empty.");
         }
 
-        appendTemp(
-                "data/prescriptions.txt",
-                String.join(",",
-                        "RX001",
-                        patientId,
-                        doctorId,
-                        medicationList)
+        Prescription prescription = new Prescription(
+                nextId("data/prescriptions.txt", "RX"),
+                patientId,
+                doctorId,
+                medicationList
         );
 
-        return true;
+        return FileHelper.appendLine(
+                "data/prescriptions.txt",
+                prescription.toFileLine()
+        );
     }
 
-    // Request laboratory test
-    public boolean requestLabTest(
-            String patientId,
-            String testType) {
+   
+    // Request Lab Test    
+
+    public boolean requestLabTest(String patientId, String testType) {
 
         if (patientId == null || patientId.isBlank()) {
+
             return false;
         }
 
         if (testType == null || testType.isBlank()) {
+
             return false;
         }
 
-        appendTemp(
-                "data/labrequests.txt",
-                String.join(",",
-                        "LR001",
-                        patientId,
-                        doctorId,
-                        testType,
-                        "Pending")
+        LabRequest request = new LabRequest(
+                nextId("data/labrequests.txt", "LR"),
+                patientId,
+                doctorId,
+                testType,
+                "Pending"
         );
 
-        return true;
+        return FileHelper.appendLine(
+                "data/labrequests.txt",
+                request.toFileLine()
+        );
     }
 
-    // Log consultation
-    public boolean logConsultation(
-            String patientId,
-            String recordId) {
+    
+    // Record Consultation
+   
+
+    public boolean logConsultation(String patientId, String recordId) {
 
         if (patientId == null || patientId.isBlank()) {
+
             return false;
         }
 
-        appendTemp(
+        String consultationId = nextId(
+                "data/consultations.txt", "C");
+
+        String line = String.join(
+                ",",
+                consultationId,
+                patientId,
+                doctorId,
+                recordId
+        );
+
+        return FileHelper.appendLine(
                 "data/consultations.txt",
-                String.join(",",
-                        "C001",
-                        patientId,
-                        doctorId,
-                        recordId)
+                line
         );
-
-        return true;
     }
 
-    // Get medical records
-    public String getMedicalRecordForPatient(
-            String patientId) {
+   
+    // Get Medical Record
+    
 
-        return "TEMPORARY: Medical records for patient "
-                + patientId
-                + " will be loaded from the shared file later.";
-    }
-
-    // Update laboratory request status
-    public boolean updateLabRequestStatus(
-            String requestId,
-            String newStatus) {
-
-        System.out.println(
-                "TEMPORARY: Lab request "
-                + requestId
-                + " changed to "
-                + newStatus
-        );
-
-        return true;
-    }
-
-    // Temporary file writing method
-    private void appendTemp(
-            String filePath,
-            String line) {
+    public String getMedicalRecordsForPatient(String patientId)
+            throws RecordNotFoundException {
 
         try {
 
-            Path path = Paths.get(filePath);
+            List<String> lines =
+                    FileHelper.readAllLines(
+                            "data/medicalrecords.txt");
 
-            if (path.getParent() != null) {
-                Files.createDirectories(path.getParent());
+            StringBuilder result = new StringBuilder();
+
+            for (String line : lines) {
+
+                if (line.contains(patientId)) {
+
+                    result.append(line)
+                            .append(System.lineSeparator());
+                }
             }
 
-            try (BufferedWriter writer =
-                         new BufferedWriter(
-                                 new FileWriter(filePath, true))) {
+            if (result.length() == 0) {
 
-                writer.write(line);
-                writer.newLine();
+                throw new RecordNotFoundException(
+                        "No medical records found for patient: " + patientId);
             }
 
-        } catch (IOException e) {
+            return result.toString();
 
-            System.out.println(
-                    "Temporary file error: "
-                    + e.getMessage()
-            );
+        } catch (DataFileNotFoundException e) {
+
+            throw new RecordNotFoundException(
+                    "No medical records found for patient: " + patientId);
+        }
+    }
+
+    
+    // Update Lab Request
+    
+
+    public boolean updateLabRequestStatus(String requestId, String newStatus)
+            throws LabRequestNotFoundException {
+
+        try {
+
+            List<String> lines =
+                    FileHelper.readAllLines(
+                            "data/labrequests.txt");
+
+            List<String> updated = new ArrayList<>();
+
+            boolean found = false;
+
+            for (String line : lines) {
+
+                if (line.startsWith(requestId + ",")) {
+
+                    LabRequest request = LabRequest.fromFileLine(line);
+
+                    request.setStatus(newStatus);
+
+                    updated.add(request.toFileLine());
+
+                    found = true;
+
+                } else {
+
+                    updated.add(line);
+                }
+            }
+
+            if (!found) {
+
+                throw new LabRequestNotFoundException(
+                        "Lab request not found: " + requestId);
+            }
+
+            return FileHelper.writeAllLines("data/labrequests.txt", updated);
+
+        } catch (DataFileNotFoundException e) {
+
+            throw new LabRequestNotFoundException(
+                    "Lab request not found with id: " + requestId);
+        }
+    }
+
+    
+    // Generate next ID
+   
+
+    private String nextId(String filePath, String prefix) {
+
+        try {
+
+            List<String> lines = FileHelper.readAllLines(filePath);
+
+            return prefix + (lines.size() + 1);
+
+        } catch (DataFileNotFoundException e) {
+
+            return prefix + "1";
         }
     }
 }

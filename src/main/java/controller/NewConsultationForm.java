@@ -13,15 +13,13 @@ public class NewConsultationForm extends javax.swing.JFrame {
         initComponents();
         
         doctor = new model.Doctor(
-        "U001",
-        "doctor",
-        "1234",
-        "Dr. Ahmed",
-        "doctor@gmail.com",
-        "0123456789",
-        "D001",
-        "Cardiology"
-    );
+            "D001",
+            "drchen",
+            "doctor123",
+            "Dr Chen",
+            "chen@apu.edu",
+            "0123456780"
+        );
 }
 public NewConsultationForm(model.Doctor doctor) {
     initComponents();
@@ -181,39 +179,38 @@ public NewConsultationForm(model.Doctor doctor) {
 
             javax.swing.JOptionPane.showMessageDialog(
                     
-                    this,
-                    "Please fill in all fields."
-            );
+                this,
+                "Please fill in all fields.");
             return;
         }
-
-        boolean vitalSaved = doctor.logVitalSigns(
-            patientId,
-            bloodPressure,
-            heartRate,
-            temperature
-        );
-
-        boolean recordSaved = doctor.writeMedicalRecords(
-            patientId,
-            diagnosis
-        );
-
-        if (vitalSaved && recordSaved) {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Consultation saved successfully!"
-
-            );
-
+        
+        try {
+            boolean vitalSaved = doctor.logVitalSigns(patientId, bloodPressure, heartRate, temperature);
+            boolean recordSaved = doctor.writeMedicalRecords(patientId, diagnosis);
+            if (vitalSaved && recordSaved) {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Consultation saved successfully!");
+                txtPatientId.setText("");
+                txtBloodPressure.setText("");
+                txtHeartRate.setText("");
+                txtTemperature.setText("");
+                txtDiagnosis.setText("");
+                
+            
         } else {
-
             javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Failed to save consultation."
-             );
-        }// TODO add your handling code here:
+                "Failed to save consultation.");
+            }
+        } catch (exceptions.InvalidVitalSignException e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                e.getMessage(),
+                "Invalid Vital Signs",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed

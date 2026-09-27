@@ -19,15 +19,14 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
     public IssuePrescriptionForm() {
         initComponents();
         doctor = new model.Doctor(
-        "U001",
-        "doctor",
-        "1234",
-        "Dr. Ahmed",
-        "doctor@gmail.com",
-        "0123456789",
-        "D001",
-        "Cardiology"
-    );
+            "D001",
+            "drchen",
+            "doctor123",
+            "Dr Chen",
+            "chen@apu.edu",
+            "0123456780"
+        
+        );
 }
 
     public IssuePrescriptionForm(model.Doctor doctor) {
@@ -101,11 +100,12 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
                         .addGap(86, 86, 86)
                         .addComponent(btnSave)
                         .addGap(40, 40, 40)
-                        .addComponent(btnClear))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(btnBack)))
+                        .addComponent(btnClear)))
                 .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnBack)
+                .addGap(132, 132, 132))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,9 +124,9 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnClear))
-                .addGap(44, 44, 44)
+                .addGap(18, 18, 18)
                 .addComponent(btnBack)
-                .addGap(29, 29, 29))
+                .addGap(55, 55, 55))
         );
 
         pack();
@@ -150,29 +150,30 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
 
             return;
         }
-
-        boolean saved = doctor.issuePrescription(
-            patientId,
-            medicationList
-        );
-
-        if (saved) {
-
+        try {
+            boolean saved = doctor.issuePrescription(patientId, medicationList);
+            if (saved){
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Prescription saved successfully!");
+                txtPatientId.setText("");
+                txtMedication.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Failed to save prescription.");
+            }
+        } catch (exceptions.InvalidPrescriptionException e) {
             javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Prescription saved successfully!"
-            );
+                e.getMessage(),
+                "Invalid Prescription",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+             
 
-             txtPatientId.setText("");
-            txtMedication.setText("");
+       
 
-        } else {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Failed to save prescription."
-            );
-        }// TODO add your handling code here:
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed

@@ -20,14 +20,13 @@ public class DoctorDashboard extends javax.swing.JFrame {
         initComponents();
         //temperory data
         doctor = new model.Doctor(
-        "U001",
-        "doctor",
-        "1234",
-        "Dr. Ahmed",
-        "doctor@gmail.com",
-        "0123456789",
-        "D001",
-        "Cardiology"
+            "D001",
+            "drchen",
+            "doctor123",
+            "Dr Chen",
+            "chen@apu.edu",
+            "0123456780"
+        
     );
      // Display doctor information
     lblWelcome.setText("Welcome, " + doctor.getFullName());
@@ -36,6 +35,14 @@ public class DoctorDashboard extends javax.swing.JFrame {
 
 
         
+    }
+    public DoctorDashboard(model.Doctor doctor) {
+        initComponents();
+        this.doctor = doctor;
+        
+        lblWelcome.setText("Welcome, " + doctor.getFullName());
+        txtSchedule.setText(doctor.viewSchedule());
+
     }
 
     /**
@@ -137,10 +144,7 @@ public class DoctorDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewConsultationActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Logout button works!"
-            );// TODO add your handling code here:
+           logout();// TODO add your handling code here:
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnIssuePrescriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIssuePrescriptionActionPerformed
@@ -164,15 +168,20 @@ public class DoctorDashboard extends javax.swing.JFrame {
 
     private void txtEditProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEditProfileActionPerformed
         
-        javax.swing.JOptionPane.showMessageDialog(
-             this,
-            "Edir profile button works!"
-        );// TODO add your handling code here:
+        openEditProfile();// TODO add your handling code here:
     }//GEN-LAST:event_txtEditProfileActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void openEditProfile() {
+    EditProfileForm form = new EditProfileForm(doctor);
+    form.setVisible(true);
+    this.dispose();
+    }
+    private void logout() {
+        LoginScreen login = new LoginScreen();
+        login.setVisible(true);
+        this.dispose();
+    }
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

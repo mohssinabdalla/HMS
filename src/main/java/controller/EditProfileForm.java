@@ -9,6 +9,7 @@ package controller;
  * @author mommi
  */
 public class EditProfileForm extends javax.swing.JFrame {
+    private model.Doctor doctor;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EditProfileForm.class.getName());
 
@@ -17,7 +18,30 @@ public class EditProfileForm extends javax.swing.JFrame {
      */
     public EditProfileForm() {
         initComponents();
+        doctor = new model.Doctor(
+            "D001",
+            "drchen",
+            "doctor123",
+            "Dr Chen",
+            "chen@apu.edu",
+            "0123456780");
+        loadDoctorData();
     }
+    public EditProfileForm(model.Doctor doctor) {
+        initComponents();
+        this.doctor = doctor;
+        loadDoctorData();
+                
+    }
+    private void loadDoctorData() {
+        txtFullName.setText(doctor.getFullName());
+        txtEmail.setText(doctor.getEmail());
+        txtphoneNumber.setText(doctor.getPhoneNumber());        
+        txtPassword.setText("");
+    }
+        
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,6 +83,7 @@ public class EditProfileForm extends javax.swing.JFrame {
         jLabel5.setText("Password:");
 
         btnUpdate.setText("Update profile");
+        btnUpdate.addActionListener(this::btnUpdateActionPerformed);
 
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
@@ -146,16 +171,56 @@ public class EditProfileForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtphoneNumberActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
+        clearForm();// TODO add your handling code here:
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        // TODO add your handling code here:
+        goBack();// TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        updateProfile();// TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void updateProfile() {
+        String fullName = txtFullName.getText().trim();
+        String email = txtEmail.getText().trim();
+        String phoneNumber = txtphoneNumber.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+        
+        if (fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Please fill in all required fields.");
+            return;
+        }
+        
+        boolean updated = doctor.updateOwnProfile(fullName,email, phoneNumber);
+        if (!password.isEmpty()) { doctor.setPassword(password);}
+        if (updated) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Profile updated successfully!");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Failed to update profile.");
+        }
+    }
+    private void clearForm() {
+        txtFullName.setText("");
+        txtEmail.setText("");
+        txtphoneNumber.setText("");
+        txtPassword.setText("");
+    }
+    private void goBack() {
+        DoctorDashboard dashboard = new DoctorDashboard();
+        dashboard.setVisible(true);
+        this.dispose();
+    }
+
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

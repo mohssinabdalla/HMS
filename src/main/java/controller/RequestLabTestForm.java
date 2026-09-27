@@ -19,14 +19,12 @@ public class RequestLabTestForm extends javax.swing.JFrame {
     public RequestLabTestForm() {
         initComponents();
         doctor = new model.Doctor(
-            "U001",
-            "doctor",
-            "1234",
-            "Dr. Ahmed",
-            "doctor@gmail.com",
-            "0123456789",
             "D001",
-            "Cardiology"
+            "drchen",
+            "doctor123",
+            "Dr Chen",
+            "chen@apu.edu",
+            "0123456780"
         );
     }
     public RequestLabTestForm(model.Doctor doctor) {
@@ -61,7 +59,7 @@ public class RequestLabTestForm extends javax.swing.JFrame {
 
         jLabel2.setText("Test Type:");
 
-        cmbTestType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbTestType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Blood Test", "Urine Test", "X-Ray", "MRI Scan", "CT Scan" }));
         cmbTestType.addActionListener(this::cmbTestTypeActionPerformed);
 
         btnSubmit.setText("Submit Lab Request");
@@ -92,12 +90,14 @@ public class RequestLabTestForm extends javax.swing.JFrame {
                             .addComponent(txtPatientId)
                             .addComponent(cmbTestType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnBack)
-                            .addComponent(btnSubmit))
+                        .addComponent(btnSubmit)
                         .addGap(51, 51, 51)
                         .addComponent(btnClear)))
                 .addContainerGap(50, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBack)
+                .addGap(126, 126, 126))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
