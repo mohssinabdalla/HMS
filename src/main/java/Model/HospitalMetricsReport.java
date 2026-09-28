@@ -16,4 +16,15 @@ public class HospitalMetricsReport extends Report {
         
         // System.out.println("debug: metrics generated");
     }
+    
+    // Method to return text formatted for GUI dialogs
+    public String getReportDetails() {
+        return """
+               === Hospital Metrics Report ===
+               Report ID: %s
+               Generated Date: %s
+               
+               Metrics: Total Patient Admissions, Occupancy Rate, Active Shift Count.
+               """.formatted(this.reportId, this.dateGenerated);
+    }
 }

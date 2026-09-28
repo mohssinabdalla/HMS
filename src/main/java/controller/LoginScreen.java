@@ -148,8 +148,13 @@ public class LoginScreen extends javax.swing.JFrame {
         } else if (loggedInUser instanceof model.Patient) {
             controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
             dashboard.setVisible(true);
-            this.dispose();}
-            else {
+            this.dispose();
+        } else if (loggedInUser instanceof model.MedicalManager) {
+            controller.MedicalManager.MedicalManagerInterface dashboard = 
+                new controller.MedicalManager.MedicalManagerInterface((model.MedicalManager) loggedInUser);
+            dashboard.setVisible(true);
+            this.dispose();
+        } else {
             JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         }
     }//GEN-LAST:event_loginBtnActionPerformed
@@ -160,7 +165,7 @@ public class LoginScreen extends javax.swing.JFrame {
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
         loadRoleSafely(allUsers, "C:\\Users\\rinsr\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+        loadRoleSafely(allUsers, "C:\\Users\\ASUS\\OneDrive - Asia Pacific University of Technology And Innovation (APU)\\Desktop\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 
         return new AuthService(allUsers);
     }
