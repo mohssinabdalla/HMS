@@ -47,9 +47,7 @@ public class Patient extends User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    // -------------------------
-    // Profile Update
-    // -------------------------
+
 
     @Override
     public boolean updateOwnProfile(String fullName,
@@ -76,13 +74,9 @@ public class Patient extends User {
     }
     @Override
     public void loadExtraFields(String[] extraFields){}
-    // -------------------------
-    // Patient Operations
-    // -------------------------
 
-    /**
-     * Allows the Patient to book an appointment.
-     */
+
+  
     public void bookAppointment() {
 
         Scanner scanner = new Scanner(System.in);
@@ -148,9 +142,7 @@ public class Patient extends User {
         }
     }
 
-    /**
-     * Allows the Patient to view their existing appointments, then select one to cancel.
-     */
+   
     public void cancelAppointment() {
         Scanner scanner = new Scanner(System.in);
         PatientAppointmentService service = new PatientAppointmentService();
@@ -177,18 +169,14 @@ public class Patient extends User {
         }
     }
 
-    /**
-     * Allows the Patient to view medical history.
-     */
+   
     public void viewMedicalHistory() {
         System.out.println(
                 "Patient " + patientId + " can view medical history."
         );
     }
 
-    /**
-     * Allows the Patient to submit feedback.
-     */
+   
     public void submitFeedback() {
 
         Scanner scanner = new Scanner(System.in);
@@ -215,9 +203,7 @@ public class Patient extends User {
         }
     }
 
-    // -------------------------
-    // File Persistence
-    // -------------------------
+
 
     @Override
     public String toFileString() {

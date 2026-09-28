@@ -9,9 +9,10 @@ import model.Patient;
 
 public class PatientDashboard extends javax.swing.JFrame {
     
+    private Patient loggedInPatient;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientDashboard.class.getName());
     
-    private Patient loggedInPatient;
     /**
      * Creates new form PatientDashboard
      */
@@ -92,6 +93,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         btnLogout.setBackground(new java.awt.Color(255, 255, 153));
         btnLogout.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnLogout.setText("Logout");
+        btnLogout.addActionListener(this::btnLogoutActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,7 +150,7 @@ public class PatientDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
-            openProfile();
+        openProfile();
     }//GEN-LAST:event_btnProfileActionPerformed
 
     private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDoctorActionPerformed
@@ -167,6 +169,21 @@ public class PatientDashboard extends javax.swing.JFrame {
         openBookAppointment();
     }//GEN-LAST:event_btnBookAppointmentActionPerformed
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to logout?",
+            "Logout",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            LoginScreen login = new LoginScreen();
+            login.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
     private void openProfile() {
         controller.PatientProfile profile;
         if (loggedInPatient != null) {
@@ -179,26 +196,33 @@ public class PatientDashboard extends javax.swing.JFrame {
     }
 
     private void openSearchDoctor() {
-        JOptionPane.showMessageDialog(
-            this,
-            "Doctor Search will open after Admin add doctors."
-        );
+        controller.PatientSearchDoctor searchDoctor = new controller.PatientSearchDoctor();
+        searchDoctor.setVisible(true);
+        this.dispose();
     }
 
     private void openFeedback() {
-        PatientFeedback feedback = new PatientFeedback();
+        PatientFeedback feedback = (loggedInPatient != null)
+            ? new PatientFeedback(loggedInPatient)
+            : new PatientFeedback();
         feedback.setVisible(true);
         this.dispose();
     }
+   
 
     private void openAppointments() {
-        PatientAppointments appointments = new PatientAppointments();
+        PatientAppointments appointments = (loggedInPatient != null)
+            ? new PatientAppointments(loggedInPatient)
+            : new PatientAppointments();
         appointments.setVisible(true);
         this.dispose();
     }
+ 
 
     private void openBookAppointment() {
-        controller.PatientBookAppointment bookAppointment = new controller.PatientBookAppointment();
+        controller.PatientBookAppointment bookAppointment = (loggedInPatient != null)
+            ? new controller.PatientBookAppointment(loggedInPatient)
+            : new controller.PatientBookAppointment();
         bookAppointment.setVisible(true);
         this.dispose();
     }

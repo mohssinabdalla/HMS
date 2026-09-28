@@ -5,6 +5,7 @@
 package controller;
 
 import model.Appointment;
+import model.Patient;
 import service.PatientAppointmentService;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
@@ -15,14 +16,27 @@ import javax.swing.JOptionPane;
  * @author rinsr
  */
 public class PatientAppointments extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientAppointments.class.getName());
+
+    private Patient loggedInPatient;
+
+    private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(PatientAppointments.class.getName());
 
     /**
      * Creates new form PatientAppointments
      */
     public PatientAppointments() {
         initComponents();
+    }
+    public PatientAppointments(Patient patient) {
+        initComponents();
+
+        this.loggedInPatient = patient;
+
+        if (patient != null) {
+            txtPatientId.setText(patient.getPatientId());
+            txtPatientId.setEditable(false);
+        }
     }
 
     /**
@@ -146,30 +160,49 @@ public class PatientAppointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        String patientId = txtPatientId.getText().trim();
+        String patientId;
+
+        if (loggedInPatient != null) {
+            patientId = loggedInPatient.getPatientId();
+        } else {
+            patientId = txtPatientId.getText().trim();
+        }
 
         if (patientId.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a Patient ID.");
+            JOptionPane.showMessageDialog(
+                this,
+                "Patient ID not found."
+            );
             return;
         }
 
-        PatientAppointmentService service = new PatientAppointmentService();
-        List<Appointment> appointments = service.getAppointmentsByPatient(patientId);
+        PatientAppointmentService service =
+            new PatientAppointmentService();
 
-        DefaultTableModel tableModel = new DefaultTableModel(
-            new Object[][] {},
-            new String[] {"Appointment ID", "Doctor ID", "Date", "Time", "Status"}
-        );
+        List<Appointment> appointments =
+            service.getAppointmentsByPatient(patientId);
 
-        for (Appointment appointment : appointments) {
-            tableModel.addRow(new Object[] {
-                appointment.getAppointmentId(),
-                appointment.getDoctorId(),
-                appointment.getDate(),
-                appointment.getTime(),
-                appointment.getStatus()
-            });
-        }
+        DefaultTableModel tableModel =
+            new DefaultTableModel(
+                new Object[][] {},
+                new String[] {
+                    "Appointment ID",
+                    "Doctor ID",
+                    "Date",
+                    "Time",
+                    "Status"
+                }
+            );
+
+    for (Appointment appointment : appointments) {
+        tableModel.addRow(new Object[] {
+            appointment.getAppointmentId(),
+            appointment.getDoctorId(),
+            appointment.getDate(),
+            appointment.getTime(),
+            appointment.getStatus()
+        });
+    }
 
         tblAppointments.setModel(tableModel);
     }//GEN-LAST:event_btnViewActionPerformed
@@ -206,7 +239,9 @@ public class PatientAppointments extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRescheduleActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.PatientDashboard dashboard = new controller.PatientDashboard();
+        PatientDashboard dashboard =
+            new PatientDashboard(loggedInPatient);
+
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed

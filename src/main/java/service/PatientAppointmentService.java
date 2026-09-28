@@ -12,8 +12,7 @@ import java.util.List;
  */
 public class PatientAppointmentService {
 
-    private static final String APPOINTMENT_FILE =
-            "data/appointments.txt";
+    private static final String APPOINTMENT_FILE = "src/main/data/appointments.txt";
 
     private List<Appointment> appointments;
 
@@ -32,6 +31,14 @@ public class PatientAppointmentService {
 
         if (appointment == null) {
             return false;
+        }
+        
+        if (new PatientProfileService().loadPatient(appointment.getPatientId()) == null) {
+            return false;
+        }
+
+        if (!new PatientDoctorService().doctorExists(appointment.getDoctorId())) {
+        return false;
         }
 
         // Prevent duplicate appointment IDs.

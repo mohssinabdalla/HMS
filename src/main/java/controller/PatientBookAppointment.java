@@ -4,8 +4,11 @@
  */
 package controller;
 
-import model.Appointment;
+import model.Patient;
+import service.PatientDoctorService;
 import service.PatientAppointmentService;
+import model.Appointment;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,14 +17,72 @@ import javax.swing.JOptionPane;
  */
 public class PatientBookAppointment extends javax.swing.JFrame {
     
+    private Patient loggedInPatient;
+    private PatientDoctorService doctorService;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientBookAppointment.class.getName());
 
     /**
      * Creates new form PatientBookAppointment
      */
+    
     public PatientBookAppointment() {
         initComponents();
+        doctorService = new PatientDoctorService();
+
+        loadPatient();
+        loadDoctors();
     }
+    
+    public PatientBookAppointment(Patient patient) {
+        initComponents();
+
+        this.loggedInPatient = patient;
+
+        doctorService = new PatientDoctorService();
+
+        loadPatient();
+        loadDoctors();
+
+        if (patient != null) {
+            cmbPatient.setSelectedItem(
+                patient.getPatientId() + " - " + patient.getFullName()
+            );
+
+            cmbPatient.setEnabled(false);
+        }
+    }
+    
+    private void loadPatient() {
+
+        cmbPatient.removeAllItems();
+        if (loggedInPatient != null) {
+
+            cmbPatient.addItem(
+                loggedInPatient.getPatientId()
+                + " - "
+                + loggedInPatient.getFullName()
+            );
+
+            cmbPatient.setEnabled(false);
+        }
+    }
+    private void loadDoctors() {
+        cmbDoctor.removeAllItems();
+        List<String[]> doctors = doctorService.listAllDoctors();
+
+        for (String[] doctor : doctors) {
+
+            String doctorId = doctor[0];
+            String doctorName = doctor[3];
+
+            cmbDoctor.addItem(
+                doctorId + " - " + doctorName
+            );
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,14 +96,14 @@ public class PatientBookAppointment extends javax.swing.JFrame {
         lblTitle = new javax.swing.JLabel();
         lblPatientId = new javax.swing.JLabel();
         lblDoctorId = new javax.swing.JLabel();
-        txtPatientId = new javax.swing.JTextField();
-        txtDoctorId = new javax.swing.JTextField();
         lblDate = new javax.swing.JLabel();
         txtDate = new javax.swing.JTextField();
         lblTime = new javax.swing.JLabel();
         txtTime = new javax.swing.JTextField();
         btnBook = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        cmbPatient = new javax.swing.JComboBox<>();
+        cmbDoctor = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +139,11 @@ public class PatientBookAppointment extends javax.swing.JFrame {
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
+        cmbPatient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbPatient.addActionListener(this::cmbPatientActionPerformed);
+
+        cmbDoctor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -93,10 +159,10 @@ public class PatientBookAppointment extends javax.swing.JFrame {
                             .addComponent(lblDate))
                         .addGap(91, 91, 91)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPatientId, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                            .addComponent(txtDoctorId)
                             .addComponent(txtDate)
-                            .addComponent(txtTime)))
+                            .addComponent(txtTime)
+                            .addComponent(cmbPatient, 0, 225, Short.MAX_VALUE)
+                            .addComponent(cmbDoctor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -114,15 +180,16 @@ public class PatientBookAppointment extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDoctorId)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblPatientId)
-                            .addComponent(txtPatientId, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(txtDoctorId, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblDoctorId))
+                        .addComponent(cmbDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,7 +198,7 @@ public class PatientBookAppointment extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTime))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBook)
                     .addComponent(btnBack))
@@ -146,40 +213,97 @@ public class PatientBookAppointment extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTimeActionPerformed
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
-        String patientId = txtPatientId.getText().trim();
-        String doctorId = txtDoctorId.getText().trim();
-        String date = txtDate.getText().trim();
-        String time = txtTime.getText().trim();
 
-        if (patientId.isEmpty() || doctorId.isEmpty() || date.isEmpty() || time.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+        if (cmbPatient.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a patient.");
             return;
         }
 
-        PatientAppointmentService service = new PatientAppointmentService();
+        if (cmbDoctor.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a doctor.");
+            return;
+        }
 
-        int nextNumber = service.getAllAppointments().size() + 1;
-        String appointmentId = "APT" + String.format("%03d", nextNumber);
+        String patientSelection =
+            cmbPatient.getSelectedItem().toString();
 
-        Appointment appointment = new Appointment(appointmentId, patientId, doctorId, date, time);
+        String doctorSelection =
+            cmbDoctor.getSelectedItem().toString();
 
-        boolean success = service.bookAppointment(appointment);
+        String patientId =
+            patientSelection.split(" - ")[0];
+
+        String doctorId =
+            doctorSelection.split(" - ")[0];
+
+        String date =
+            txtDate.getText().trim();
+
+        String time =
+            txtTime.getText().trim();
+
+        if (date.isEmpty() || time.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Please enter date and time."
+            );
+            return;
+        }
+
+        PatientAppointmentService service =
+            new PatientAppointmentService();
+
+        int nextNumber =
+            service.getAllAppointments().size() + 1;
+
+        String appointmentId =
+            "APT" + String.format("%03d", nextNumber);
+
+        Appointment appointment =
+            new Appointment(
+                appointmentId,
+                patientId,
+                doctorId,
+                date,
+                time
+            );
+
+        boolean success =
+            service.bookAppointment(appointment);
 
         if (success) {
-            JOptionPane.showMessageDialog(this, "Appointment booked. ID: " + appointmentId);
-            txtDoctorId.setText("");
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Appointment booked successfully.\n"
+                + "Appointment ID: "
+                + appointmentId
+            );
+
             txtDate.setText("");
             txtTime.setText("");
+
         } else {
-            JOptionPane.showMessageDialog(this, "Could not book appointment.");
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Could not book appointment."
+            );
         }
     }//GEN-LAST:event_btnBookActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.PatientDashboard dashboard = new controller.PatientDashboard();
+        PatientDashboard dashboard =
+            new PatientDashboard(loggedInPatient);
+
         dashboard.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void cmbPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPatientActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbPatientActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,14 +333,14 @@ public class PatientBookAppointment extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnBook;
+    private javax.swing.JComboBox<String> cmbDoctor;
+    private javax.swing.JComboBox<String> cmbPatient;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblDoctorId;
     private javax.swing.JLabel lblPatientId;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTextField txtDate;
-    private javax.swing.JTextField txtDoctorId;
-    private javax.swing.JTextField txtPatientId;
     private javax.swing.JTextField txtTime;
     // End of variables declaration//GEN-END:variables
 }

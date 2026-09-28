@@ -13,8 +13,8 @@ import java.io.IOException;
  */
 public class PatientFeedbackService {
 
-    private static final String FEEDBACK_FILE = "data/feedback.txt";
-
+    private static final String FEEDBACK_FILE = "src/main/data/feedback.txt";
+    
     public PatientFeedbackService() {
     }
 
