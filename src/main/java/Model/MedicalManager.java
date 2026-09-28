@@ -1,26 +1,27 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import service.MedicalDataService;
+import exceptions.DepartmentExceptions.DuplicateDepartmentException;
+import exceptions.DepartmentExceptions.DepartmentNotFoundException;
+import exceptions.RosterExceptions.ShiftConflictException;
+import exceptions.RosterExceptions.InvalidShiftTimeException;
+import exceptions.ReportExceptions.ReportGenerationException;
 
 public class MedicalManager extends User {
 
     private String managerId;
-
+    private String name = "Dr. Chen";
+    
     public MedicalManager(String userId, String username, String password, String fullName,
                           String email, String phoneNumber, String managerId) {
         super(userId, username, password, fullName, email, phoneNumber, "MedicalManager");
         this.managerId = managerId;
     }
-    public MedicalManager(String userId, String username, String password, String fullName, String email, String phoneNumber) {
+    
+    public MedicalManager(String userId, String username, String password, String fullName, 
+                          String email, String phoneNumber) {
         super(userId, username, password, fullName, email, phoneNumber, "MedicalManager");
-        this.managerId = managerId;
+        this.managerId = userId;
     }
 
     @Override
@@ -31,113 +32,43 @@ public class MedicalManager extends User {
         this.phoneNumber = phoneNumber;
         return true;
     }
-
+    
     @Override
-      public void loadExtraFields(String[] extraFields){};
-    public void createDepartment(Department newDept) {
-        if (newDept == null) return;
-        
-        File deptFile = new File("src/main/data/departments.txt");
-        if (deptFile.getParentFile() != null) {
-            deptFile.getParentFile().mkdirs(); // make sure data folder exists first
-        }
-        
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(deptFile, true))) {
-            bw.write(newDept.toFileString());
-            bw.newLine();
-            // System.out.println("debug: new dept saved");
-        } catch (IOException ex) {
-            System.out.println("file error when creating department: " + ex.getMessage());
-        }
+    public void loadExtraFields(String[] extraFields) {
+        // Implemented to satisfy abstract method in User
     }
-
-    public void updateDepartment(Department deptInfo) {
-        if (deptInfo == null) return;
-        
-        File deptFile = new File("src/main/data/departments.txt");
-        if (!deptFile.exists()) {
-            System.out.println("no department file found to update.");
+    
+    public void createDepartment(Department newDept) throws DuplicateDepartmentException {
+        if (newDept == null) {
             return;
         }
 
-        List<String> tempData = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(deptFile))) {
-            String rowLine;
-            while ((rowLine = br.readLine()) != null) {
-                String[] row = rowLine.split(",");
-                // check if this is the department we want to edit
-                if (row.length > 0 && row[0].trim().equals(deptInfo.getDepartmentId())) {
-                    tempData.add(deptInfo.toFileString()); 
-                } else {
-                    tempData.add(rowLine); // keep original data
-                }
-            }
-        } catch (IOException ex) {
-            System.out.println("error reading file: " + ex.getMessage());
+        if (MedicalDataService.departmentExists(newDept.getDepartmentId())) {
+            throw new DuplicateDepartmentException("Department ID '" + newDept.getDepartmentId() + "' already exists!");
         }
 
-        // overwrite the file with new list
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(deptFile, false))) {
-            for (String text : tempData) {
-                bw.write(text);
-                bw.newLine();
-            }
-        } catch (IOException ex) {
-            System.out.println("error rewriting file: " + ex.getMessage());
+        MedicalDataService.saveDepartment(newDept);
+    }
+
+    public void updateDepartment(Department deptInfo) throws DepartmentNotFoundException {
+        if (deptInfo != null) {
+            MedicalDataService.updateDepartment(deptInfo);
         }
     }
 
-    public void designRoster(ShiftRoster targetRoster) {
-        if (targetRoster == null) return;
-        
-        File rosterFile = new File("src/main/data/rosters.txt");
-        if (rosterFile.getParentFile() != null) {
-            rosterFile.getParentFile().mkdirs(); 
-        }
-        
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rosterFile, true))) {
-            bw.write(targetRoster.getRosterId() + "," + targetRoster.getWeekStartDate());
-            bw.newLine();
-        } catch (IOException ex) {
-            System.out.println("could not save roster: " + ex.getMessage());
+    public void designRoster(ShiftRoster targetRoster) throws ShiftConflictException, InvalidShiftTimeException {
+        if (targetRoster != null) {
+            MedicalDataService.saveRoster(targetRoster);
         }
     }
 
-    public void modifyRoster(ShiftRoster rosterData) {
-        if (rosterData == null) return;
-        
-        File rosterFile = new File("src/main/data/rosters.txt");
-        if (!rosterFile.exists()) return;
-
-        List<String> fileContent = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(rosterFile))) {
-            String lineData;
-            while ((lineData = br.readLine()) != null) {
-                String[] cols = lineData.split(",");
-                // match the roster id to update
-                if (cols.length > 0 && cols[0].trim().equals(rosterData.getRosterId())) {
-                    fileContent.add(rosterData.getRosterId() + "," + rosterData.getWeekStartDate()); 
-                } else {
-                    fileContent.add(lineData); 
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("read error: " + e.getMessage());
-        }
-
-        // save back
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rosterFile, false))) {
-            for (String record : fileContent) {
-                bw.write(record);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("write error: " + e.getMessage());
+    public void modifyRoster(ShiftRoster rosterData) throws ShiftConflictException, InvalidShiftTimeException {
+        if (rosterData != null) {
+            MedicalDataService.updateRoster(rosterData);
         }
     }
-
-    public Report viewReport(String reportCategory) {
-        // generate a random id for now
+    
+    public Report viewReport(String reportCategory) throws ReportGenerationException {
         String tempId = "REP" + (System.currentTimeMillis() % 10000);
         String todayDate = "2026-09-23";
 
@@ -150,21 +81,56 @@ public class MedicalManager extends User {
             revenue.generateReport();
             return revenue;
         }
-        return null; // return nothing if category is wrong
+
+        throw new ReportGenerationException("Failed to generate report: Unknown category '" + reportCategory + "'");
     }
 
     @Override
     public String toFileString() {
-        // combine parent user string with manager id
         return super.toFileString() + "," + managerId;
     }
-    
+
     // --- Getters & Setters ---
-    public String getManagerId() { 
-        return managerId; 
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }    
+    
+    //STUBS FOR TEAMMATES TO IMPLEMENT(Patient & Admin)
+    
+    public int getTotalPatientAdmissions() {
+        return 0;
+    }
+
+    public double getOccupancyRate() {
+        return 0.0;
+    }
+
+    public int getActiveShiftCount() {
+        return controller.MedicalManager.ShiftRosterDialog.getActiveShiftCount();
+    }
+
+    public double getTotalConsultationFees() {
+        return 0.00;
+    }
+
+    public double getInsuranceClaims() {
+        return 0.00;
+    }
+
+    public double getMonthlyRevenue() {
+        return 0.00;
     }
     
-    public void setManagerId(String managerId) { 
-        this.managerId = managerId; 
-    }
 }
