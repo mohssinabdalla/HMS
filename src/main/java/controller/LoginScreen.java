@@ -134,9 +134,16 @@ public class LoginScreen extends javax.swing.JFrame {
         
         User loggedInUser = authService.login(username, password, selectedType);
         
+          if (loggedInUser == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid username or password for the selected user type.",
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         if (loggedInUser instanceof model.Admin) {
-            controller.AdminControllers.AdminDashboard_1 dashboard = new controller.AdminControllers.AdminDashboard_1((model.Admin) loggedInUser);
-            dashboard.setVisible(true);
+             controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard();
+             adminDashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.Patient) {
             controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
