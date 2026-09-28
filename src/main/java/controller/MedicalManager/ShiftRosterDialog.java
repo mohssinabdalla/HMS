@@ -1,12 +1,10 @@
 package controller.MedicalManager;
 
-import exceptions.RosterExceptions.ShiftConflictException;
 import exceptions.RosterExceptions.InvalidShiftTimeException;
 import javax.swing.JOptionPane;
 
 public class ShiftRosterDialog extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShiftRosterDialog.class.getName());    
     private static final java.util.Set<String> assignedShifts = new java.util.HashSet<>();
     
     public ShiftRosterDialog(java.awt.Frame parent, boolean modal) {
@@ -161,11 +159,11 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbTimingItemStateChanged
 
     private void btnAssignShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignShiftActionPerformed
-        saveShiftRoster(); // Delegate to external method
+        saveShiftRoster(); 
     }//GEN-LAST:event_btnAssignShiftActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        this.dispose(); // Close dialog
+        this.dispose(); 
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void saveShiftRoster() {
@@ -174,7 +172,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
         String timing = cmbTiming.getSelectedItem().toString();
         String dept = cmbDepartment.getSelectedItem().toString();
 
-        // 1. Basic validation for empty fields
+        // 1) validation for empty fields
         if (docInfo.isEmpty() || shiftDate.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Please fill in all required fields.", 
@@ -184,17 +182,17 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
         }
 
         try {
-            // 2. Validate date format (YYYY-MM-DD)
+            // 2)validation of date formatt (YYYY-MM-DD)
             if (!shiftDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
                 throw new InvalidShiftTimeException("Invalid date format. Please use YYYY-MM-DD.");
             }
 
-            // 3. Create a unique identifier key for this shift booking
+            // 3) Create a unique identifier key for this shift booking
             String shiftKey = docInfo.toLowerCase() + "|" + shiftDate + "|" + timing;
 
             boolean isUpdate = false;
 
-            // 4. Check if doctor is already assigned to this shift date & time
+            // 4) Check iff doctor is already assigned to this shift date & time and ask whether need to modify
             if (assignedShifts.contains(shiftKey)) {
                 int choice = JOptionPane.showConfirmDialog(
                     this,
@@ -213,7 +211,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
                 assignedShifts.add(shiftKey);
             }
 
-            // 5. Persist to file (src/main/data/rosters.txt)
+            // 5) To file (src/main/data/rosters.txt)
             java.io.File file = new java.io.File("src/main/data/rosters.txt");
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
@@ -237,7 +235,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
                 }
             }
 
-            // Add the new or updated roster record
+            
             lines.add(docInfo + "," + shiftDate + "," + timing + "," + dept);
 
             try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(file, false))) {
@@ -247,7 +245,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
                 }
             }
 
-            // 6. Success message display
+            
             String headerMsg = isUpdate ? "Shift Roster Modified Successfully!" : "Shift Roster Assigned Successfully!";
             String message = """
                     %s
@@ -261,7 +259,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
             this.dispose();
 
         } catch (InvalidShiftTimeException ex) {
-            // Triggers on malformed date string
+            
             JOptionPane.showMessageDialog(this, 
                 ex.getMessage(), 
                 "Invalid Shift Time", 
@@ -289,7 +287,11 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
     }
 
     public static int getActiveShiftCount() {
-    return assignedShifts.size();
+        return assignedShifts.size();
+    }
+    
+    public static java.util.Set<String> getAssignedShifts() {
+        return assignedShifts;
     }
     
     private void populateDepartmentComboBox() {

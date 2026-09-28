@@ -130,7 +130,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
         String depName = txtDeptName.getText().trim();
         String headDoctor = txtHeadDoctor.getText().trim();
 
-        // 1. Validation check
+        // Validation check
         if (depId.isEmpty() || depName.isEmpty() || headDoctor.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields!", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -140,7 +140,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
         java.util.List<String> lines = new java.util.ArrayList<>();
         boolean idExists = false;
 
-        // 2. Read existing departments
+        // Read existing departments
         if (file.exists()) {
             try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
                 String line;
@@ -159,7 +159,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
             }
         }
 
-        // 3. 
+        
         if (idExists) {
             int choice = JOptionPane.showConfirmDialog(
                 this,
@@ -174,10 +174,10 @@ public class DepartmentDialog extends javax.swing.JDialog {
             }
         }
 
-        // 4. Append new entry / updated entry
+        // Append new or updated entry
         lines.add(depId + "," + depName + "," + headDoctor);
 
-        // 5. Save back to file
+        // Save back to file
         try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(file, false))) {
             for (String l : lines) {
                 writer.write(l);
@@ -187,7 +187,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
             String msg = idExists ? "Department updated successfully!" : "Department created successfully!";
             JOptionPane.showMessageDialog(this, msg, "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            // Clear fields after saving
+            
             txtDeptId.setText("");
             txtDeptName.setText("");
             txtHeadDoctor.setText("");
