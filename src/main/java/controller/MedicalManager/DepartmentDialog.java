@@ -1,10 +1,8 @@
 package controller.MedicalManager;
 
-import model.Department;
 import model.MedicalManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import exceptions.DepartmentExceptions.DepartmentNotFoundException;
 import javax.swing.JOptionPane;
 
 public class DepartmentDialog extends javax.swing.JDialog {
@@ -128,48 +126,74 @@ public class DepartmentDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDeptIdActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        String id = txtDeptId.getText().trim();
-        String name = txtDeptName.getText().trim();
-        String desc = txtHeadDoctor.getText().trim();
+        String depId = txtDeptId.getText().trim();
+        String depName = txtDeptName.getText().trim();
+        String headDoctor = txtHeadDoctor.getText().trim();
 
-        if (id.isEmpty() || name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Department ID and Name are required!", 
-                "Input Error", 
-                JOptionPane.WARNING_MESSAGE);
+        // 1. Validation check
+        if (depId.isEmpty() || depName.isEmpty() || headDoctor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields!", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            Department newDept = new Department(id, name, desc);
+        java.io.File file = new java.io.File("src/main/data/departments.txt");
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        boolean idExists = false;
 
-            // Safety check: Ensure currentManager is not null
-            if (currentManager == null) {
-                currentManager = new model.MedicalManager("M001", "manager1", "pass", "Dr. Manager", "manager@hospital.com", "0123456789");
+        // 2. Read existing departments
+        if (file.exists()) {
+            try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length >= 1 && parts[0].trim().equalsIgnoreCase(depId)) {
+                        idExists = true;
+                        // If updated later, this line will be replaced
+                    } else {
+                        lines.add(line);
+                    }
+                }
+            } catch (java.io.IOException e) {
+                JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // 3. 
+        if (idExists) {
+            int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Department ID '" + depId + "' already exists!\nWould you like to update its details?",
+                "Update Existing Department",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (choice != JOptionPane.YES_OPTION) {
+                return; // User chose "No", do nothing
+            }
+        }
+
+        // 4. Append new entry / updated entry
+        lines.add(depId + "," + depName + "," + headDoctor);
+
+        // 5. Save back to file
+        try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(file, false))) {
+            for (String l : lines) {
+                writer.write(l);
+                writer.newLine();
             }
 
-            currentManager.createDepartment(newDept);
+            String msg = idExists ? "Department updated successfully!" : "Department created successfully!";
+            JOptionPane.showMessageDialog(this, msg, "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            JOptionPane.showMessageDialog(this, 
-                "Department created successfully!", 
-                "Success", 
-                JOptionPane.INFORMATION_MESSAGE);
+            // Clear fields after saving
+            txtDeptId.setText("");
+            txtDeptName.setText("");
+            txtHeadDoctor.setText("");
 
-            this.dispose(); // Close window after saving
-
-        } catch (exceptions.DepartmentExceptions.DuplicateDepartmentException ex) {
-            // Handles existing department ID conflict
-            JOptionPane.showMessageDialog(this, 
-                ex.getMessage(), 
-                "Duplicate Department Error", 
-                JOptionPane.ERROR_MESSAGE);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, 
-                "An error occurred: " + ex.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            logger.log(Level.SEVERE, "Failed to save department", ex);
+        } catch (java.io.IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving file: " + e.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

@@ -12,6 +12,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
     public ShiftRosterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        populateDepartmentComboBox(); // method call
     }
     
     @SuppressWarnings("unchecked")
@@ -191,31 +192,73 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
             // 3. Create a unique identifier key for this shift booking
             String shiftKey = docInfo.toLowerCase() + "|" + shiftDate + "|" + timing;
 
+            boolean isUpdate = false;
+
             // 4. Check if doctor is already assigned to this shift date & time
             if (assignedShifts.contains(shiftKey)) {
-                throw new ShiftConflictException("Shift Conflict: Doctor '" + docInfo + "' is already assigned to a shift on " + shiftDate + " (" + timing + ").");
+                int choice = JOptionPane.showConfirmDialog(
+                    this,
+                    "A shift assignment already exists for '" + docInfo + "' on " + shiftDate + " (" + timing + ")!\nWould you like to modify/update this shift assignment?",
+                    "Modify Shift Roster",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (choice != JOptionPane.YES_OPTION) {
+                    return; // User cancelled modification
+                }
+                isUpdate = true;
+            } else {
+                // Store new shift key in memory
+                assignedShifts.add(shiftKey);
             }
 
-            // 5. Store shift in memory upon successful validation
-            assignedShifts.add(shiftKey);
+            // 5. Persist to file (src/main/data/rosters.txt)
+            java.io.File file = new java.io.File("src/main/data/rosters.txt");
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
+            }
 
+            java.util.List<String> lines = new java.util.ArrayList<>();
+            if (file.exists()) {
+                try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split(",");
+                        // Skip existing line if updating this doctor's shift
+                        if (parts.length >= 3 && 
+                            parts[0].trim().equalsIgnoreCase(docInfo) && 
+                            parts[1].trim().equalsIgnoreCase(shiftDate) && 
+                            parts[2].trim().equalsIgnoreCase(timing)) {
+                            continue;
+                        }
+                        lines.add(line);
+                    }
+                }
+            }
+
+            // Add the new or updated roster record
+            lines.add(docInfo + "," + shiftDate + "," + timing + "," + dept);
+
+            try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(file, false))) {
+                for (String l : lines) {
+                    writer.write(l);
+                    writer.newLine();
+                }
+            }
+
+            // 6. Success message display
+            String headerMsg = isUpdate ? "Shift Roster Modified Successfully!" : "Shift Roster Assigned Successfully!";
             String message = """
-                    Shift Roster Assigned Successfully!
+                    %s
 
                     Doctor: %s
                     Date: %s
                     Timing: %s
-                    Department: %s""".formatted(docInfo, shiftDate, timing, dept);
+                    Department: %s""".formatted(headerMsg, docInfo, shiftDate, timing, dept);
 
             JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-
-        } catch (ShiftConflictException ex) {
-            // Triggers when assigning the same shift twice
-            JOptionPane.showMessageDialog(this, 
-                ex.getMessage(), 
-                "Shift Conflict Error", 
-                JOptionPane.ERROR_MESSAGE);
 
         } catch (InvalidShiftTimeException ex) {
             // Triggers on malformed date string
@@ -231,6 +274,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
                 JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             ShiftRosterDialog dialog = new ShiftRosterDialog(new javax.swing.JFrame(), true);
@@ -246,6 +290,29 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
 
     public static int getActiveShiftCount() {
     return assignedShifts.size();
+    }
+    
+    private void populateDepartmentComboBox() {
+        cmbDepartment.removeAllItems(); 
+
+        java.io.File file = new java.io.File("src/main/data/departments.txt");
+        if (!file.exists()) {
+            cmbDepartment.addItem("Emergency");
+            cmbDepartment.addItem("Cardiology");
+            return;
+        }
+
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    cmbDepartment.addItem(parts[1].trim()); 
+                }
+            }
+        } catch (java.io.IOException e) {
+            cmbDepartment.addItem("Emergency");
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
