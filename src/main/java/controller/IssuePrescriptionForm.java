@@ -138,6 +138,18 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         
+        savePrescription();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+       clearForm();// TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        goBack();// TODO add your handling code here:
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void savePrescription() {
         String patientId = txtPatientId.getText().trim();
         String medicationList = txtMedication.getText().trim();
 
@@ -169,27 +181,21 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
                 e.getMessage(),
                 "Invalid Prescription",
                 javax.swing.JOptionPane.ERROR_MESSAGE);
-             
-
-       
-
+            System.out.println("Invalid prescription: " + e.getMessage());
+            
         }
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+    }
+    private void clearForm() {
         txtPatientId.setText("");
-        txtMedication.setText("");// TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        txtMedication.setText("");
+        System.out.println("Prescription form cleared");
+    }
+    private void goBack() {
         DoctorDashboard dashboard = new DoctorDashboard();
         dashboard.setVisible(true);
-        this.dispose();// TODO add your handling code here:
-    }//GEN-LAST:event_btnBackActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+        this.dispose();
+        System.out.println("Returning to Doctor Daashboard");
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

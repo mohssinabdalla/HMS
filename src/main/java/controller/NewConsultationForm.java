@@ -165,11 +165,25 @@ public NewConsultationForm(model.Doctor doctor) {
     }//GEN-LAST:event_txtPatientIdActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveConsultation();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        
+       clearForm();// TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        goBack();// TODO add your handling code here:
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void saveConsultation() {
         String patientId = txtPatientId.getText().trim();
         String bloodPressure = txtBloodPressure.getText().trim();
         String heartRate = txtHeartRate.getText().trim();
         String temperature = txtTemperature.getText().trim();
-        String diagnosis = txtDiagnosis.getText().trim();
+         String diagnosis = txtDiagnosis.getText().trim();
 
         if (patientId.isEmpty()
             || bloodPressure.isEmpty()
@@ -178,61 +192,71 @@ public NewConsultationForm(model.Doctor doctor) {
             || diagnosis.isEmpty()) {
 
             javax.swing.JOptionPane.showMessageDialog(
-                    
                 this,
-                "Please fill in all fields.");
+                "Please fill in all fields."
+            );
+
             return;
         }
-        
+
         try {
-            boolean vitalSaved = doctor.logVitalSigns(patientId, bloodPressure, heartRate, temperature);
-            boolean recordSaved = doctor.writeMedicalRecords(patientId, diagnosis);
+
+            boolean vitalSaved = doctor.logVitalSigns(
+                patientId,
+                bloodPressure,
+                heartRate,
+                temperature
+            );
+
+            boolean recordSaved = doctor.writeMedicalRecords(
+                patientId,
+                diagnosis
+            );
+
             if (vitalSaved && recordSaved) {
+
                 javax.swing.JOptionPane.showMessageDialog(
                     this,
-                    "Consultation saved successfully!");
-                txtPatientId.setText("");
-                txtBloodPressure.setText("");
-                txtHeartRate.setText("");
-                txtTemperature.setText("");
-                txtDiagnosis.setText("");
-                
-            
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Failed to save consultation.");
+                    "Consultation saved successfully!"
+                );
+
+                clearForm();
+
+            } else {
+
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Failed to save consultation."
+                );
             }
+
         } catch (exceptions.InvalidVitalSignException e) {
+
             javax.swing.JOptionPane.showMessageDialog(
                 this,
                 e.getMessage(),
                 "Invalid Vital Signs",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
         }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         
+    }
+    private void clearForm() {
+        System.out.println("Consulation form cleared");
         txtPatientId.setText("");
         txtBloodPressure.setText("");
         txtHeartRate.setText("");
         txtTemperature.setText("");
-        txtDiagnosis.setText("");// TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        txtDiagnosis.setText("");
+    }
+    private void goBack() {
         DoctorDashboard dashboard = new DoctorDashboard();
 
         dashboard.setVisible(true);
 
-        this.dispose();// TODO add your handling code here:
-    }//GEN-LAST:event_btnBackActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+        this.dispose();
+        System.out.println("Returning to Doctor Dashboard");
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

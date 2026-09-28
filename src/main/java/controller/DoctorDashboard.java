@@ -134,13 +134,8 @@ public class DoctorDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNewConsultationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewConsultationActionPerformed
-        NewConsultationForm form =
-            new NewConsultationForm(doctor);
-
-        form.setVisible(true);
-        this.dispose();
-        
-// TODO add your handling code here:
+       openNewConsultation();
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnNewConsultationActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -149,28 +144,35 @@ public class DoctorDashboard extends javax.swing.JFrame {
 
     private void btnIssuePrescriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIssuePrescriptionActionPerformed
                 
-        IssuePrescriptionForm form =
-            new IssuePrescriptionForm(doctor);
-
-        form.setVisible(true);
-        this.dispose();// TODO add your handling code here:
+       openIssuePrescription();// TODO add your handling code here:
     }//GEN-LAST:event_btnIssuePrescriptionActionPerformed
 
     private void btnRequestLabTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestLabTestActionPerformed
         
-        RequestLabTestForm form =
-                new RequestLabTestForm(doctor);
-
-        form.setVisible(true);
-
-        this.dispose();//add your handling code here:// TODO add your handling code here:
+        openRequestLabTest();//add your handling code here:// TODO add your handling code here:
     }//GEN-LAST:event_btnRequestLabTestActionPerformed
 
     private void txtEditProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEditProfileActionPerformed
         
         openEditProfile();// TODO add your handling code here:
     }//GEN-LAST:event_txtEditProfileActionPerformed
-
+    
+    private void openNewConsultation() {
+        NewConsultationForm form = new NewConsultationForm(doctor);
+        form.setVisible(true);
+        this.dispose();
+    }
+    private void openIssuePrescription() {
+        IssuePrescriptionForm form = new IssuePrescriptionForm(doctor);
+        form.setVisible(true);
+        this.dispose();
+    }
+    private void openRequestLabTest() {
+        RequestLabTestForm form = new RequestLabTestForm(doctor);
+        form.setVisible(true);
+        this.dispose();
+        
+    }
     private void openEditProfile() {
     EditProfileForm form = new EditProfileForm(doctor);
     form.setVisible(true);

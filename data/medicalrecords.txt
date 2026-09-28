@@ -1,2 +1,3 @@
 MR1,P001,D001,fever
 MR2,P001,D001,fever
+MR3,P002,D001,viral cough

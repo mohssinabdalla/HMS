@@ -129,16 +129,23 @@ public class RequestLabTestForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbTestTypeActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-         DoctorDashboard dashboard = new DoctorDashboard();
-
-        dashboard.setVisible(true);
-
-    this.dispose();// TODO add your handling code here:
+        goBack(); // TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        submitLabRequest();  // TODO add your handling code here:
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearForm();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void submitLabRequest() {
+        
+
         String patientId = txtPatientId.getText().trim();
         String testType = cmbTestType.getSelectedItem().toString();
+
         if (patientId.isEmpty() || testType.isEmpty()) {
 
             javax.swing.JOptionPane.showMessageDialog(
@@ -161,8 +168,7 @@ public class RequestLabTestForm extends javax.swing.JFrame {
                 "Lab test request submitted successfully!"
             );
 
-            txtPatientId.setText("");
-            cmbTestType.setSelectedIndex(0);
+            clearForm();
 
         } else {
 
@@ -170,17 +176,19 @@ public class RequestLabTestForm extends javax.swing.JFrame {
                 this,
                 "Failed to submit lab test request."
             );
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSubmitActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        }
+    }
+    private void clearForm() {
+        System.out.println("lab test form cleared");
         txtPatientId.setText("");
-        cmbTestType.setSelectedIndex(0);        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+        cmbTestType.setSelectedIndex(0);
+    }
+    private void goBack() {
+        DoctorDashboard dashboard = new DoctorDashboard(doctor);
+        dashboard.setVisible(true);
+        this.dispose();
+        System.out.println("Returning to Doctor Dashboard");
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -208,6 +208,7 @@ public class EditProfileForm extends javax.swing.JFrame {
         }
     }
     private void clearForm() {
+        System.out.println("Profile form cleared");
         txtFullName.setText("");
         txtEmail.setText("");
         txtphoneNumber.setText("");
@@ -217,6 +218,7 @@ public class EditProfileForm extends javax.swing.JFrame {
         DoctorDashboard dashboard = new DoctorDashboard();
         dashboard.setVisible(true);
         this.dispose();
+        System.out.println("Returning to Doctor Dashboard");
     }
 
     
