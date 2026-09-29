@@ -1,2 +1,2 @@
-D001,drchen,doctor123,Dr Chen,chen@apu.edu,0123456780
-D002,drlim,doctor456,Dr Lim,lim@apu.edu,0123456781
+D001,drchen,doctor123,Dr Chen,chen@apu.edu,0123456780,Doctor
+D002,drlim,doctor456,Dr Lim,lim@apu.edu,0123456781,Doctor
