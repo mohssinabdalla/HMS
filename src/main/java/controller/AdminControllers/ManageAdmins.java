@@ -4,7 +4,12 @@
  */
 package controller.AdminControllers;
 
+import exceptions.DataFileNotFoundException;
+import exceptions.DuplicateUserException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import service.FileHelper;
 
 /**
  *
@@ -14,18 +19,31 @@ public class ManageAdmins extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageAdmins.class.getName());
     private DefaultTableModel model = new DefaultTableModel();
-    private String[] columnName = {"User ID", "Username", "Password", "Full Name", "Email", "Phone" };
+    private String[] columnName = {"User ID", "Username", "Password", "Full Name", "Email", "Phone", "Department" };
+    private static final String FILE_PATH = "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt";
+
  
     /**
      * Creates new form ManageAdmins
      */
     public ManageAdmins() {
         model.setColumnIdentifiers(columnName);
-        try{
-            
-        
-        }catch(Exception e){e.getMessage();}
         initComponents();
+        try{
+            List<String> admins = FileHelper.readAllLines("D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt");
+            for (String lines : admins){
+                String[] line = lines.split(",");
+            if(line.length >= 6){
+                model.addRow(line);
+            }
+            }
+        }catch(DataFileNotFoundException e){
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
+        // File doesn't exist yet — table just starts empty, no error shown here
+            
+        }
     }
 
     /**
@@ -52,15 +70,18 @@ public class ManageAdmins extends javax.swing.JFrame {
         userIdLb = new javax.swing.JLabel();
         usernameLb = new javax.swing.JLabel();
         emailTf = new javax.swing.JTextField();
-        passwordTf = new javax.swing.JTextField();
         phoneTf = new javax.swing.JTextField();
         phoneLb = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+        passwordTf = new javax.swing.JPasswordField();
+        departmentLb = new javax.swing.JLabel();
+        departmentTf = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("Admins"); // NOI18N
 
         addBtn.setText("Add");
+        addBtn.addActionListener(this::addBtnActionPerformed);
 
         passwordLb.setText("Password:");
 
@@ -81,54 +102,21 @@ public class ManageAdmins extends javax.swing.JFrame {
 
         usernameLb.setText("Username:");
 
-        passwordTf.addActionListener(this::passwordTfActionPerformed);
-
-        phoneLb.setText("Phone");
+        phoneLb.setText("Phone:");
 
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
+
+        departmentLb.setText("Department:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(167, 167, 167)
-                                        .addComponent(usernameLb)
-                                        .addGap(101, 101, 101)
-                                        .addComponent(passwordLb))
-                                    .addComponent(userIdLb))
-                                .addGap(115, 115, 115)
-                                .addComponent(fullNameLb)
-                                .addGap(264, 264, 264)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(phoneLb)
-                                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emailLb)
-                            .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 9, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(backBtn)
-                .addGap(220, 220, 220)
+                .addGap(338, 338, 338)
                 .addComponent(addBtn)
                 .addGap(18, 18, 18)
                 .addComponent(editBtn)
@@ -137,33 +125,81 @@ public class ManageAdmins extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(clearBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(167, 167, 167)
+                                                .addComponent(usernameLb)
+                                                .addGap(101, 101, 101)
+                                                .addComponent(passwordLb))
+                                            .addComponent(userIdLb))
+                                        .addGap(115, 115, 115)
+                                        .addComponent(fullNameLb))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(328, 328, 328)
+                                        .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(264, 264, 264)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(phoneLb)
+                                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(179, 179, 179)
+                                .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(emailLb)
+                                    .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(departmentLb)
+                            .addComponent(departmentTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userIdLb)
-                    .addComponent(usernameLb)
-                    .addComponent(passwordLb)
-                    .addComponent(fullNameLb)
-                    .addComponent(emailLb)
-                    .addComponent(phoneLb))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(userIdLb)
+                            .addComponent(usernameLb)
+                            .addComponent(passwordLb)
+                            .addComponent(fullNameLb)
+                            .addComponent(emailLb)
+                            .addComponent(phoneLb))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(departmentLb)
+                        .addGap(18, 18, 18)
+                        .addComponent(departmentTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(addBtn)
                     .addComponent(editBtn)
-                    .addComponent(deleteBtn)
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(clearBtn, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(backBtn))
                 .addContainerGap())
@@ -172,17 +208,55 @@ public class ManageAdmins extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwordTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordTfActionPerformed
-
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
         AdminDashboard adminDashboard = new AdminDashboard();
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // TODO add your handling code here:
+    String userId = userIdTf.getText().trim();
+    String userName = usernameTf.getText().trim();
+    String password = new String(passwordTf.getPassword());
+    String fullName = fullNameTf.getText().trim();
+    String email = emailTf.getText().trim();
+    String phone = phoneTf.getText().trim();          // keep as String
+    String department = departmentTf.getText().trim();
 
+    model.addRow(new String[]{userId, userName, password, fullName, email, phone, department});
+
+    if (saveToFile()) {
+        JOptionPane.showMessageDialog(this, fullName + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+        userIdTf.setText("");
+        usernameTf.setText("");
+        passwordTf.setText("");
+        fullNameTf.setText("");
+        emailTf.setText("");
+        phoneTf.setText("");
+        departmentTf.setText("");
+    } else {
+        model.removeRow(model.getRowCount() - 1);     // undo the row, since saving failed
+        JOptionPane.showMessageDialog(this, "Couldn't add " + fullName, "Failed", JOptionPane.ERROR_MESSAGE);
+    }
+        
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    public boolean saveToFile() {
+    List<String> lines = new java.util.ArrayList<>();
+
+    for (int i = 0; i < model.getRowCount(); i++) {
+        String[] cols = new String[model.getColumnCount()];
+        for (int c = 0; c < cols.length; c++) {
+            cols[c] = String.valueOf(model.getValueAt(i, c));
+        }
+        lines.add(String.join(",", cols));            // no "\n", writeAllLines adds it
+    }
+
+    return FileHelper.writeAllLines(FILE_PATH, lines);
+}
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -213,6 +287,8 @@ public class ManageAdmins extends javax.swing.JFrame {
     private javax.swing.JButton backBtn;
     private javax.swing.JButton clearBtn;
     private javax.swing.JButton deleteBtn;
+    private javax.swing.JLabel departmentLb;
+    private javax.swing.JTextField departmentTf;
     private javax.swing.JButton editBtn;
     private javax.swing.JLabel emailLb;
     private javax.swing.JTextField emailTf;
@@ -220,7 +296,7 @@ public class ManageAdmins extends javax.swing.JFrame {
     private javax.swing.JTextField fullNameTf;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel passwordLb;
-    private javax.swing.JTextField passwordTf;
+    private javax.swing.JPasswordField passwordTf;
     private javax.swing.JLabel phoneLb;
     private javax.swing.JTextField phoneTf;
     private javax.swing.JLabel userIdLb;

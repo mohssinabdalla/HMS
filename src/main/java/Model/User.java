@@ -73,6 +73,6 @@ public abstract class User {
      * then append their own fields, keeping a consistent column order per role.
      */
     public String toFileString() {
-        return String.join(",", userId, username, password, fullName, email, phoneNumber, role);
-    }
+    return String.join(",", userId, username, password, fullName, email, phoneNumber);
+}
 }

@@ -148,6 +148,7 @@ public class LoginScreen extends javax.swing.JFrame {
         } else if (loggedInUser instanceof model.Patient) {
             controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
             dashboard.setVisible(true);
+<<<<<<< Updated upstream
             this.dispose();
         } else if (loggedInUser instanceof model.MedicalManager) {
             controller.MedicalManager.MedicalManagerInterface dashboard = 
@@ -155,6 +156,16 @@ public class LoginScreen extends javax.swing.JFrame {
             dashboard.setVisible(true);
             this.dispose();
         } else {
+=======
+            this.dispose();}
+//        else if (loggedInUser instanceof model.MedicalManager) {
+//            controller.MedicalManager.MedicalManagerInterface dashboard = 
+//                new controller.MedicalManager.MedicalManagerInterface((model.MedicalManager) loggedInUser);
+//            dashboard.setVisible(true);
+//            this.dispose();
+//        }
+            else {
+>>>>>>> Stashed changes
             JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         }
     }//GEN-LAST:event_loginBtnActionPerformed
