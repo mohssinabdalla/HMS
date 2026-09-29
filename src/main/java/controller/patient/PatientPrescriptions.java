@@ -4,12 +4,20 @@
  */
 package controller.patient;
 
+import exceptions.DataFileNotFoundException;
+import model.Patient;
+import model.Prescription;
+import service.FileHelper;
+
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author rinsr
  */
 public class PatientPrescriptions extends javax.swing.JFrame {
-    
+    private Patient loggedInPatient;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientPrescriptions.class.getName());
 
     /**
@@ -17,6 +25,96 @@ public class PatientPrescriptions extends javax.swing.JFrame {
      */
     public PatientPrescriptions() {
         initComponents();
+    }
+    public PatientPrescriptions(Patient patient) {
+        initComponents();
+
+        this.loggedInPatient = patient;
+
+        if (patient != null) {
+            lblPatientId.setText("Patient ID: " + patient.getPatientId());
+
+            loadPrescriptions(patient.getPatientId());
+        }
+    }
+    
+    private void loadPrescriptions(String patientId) {
+
+        DefaultTableModel tableModel =
+            (DefaultTableModel) tblPrescriptions.getModel();
+
+        tableModel.setRowCount(0);
+
+        try {
+
+            List<String> lines =
+                FileHelper.readAllLines(
+                    "src/main/data/prescriptions.txt"
+                );
+
+            for (String line : lines) {
+
+                Prescription prescription =
+                    Prescription.fromFileLine(line);
+
+                if (!prescription.getPatientId().equals(patientId)) {
+                    continue;
+                }
+
+                String medicationText =
+                    prescription.getMedicationList();
+
+                String medication = medicationText;
+                String instructions = "-";
+
+            
+                if (medicationText.contains(" - ")) {
+
+                    String[] parts =
+                        medicationText.split(" - ", 2);
+
+                    medication = parts[0].trim();
+                    instructions = parts[1].trim();
+                }
+
+                tableModel.addRow(new Object[] {
+                    prescription.getPrescriptionId(),
+                    "-",                         // Date not available
+                    prescription.getDoctorId(),
+                    medication,
+                    "-",                         // Dosage not available
+                    instructions
+                });
+            }
+
+            if (tableModel.getRowCount() == 0) {
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "No prescriptions found for patient " + patientId,
+                    "Prescriptions",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        } catch (DataFileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(
+                this,
+                e.getMessage(),
+                "Prescription File Error",
+                JOptionPane.ERROR_MESSAGE
+            );  
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Error loading prescriptions: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     /**
@@ -30,7 +128,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
 
         lblTitle = new javax.swing.JLabel();
         lblPatientId = new javax.swing.JLabel();
-        cmbPatientId = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrescriptions = new javax.swing.JTable();
         btnViewPrescription = new javax.swing.JButton();
@@ -41,8 +138,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
         lblTitle.setText("My Prescriptions");
 
         lblPatientId.setText("Patient ID :");
-
-        cmbPatientId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         tblPrescriptions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -60,6 +155,7 @@ public class PatientPrescriptions extends javax.swing.JFrame {
         btnViewPrescription.setText("View Prescription");
 
         btnBack.setText("Back");
+        btnBack.addActionListener(this::btnBackActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -73,9 +169,7 @@ public class PatientPrescriptions extends javax.swing.JFrame {
                         .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(lblPatientId)
-                        .addGap(47, 47, 47)
-                        .addComponent(cmbPatientId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblPatientId)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(59, 59, 59)
@@ -90,20 +184,27 @@ public class PatientPrescriptions extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPatientId)
-                    .addComponent(cmbPatientId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblPatientId)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnViewPrescription)
                     .addComponent(btnBack))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        PatientDashboard dashboard =
+            new PatientDashboard(loggedInPatient);
+
+        dashboard.setVisible(true);
+
+        this.dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,7 +234,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnViewPrescription;
-    private javax.swing.JComboBox<String> cmbPatientId;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPatientId;
     private javax.swing.JLabel lblTitle;

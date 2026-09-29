@@ -4,54 +4,107 @@
  */
 package controller.patient;
 
+import exceptions.DataFileNotFoundException;
+import model.MedicalRecord;
+import model.Patient;
+import service.FileHelper;
+
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rinsr
  */
 public class PatientMedicalHistory extends javax.swing.JFrame {
+    private Patient loggedInPatient;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientMedicalHistory.class.getName());
     
-    private final String[] patientIds = {
-        "P001",
-        "P002"
-    };
     /**
      * Creates new form PatientMedicalHistory
      */
     public PatientMedicalHistory() {
-        initComponents();
-        
-        loadPatientIds();
-        setupMedicalHistoryTable();
-    
+        initComponents();  
     }
     
-    private void loadPatientIds() {
+    public PatientMedicalHistory(Patient patient) {
+        initComponents();
 
-        cmbPatientId.removeAllItems();
+        this.loggedInPatient = patient;
 
-        for (String patientId : patientIds) {
-            cmbPatientId.addItem(patientId);
+        if (patient != null) {
+            lblPatientId.setText(
+                "Patient ID: " + patient.getPatientId()
+            );
+
+            loadMedicalHistory(patient.getPatientId());
         }
     }
     
-    private void setupMedicalHistoryTable() {
+    private void loadMedicalHistory(String patientId) {
 
-        javax.swing.table.DefaultTableModel model =
-            new javax.swing.table.DefaultTableModel(
-                new Object[][] {},
-                new String[] {
-                    "Record ID",
-                    "Date",
-                    "Doctor",
-                    "Diagnosis",
-                    "Notes"
+        DefaultTableModel tableModel =
+            (DefaultTableModel) tblMedicalHistory.getModel();
+
+        tableModel.setRowCount(0);
+
+        try {
+
+            List<String> lines =
+                FileHelper.readAllLines(
+                    "src/main/data/medicalrecords.txt"
+                );
+
+            for (String line : lines) {
+
+                MedicalRecord record =
+                    MedicalRecord.fromFileLine(line);
+
+                if (!record.getPatientId().equals(patientId)) {
+                    continue;
                 }
+
+                tableModel.addRow(new Object[] {
+                    record.getRecordId(),
+                    record.getDoctorId(),
+                    record.getDiagnosis()
+                });
+            }
+            
+            if (tableModel.getRowCount() == 0) {
+                
+                JOptionPane.showMessageDialog(
+                    this,
+                    "No medical history found for patient " + patientId,
+                    "Medical History",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+        } catch (DataFileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(
+                this,
+                e.getMessage(),
+                "Medical Record File Error",
+                JOptionPane.ERROR_MESSAGE
             );
 
-        tblMedicalHistory.setModel(model);
-    }
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Error loading medical history: "
+                    + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }  
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,8 +120,6 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMedicalHistory = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
-        cmbPatientId = new javax.swing.JComboBox<>();
-        btnViewHistory = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,13 +129,13 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
 
         tblMedicalHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Record ID", "Date", "Doctor", "Diagnosis", "Notes"
+                "Record ID", "Doctor ID", "Medical Information"
             }
         ));
         jScrollPane1.setViewportView(tblMedicalHistory);
@@ -92,18 +143,11 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
-        cmbPatientId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbPatientId.addItemListener(this::cmbPatientIdItemStateChanged);
-        cmbPatientId.addActionListener(this::cmbPatientIdActionPerformed);
-
-        btnViewHistory.setText("View Medical History");
-        btnViewHistory.addActionListener(this::btnViewHistoryActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -111,16 +155,11 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
                         .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblPatientId)
-                        .addGap(39, 39, 39)
-                        .addComponent(cmbPatientId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblPatientId))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addComponent(btnBack)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(75, 75, 75)
-                .addComponent(btnViewHistory)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(70, 70, 70))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,48 +167,22 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPatientId)
-                    .addComponent(cmbPatientId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblPatientId)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBack)
-                    .addComponent(btnViewHistory))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(btnBack)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbPatientIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbPatientIdItemStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbPatientIdItemStateChanged
-
-    private void cmbPatientIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPatientIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbPatientIdActionPerformed
-
-    private void btnViewHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHistoryActionPerformed
-        String patientId =
-            cmbPatientId.getSelectedItem().toString();
-
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Medical history for patient " + patientId
-            + " will be loaded here.",
-            "Medical History",
-            javax.swing.JOptionPane.INFORMATION_MESSAGE
-        );
-    }//GEN-LAST:event_btnViewHistoryActionPerformed
-
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         PatientDashboard dashboard =
-            new PatientDashboard();
+            new PatientDashboard(loggedInPatient);
 
         dashboard.setVisible(true);
-
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
@@ -200,8 +213,6 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnViewHistory;
-    private javax.swing.JComboBox<String> cmbPatientId;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPatientId;
     private javax.swing.JLabel lblTitle;

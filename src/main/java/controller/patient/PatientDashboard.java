@@ -82,6 +82,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         btnMedicalHistory.setBackground(new java.awt.Color(255, 255, 153));
         btnMedicalHistory.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnMedicalHistory.setText("Medical History");
+        btnMedicalHistory.addActionListener(this::btnMedicalHistoryActionPerformed);
 
         btnFeedback.setBackground(new java.awt.Color(255, 255, 153));
         btnFeedback.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -91,6 +92,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         btnPrescriptions.setBackground(new java.awt.Color(255, 255, 153));
         btnPrescriptions.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnPrescriptions.setText("Prescriptions");
+        btnPrescriptions.addActionListener(this::btnPrescriptionsActionPerformed);
 
         btnLogout.setBackground(new java.awt.Color(255, 255, 153));
         btnLogout.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -185,6 +187,14 @@ public class PatientDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    private void btnPrescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrescriptionsActionPerformed
+        openPrescriptions();
+    }//GEN-LAST:event_btnPrescriptionsActionPerformed
+
+    private void btnMedicalHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMedicalHistoryActionPerformed
+        openMedicalHistory();
+    }//GEN-LAST:event_btnMedicalHistoryActionPerformed
+
     private void openProfile() {
         controller.patient.PatientProfile profile;
         if (loggedInPatient != null) {
@@ -229,6 +239,26 @@ public class PatientDashboard extends javax.swing.JFrame {
         bookAppointment.setVisible(true);
         this.dispose();
     }
+    
+    private void openPrescriptions () {
+        PatientPrescriptions prescriptions =
+            new PatientPrescriptions(loggedInPatient);
+
+        prescriptions.setVisible(true);
+
+        this.dispose();
+    }
+    private void openMedicalHistory() {
+
+        PatientMedicalHistory history =
+            new PatientMedicalHistory(loggedInPatient);
+
+        history.setVisible(true);
+
+        this.dispose();
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
