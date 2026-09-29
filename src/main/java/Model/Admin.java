@@ -102,4 +102,10 @@ public class Admin extends User {
     public List<String> viewActivityLog() {
         return auditLog.getLogsByUser(this.userId);
     }
+    
+    @Override
+    public String toFileString() {
+        return super.toFileString() + "," + department;
+    }
+    
 }

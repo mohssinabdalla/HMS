@@ -11,7 +11,7 @@ package controller.AdminControllers;
 public class ActivityLogScreen extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ActivityLogScreen.class.getName());
-
+    private model.Admin loggedInAdmin;
     /**
      * Creates new form ActivityLogScreen
      */
@@ -104,7 +104,7 @@ public class ActivityLogScreen extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard();
+        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 

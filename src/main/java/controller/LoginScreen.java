@@ -152,25 +152,24 @@ public class LoginScreen extends javax.swing.JFrame {
         DoctorDashboard dashboard = new DoctorDashboard(doctor);
         dashboard.setVisible(true);
         this.dispose();
-        
-
         } else if (loggedInUser instanceof model.Admin) {
-             controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard();
+             controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard((model.Admin) loggedInUser);
              adminDashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.Patient) {
             controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
             dashboard.setVisible(true);
+
             this.dispose();
         } else if (loggedInUser instanceof model.MedicalManager) {
             controller.MedicalManager.MedicalManagerInterface dashboard = 
                 new controller.MedicalManager.MedicalManagerInterface((model.MedicalManager) loggedInUser);
             dashboard.setVisible(true);
             this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
+        } 
+         else {
+            JOptionPane.showMessageDialog(this, "Unknown user role — no dashboard available.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    
  
 //GEN-LAST:event_loginBtnActionPerformed
     

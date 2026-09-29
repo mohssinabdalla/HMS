@@ -7,6 +7,6 @@ package exceptions;
  */ 
 public class DataFileNotFoundException extends HMSException {
     public DataFileNotFoundException(String message) {
-        super(message);
+        super("There is no data file for admins records!");
     }
 }
