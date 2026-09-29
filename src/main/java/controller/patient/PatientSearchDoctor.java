@@ -7,12 +7,14 @@ package controller.patient;
 import service.PatientDoctorService;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import model.Patient;
 
 /**
  *
  * @author rinsr
  */
 public class PatientSearchDoctor extends javax.swing.JFrame {
+    private Patient loggedInPatient;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientSearchDoctor.class.getName());
 
@@ -21,6 +23,11 @@ public class PatientSearchDoctor extends javax.swing.JFrame {
      */
     public PatientSearchDoctor() {
         initComponents();
+    }
+    
+    public PatientSearchDoctor(Patient patient) {
+        initComponents();
+        this.loggedInPatient = patient;
     }
 
     /**
@@ -84,19 +91,19 @@ public class PatientSearchDoctor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(lblTitle))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(167, 167, 167)
-                        .addComponent(btnBack)))
+                        .addComponent(btnBack))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(lblTitle)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(lblTitle)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSearch)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,7 +144,9 @@ public class PatientSearchDoctor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.patient.PatientDashboard dashboard = new controller.patient.PatientDashboard();
+        controller.patient.PatientDashboard dashboard =
+            new controller.patient.PatientDashboard(loggedInPatient);
+
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
@@ -166,6 +175,7 @@ public class PatientSearchDoctor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new PatientSearchDoctor().setVisible(true));
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;

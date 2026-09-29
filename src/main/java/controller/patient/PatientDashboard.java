@@ -197,7 +197,9 @@ public class PatientDashboard extends javax.swing.JFrame {
     }
 
     private void openSearchDoctor() {
-        controller.patient.PatientSearchDoctor searchDoctor = new controller.patient.PatientSearchDoctor();
+        PatientSearchDoctor searchDoctor =
+            new PatientSearchDoctor(loggedInPatient);
+
         searchDoctor.setVisible(true);
         this.dispose();
     }
