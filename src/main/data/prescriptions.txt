@@ -1,2 +1,2 @@
-RX001,C001,D001,you want to rest more than 2 weeks
+RX001,P001,D001,you want to rest more than 2 weeks
 RX001,P001,D001,paracetamol 500mg - 2 time in a week
