@@ -183,7 +183,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="userIdLb">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Asset ID:"/>
+        <Property name="text" type="java.lang.String" value="Manager ID:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="deleteBtn">

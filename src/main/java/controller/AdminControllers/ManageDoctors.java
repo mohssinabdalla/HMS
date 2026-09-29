@@ -11,7 +11,7 @@ package controller.AdminControllers;
 public class ManageDoctors extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageDoctors.class.getName());
-
+    private model.Admin loggedInAdmin;
     /**
      * Creates new form ManageDoctors
      */
@@ -73,7 +73,7 @@ public class ManageDoctors extends javax.swing.JFrame {
 
         fullNameLb.setText("Full Name:");
 
-        userIdLb.setText("Asset ID:");
+        userIdLb.setText("Doctor ID:");
 
         deleteBtn.setText("Delete");
 
@@ -136,13 +136,14 @@ public class ManageDoctors extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userIdLb)
-                    .addComponent(usernameLb)
-                    .addComponent(fullNameLb)
-                    .addComponent(emailLb)
-                    .addComponent(phoneLb)
-                    .addComponent(passwordLb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(passwordLb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(userIdLb)
+                        .addComponent(usernameLb)
+                        .addComponent(fullNameLb)
+                        .addComponent(emailLb)
+                        .addComponent(phoneLb)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,7 +170,7 @@ public class ManageDoctors extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard();
+        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 

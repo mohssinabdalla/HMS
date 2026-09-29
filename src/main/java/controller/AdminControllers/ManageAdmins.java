@@ -6,8 +6,10 @@ package controller.AdminControllers;
 
 import exceptions.DataFileNotFoundException;
 import exceptions.DuplicateUserException;
+import exceptions.InvalidPhoneNumberException;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import service.FileHelper;
 
@@ -18,19 +20,35 @@ import service.FileHelper;
 public class ManageAdmins extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageAdmins.class.getName());
+    private model.Admin loggedInAdmin;
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = {"User ID", "Username", "Password", "Full Name", "Email", "Phone", "Department" };
     private static final String FILE_PATH = "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt";
+    private int row = -1;
 
  
     /**
      * Creates new form ManageAdmins
      */
+    
+    public ManageAdmins(model.Admin loggedInAdmin) {
+        this();   // reuses the no-arg constructor's setup (column headers, initComponents, loading the table)
+        this.loggedInAdmin = loggedInAdmin;
+        userIdTf.setEditable(false);
+        }
     public ManageAdmins() {
         model.setColumnIdentifiers(columnName);
         initComponents();
+        usersTable.getColumnModel().getColumn(2).setMinWidth(0);
+        usersTable.getColumnModel().getColumn(2).setMaxWidth(0);
+        usersTable.getColumnModel().getColumn(2).setWidth(0);
         try{
-            List<String> admins = FileHelper.readAllLines("D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt");
+            List<String> admins = FileHelper.readAllLines(FILE_PATH);
+                admins.sort((a, b) -> {
+                String idA = a.split(",")[0];
+                String idB = b.split(",")[0];
+                return idA.compareTo(idB);
+            });
             for (String lines : admins){
                 String[] line = lines.split(",");
             if(line.length >= 6){
@@ -44,6 +62,7 @@ public class ManageAdmins extends javax.swing.JFrame {
         // File doesn't exist yet — table just starts empty, no error shown here
             
         }
+        userIdTf.setEditable(false);
     }
 
     /**
@@ -86,19 +105,27 @@ public class ManageAdmins extends javax.swing.JFrame {
         passwordLb.setText("Password:");
 
         editBtn.setText("Edit");
+        editBtn.addActionListener(this::editBtnActionPerformed);
 
         fullNameLb.setText("Full Name:");
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(this::deleteBtnActionPerformed);
 
         emailLb.setText("Email:");
 
         clearBtn.setText("Clear");
+        clearBtn.addActionListener(this::clearBtnActionPerformed);
 
         usersTable.setModel(model);
+        usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                usersTableMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(usersTable);
 
-        userIdLb.setText("Asset ID:");
+        userIdLb.setText("Admin ID:");
 
         usernameLb.setText("Username:");
 
@@ -211,24 +238,32 @@ public class ManageAdmins extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard();
+        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         // TODO add your handling code here:
-    String userId = userIdTf.getText().trim();
     String userName = usernameTf.getText().trim();
     String password = new String(passwordTf.getPassword());
     String fullName = fullNameTf.getText().trim();
     String email = emailTf.getText().trim();
-    String phone = phoneTf.getText().trim();          // keep as String
+    String phone = phoneTf.getText().trim();
     String department = departmentTf.getText().trim();
+
+    try {
+        validatePhoneNumber(phone);
+        validateUniqueUsername(userName);
+    } catch (InvalidPhoneNumberException | DuplicateUserException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String userId = generateNextId("A");
 
     model.addRow(new String[]{userId, userName, password, fullName, email, phone, department});
 
     if (saveToFile()) {
         JOptionPane.showMessageDialog(this, fullName + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-        userIdTf.setText("");
         usernameTf.setText("");
         passwordTf.setText("");
         fullNameTf.setText("");
@@ -236,11 +271,123 @@ public class ManageAdmins extends javax.swing.JFrame {
         phoneTf.setText("");
         departmentTf.setText("");
     } else {
-        model.removeRow(model.getRowCount() - 1);     // undo the row, since saving failed
+        model.removeRow(model.getRowCount() - 1);
         JOptionPane.showMessageDialog(this, "Couldn't add " + fullName, "Failed", JOptionPane.ERROR_MESSAGE);
     }
         
     }//GEN-LAST:event_addBtnActionPerformed
+
+    private void usersTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersTableMouseReleased
+        // TODO add your handling code here:
+        int row = usersTable.getSelectedRow();
+                
+        String userId = String.valueOf(usersTable.getValueAt(row, 0));
+        String userName = String.valueOf(usersTable.getValueAt(row, 1));
+        String password = String.valueOf(usersTable.getValueAt(row, 2));
+        String fullName = String.valueOf(usersTable.getValueAt(row, 3));
+        String email = String.valueOf(usersTable.getValueAt(row, 4));
+        String phone = String.valueOf(usersTable.getValueAt(row, 5));
+        String department = String.valueOf(usersTable.getValueAt(row, 6));
+        
+        userIdTf.setText(userId);
+        usernameTf.setText(userName);
+        passwordTf.setText(password);
+        fullNameTf.setText(fullName);
+        emailTf.setText(email);
+        phoneTf.setText(phone);
+        departmentTf.setText(department);
+    }//GEN-LAST:event_usersTableMouseReleased
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        // TODO add your handling code here:
+        String userName = usernameTf.getText().trim();
+        String password = new String(passwordTf.getPassword());
+        String fullName = fullNameTf.getText().trim();
+        String email = emailTf.getText().trim();
+        String phone = phoneTf.getText().trim();
+        String department = departmentTf.getText().trim();
+        int row = usersTable.getSelectedRow();
+
+        if(row == -1){
+            JOptionPane.showMessageDialog(null,"Must clcik a row");
+        
+        }
+        
+        try {
+            validatePhoneNumber(phone);
+        } catch (InvalidPhoneNumberException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String userId = generateNextId("A");
+        model.removeRow(row);
+        model.insertRow(row, new String[]{userId, userName, password, fullName, email, phone, department});
+
+        if (saveToFile()) {
+            JOptionPane.showMessageDialog(this, fullName + " edited successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            usernameTf.setText("");
+            passwordTf.setText("");
+            fullNameTf.setText("");
+            emailTf.setText("");
+            phoneTf.setText("");
+            departmentTf.setText("");
+        } else {
+            model.removeRow(model.getRowCount() - 1);
+            JOptionPane.showMessageDialog(this, "Couldn't edit " + fullName, "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // TODO add your handling code here:
+        int row = usersTable.getSelectedRow();
+
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Must click a row", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;   // stop here — nothing below should run
+        }
+
+        String fullName = fullNameTf.getText().trim();
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete " + fullName + "?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;   // user clicked "No" — stop, don't delete anything
+        }
+
+        model.removeRow(row);
+        usernameTf.setText("");
+        passwordTf.setText("");
+        fullNameTf.setText("");
+        emailTf.setText("");
+        phoneTf.setText("");
+        departmentTf.setText("");
+
+        if (saveToFile()) {
+            JOptionPane.showMessageDialog(this, fullName + " deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Couldn't delete " + fullName, "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+        
+        userIdTf.setText("");
+        usernameTf.setText("");
+        passwordTf.setText("");
+        fullNameTf.setText("");
+        emailTf.setText("");
+        phoneTf.setText("");
+        departmentTf.setText("");
+    }//GEN-LAST:event_clearBtnActionPerformed
 
     public boolean saveToFile() {
     List<String> lines = new java.util.ArrayList<>();
@@ -255,8 +402,46 @@ public class ManageAdmins extends javax.swing.JFrame {
 
     return FileHelper.writeAllLines(FILE_PATH, lines);
 }
+    private void validatePhoneNumber(String phone) throws InvalidPhoneNumberException {
+    if (!phone.matches("\\d+")) {
+        throw new InvalidPhoneNumberException("Phone number must contain digits only.");
+        }
+    }
     
-    
+    private void validateUniqueUsername(String username) throws DuplicateUserException {
+    try {
+            List<String> lines = FileHelper.readAllLines(FILE_PATH);
+            for (String line : lines) {
+                String[] p = line.split(",");
+                if (p.length > 1 && p[1].equalsIgnoreCase(username)) {
+                    throw new DuplicateUserException("Username \"" + username + "\" already exists.");
+                }
+            }
+        } catch (DataFileNotFoundException e) {
+            // no file yet, so nothing to clash with
+        }
+    }
+    private String generateNextId(String prefix) {
+    int maxNumber = 0;
+    try {
+        List<String> lines = FileHelper.readAllLines(FILE_PATH);
+        for (String line : lines) {
+            String[] p = line.split(",");
+            if (p.length > 0 && p[0].startsWith(prefix)) {
+                try {
+                    int num = Integer.parseInt(p[0].substring(prefix.length()));
+                    if (num > maxNumber) maxNumber = num;
+                } catch (NumberFormatException e) {
+                    // skip malformed IDs
+                }
+            }
+        }
+    } catch (DataFileNotFoundException e) {
+        // no file yet, so start from 0
+    }
+
+    return prefix + String.format("%03d", maxNumber + 1);   // A001, A002, ...
+}
     /**
      * @param args the command line arguments
      */
@@ -305,4 +490,5 @@ public class ManageAdmins extends javax.swing.JFrame {
     private javax.swing.JTextField usernameTf;
     private javax.swing.JTable usersTable;
     // End of variables declaration//GEN-END:variables
+
 }

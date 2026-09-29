@@ -11,7 +11,7 @@ package controller.AdminControllers;
 public class ManageMedicalManagers extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageMedicalManagers.class.getName());
-
+    private model.Admin loggedInAdmin;
     /**
      * Creates new form ManageMedicalManagers
      */
@@ -73,7 +73,7 @@ public class ManageMedicalManagers extends javax.swing.JFrame {
 
         fullNameLb.setText("Full Name:");
 
-        userIdLb.setText("Asset ID:");
+        userIdLb.setText("Manager ID:");
 
         deleteBtn.setText("Delete");
 
@@ -169,7 +169,7 @@ public class ManageMedicalManagers extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard();
+        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 

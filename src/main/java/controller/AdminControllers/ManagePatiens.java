@@ -73,7 +73,7 @@ public class ManagePatiens extends javax.swing.JFrame {
 
         fullNameLb.setText("Full Name:");
 
-        userIdLb.setText("Asset ID:");
+        userIdLb.setText("Patient ID:");
 
         deleteBtn.setText("Delete");
 
