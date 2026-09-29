@@ -2,7 +2,7 @@ package model;
 
 public abstract class Report {
     
-    // common details for any report
+    // common details for report
     protected String reportId;
     protected String dateGenerated;
 
@@ -11,10 +11,10 @@ public abstract class Report {
         this.dateGenerated = generatedDate;
     }
 
-    // child classes have to write their own print logic
+    
     public abstract void generateReport();
 
-    // --- getters down here ---
+    // --- getters  here ---
     public String getReportId() {
         return reportId;
     }

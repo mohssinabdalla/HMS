@@ -46,7 +46,7 @@ public class Shift {
         this.shiftType = shiftType; 
     }
 
-    // File Persistence Helper
+    
     public String toFileString() {
         return shiftId + "," + startTime + "," + endTime + "," + shiftType;
     }

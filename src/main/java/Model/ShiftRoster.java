@@ -6,9 +6,8 @@ import java.util.Map;
 
 public class ShiftRoster {
     
-    // basic roster info
     private String rosterId;
-    private String startDate; // represents the week start date
+    private String startDate; 
     
     // maps a doctor to their assigned shift
     private Map<Doctor, Shift> shiftMap;
@@ -19,17 +18,12 @@ public class ShiftRoster {
         this.shiftMap = new HashMap<>();
     }
 
-    // link a doctor to a shift in the map
+    // links a doctor to a shift in map
     public void assignDoctor(Doctor doc, Shift shift) {
         if (doc != null && shift != null) {
             shiftMap.put(doc, shift);
-            // System.out.println("debug: assigned doctor to roster");
+            
         }
-    }
-
-    // take a doctor off the roster
-    public void removeDoctor(Doctor doc) {
-        shiftMap.remove(doc);
     }
 
     // --- getters and setters down here ---

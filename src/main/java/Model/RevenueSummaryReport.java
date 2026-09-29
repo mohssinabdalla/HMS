@@ -8,7 +8,7 @@ public class RevenueSummaryReport extends Report {
 
     @Override
     public void generateReport() {
-        // show all the money related stuff here
+        // show money related stuff here
         System.out.println("=== Revenue Summary Report ===");
         System.out.println("Report ID: " + this.reportId);
         System.out.println("Generated Date: " + this.dateGenerated);
