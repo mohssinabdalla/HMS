@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package controller.AdminControllers;
+import model.Admin;
+import controller.LoginScreen;
 
 /**
  *
@@ -11,11 +13,19 @@ package controller.AdminControllers;
 public class AdminDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminDashboard.class.getName());
+    private model.Admin loggedInAdmin; 
 
     /**
      * Creates new form AdminDashboard
+     * @param admin
      */
-    public AdminDashboard() {
+    public AdminDashboard(Admin admin) {
+        initComponents();
+         this.loggedInAdmin = admin;
+        welcomeLb.setText("Welcome, " + admin.getFullName());
+    }
+
+    private AdminDashboard() {
         initComponents();
     }
 
@@ -301,7 +311,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void manageAdminsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageAdminsBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ManageAdmins manageAdmins = new ManageAdmins();
+        
+        ManageAdmins manageAdmins = new ManageAdmins(loggedInAdmin);
         manageAdmins.setVisible(true);
     }//GEN-LAST:event_manageAdminsBtnActionPerformed
 
@@ -335,6 +346,9 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void logoutBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtn1ActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        LoginScreen loginScreen = new LoginScreen();
+        loginScreen.setVisible(true);
     }//GEN-LAST:event_logoutBtn1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -364,7 +378,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         managePatiens.setVisible(true);
     }//GEN-LAST:event_managePatientsBtnActionPerformed
    
-        
+
     /**
      * @param args the command line arguments
      */

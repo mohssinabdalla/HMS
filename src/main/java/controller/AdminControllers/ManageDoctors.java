@@ -11,7 +11,7 @@ package controller.AdminControllers;
 public class ManageDoctors extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageDoctors.class.getName());
-
+    private model.Admin loggedInAdmin;
     /**
      * Creates new form ManageDoctors
      */
@@ -33,7 +33,6 @@ public class ManageDoctors extends javax.swing.JFrame {
         usernameTf = new javax.swing.JTextField();
         emailTf = new javax.swing.JTextField();
         fullNameTf = new javax.swing.JTextField();
-        passwordTf = new javax.swing.JTextField();
         phoneTf = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
         phoneLb = new javax.swing.JLabel();
@@ -47,13 +46,12 @@ public class ManageDoctors extends javax.swing.JFrame {
         usernameLb = new javax.swing.JLabel();
         emailLb = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+        passwordTf = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("Doctors"); // NOI18N
 
         clearBtn.setText("Clear");
-
-        passwordTf.addActionListener(this::passwordTfActionPerformed);
 
         addBtn.setText("Add");
 
@@ -75,7 +73,7 @@ public class ManageDoctors extends javax.swing.JFrame {
 
         fullNameLb.setText("Full Name:");
 
-        userIdLb.setText("Asset ID:");
+        userIdLb.setText("Doctor ID:");
 
         deleteBtn.setText("Delete");
 
@@ -93,33 +91,7 @@ public class ManageDoctors extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(167, 167, 167)
-                                .addComponent(usernameLb)
-                                .addGap(101, 101, 101)
-                                .addComponent(passwordLb))
-                            .addComponent(userIdLb))
-                        .addGap(115, 115, 115)
-                        .addComponent(fullNameLb)
-                        .addGap(264, 264, 264)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(phoneLb)
-                            .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 984, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emailLb)
-                            .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(backBtn)
                         .addGap(226, 226, 226)
@@ -129,28 +101,57 @@ public class ManageDoctors extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(deleteBtn)
                         .addGap(18, 18, 18)
-                        .addComponent(clearBtn)))
+                        .addComponent(clearBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(167, 167, 167)
+                                .addComponent(usernameLb))
+                            .addComponent(userIdLb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(passwordLb)
+                                .addGap(111, 111, 111)
+                                .addComponent(fullNameLb)
+                                .addGap(264, 264, 264)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(phoneLb)
+                                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(emailLb)
+                                    .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGap(6, 6, 6))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(userIdLb)
-                    .addComponent(usernameLb)
-                    .addComponent(passwordLb)
-                    .addComponent(fullNameLb)
-                    .addComponent(emailLb)
-                    .addComponent(phoneLb))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(passwordLb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(userIdLb)
+                        .addComponent(usernameLb)
+                        .addComponent(fullNameLb)
+                        .addComponent(emailLb)
+                        .addComponent(phoneLb)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userIdTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fullNameTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phoneTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -160,20 +161,16 @@ public class ManageDoctors extends javax.swing.JFrame {
                     .addComponent(deleteBtn)
                     .addComponent(clearBtn, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(backBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwordTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwordTfActionPerformed
-
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard();
+        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -214,7 +211,7 @@ public class ManageDoctors extends javax.swing.JFrame {
     private javax.swing.JTextField fullNameTf;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel passwordLb;
-    private javax.swing.JTextField passwordTf;
+    private javax.swing.JPasswordField passwordTf;
     private javax.swing.JLabel phoneLb;
     private javax.swing.JTextField phoneTf;
     private javax.swing.JLabel userIdLb;
