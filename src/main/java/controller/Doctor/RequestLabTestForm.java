@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.Doctor;
+
+import controller.Doctor.DoctorDashboard;
 
 /**
  *
@@ -53,21 +55,30 @@ public class RequestLabTestForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        lblTitle.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         lblTitle.setText("Request Lab Test");
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("PatientID:");
 
+        txtPatientId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel2.setText("Test Type:");
 
+        cmbTestType.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         cmbTestType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Blood Test", "Urine Test", "X-Ray", "MRI Scan", "CT Scan" }));
         cmbTestType.addActionListener(this::cmbTestTypeActionPerformed);
 
+        btnSubmit.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnSubmit.setText("Submit Lab Request");
         btnSubmit.addActionListener(this::btnSubmitActionPerformed);
 
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
 
+        btnBack.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
@@ -76,28 +87,30 @@ public class RequestLabTestForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(91, 91, 91)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTitle)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtPatientId)
-                            .addComponent(cmbTestType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(50, 50, 50)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPatientId)
+                                    .addComponent(cmbTestType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSubmit)
+                                .addGap(51, 51, 51)
+                                .addComponent(btnClear))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSubmit)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnClear)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addGap(106, 106, 106)
+                        .addComponent(lblTitle)))
+                .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnBack)
-                .addGap(126, 126, 126))
+                .addGap(103, 103, 103))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,7 +131,7 @@ public class RequestLabTestForm extends javax.swing.JFrame {
                     .addComponent(btnClear))
                 .addGap(18, 18, 18)
                 .addComponent(btnBack)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();

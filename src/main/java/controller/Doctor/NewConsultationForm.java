@@ -1,4 +1,6 @@
-package controller;
+package controller.Doctor;
+
+import controller.Doctor.DoctorDashboard;
 
 public class NewConsultationForm extends javax.swing.JFrame {
     
@@ -61,30 +63,47 @@ public NewConsultationForm(model.Doctor doctor) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        lblTitle.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         lblTitle.setText("New Consultation");
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel3.setText("PatientID:");
 
+        txtPatientId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtPatientId.addActionListener(this::txtPatientIdActionPerformed);
 
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel5.setText("Blood Pressure:");
 
+        txtBloodPressure.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel6.setText("Heart Rate:");
 
+        txtHeartRate.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel7.setText("Temperature:");
 
+        txtTemperature.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel8.setText("Diagnosis:");
 
         txtDiagnosis.setColumns(20);
+        txtDiagnosis.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtDiagnosis.setRows(5);
         jScrollPane1.setViewportView(txtDiagnosis);
 
+        btnSave.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnSave.setText("Save Consultation");
         btnSave.addActionListener(this::btnSaveActionPerformed);
 
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
 
+        btnBack.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
@@ -104,7 +123,6 @@ public NewConsultationForm(model.Doctor doctor) {
                             .addComponent(jLabel8))
                         .addGap(60, 60, 60)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTitle)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(txtTemperature, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
@@ -117,9 +135,13 @@ public NewConsultationForm(model.Doctor doctor) {
                         .addGap(51, 51, 51)
                         .addComponent(btnClear))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(btnBack)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addGap(114, 114, 114)
+                        .addComponent(lblTitle)))
+                .addContainerGap(40, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnBack)
+                .addGap(143, 143, 143))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,7 +168,7 @@ public NewConsultationForm(model.Doctor doctor) {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnClear))

@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.Doctor;
+
+import controller.Doctor.DoctorDashboard;
 
 /**
  *
@@ -55,24 +57,32 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        lblTitle.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         lblTitle.setText("Issue Prescription");
 
+        lbl.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         lbl.setText("PatientID:");
 
+        txtPatientId.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtPatientId.addActionListener(this::txtPatientIdActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setText("Medication:");
 
         txtMedication.setColumns(20);
+        txtMedication.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         txtMedication.setRows(5);
         jScrollPane1.setViewportView(txtMedication);
 
+        btnSave.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnSave.setText("Save Prescription");
         btnSave.addActionListener(this::btnSaveActionPerformed);
 
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
 
+        btnBack.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
@@ -82,9 +92,6 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(157, 157, 157)
-                        .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -100,12 +107,15 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
                         .addGap(86, 86, 86)
                         .addComponent(btnSave)
                         .addGap(40, 40, 40)
-                        .addComponent(btnClear)))
-                .addContainerGap(56, Short.MAX_VALUE))
+                        .addComponent(btnClear))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(lblTitle)))
+                .addContainerGap(50, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnBack)
-                .addGap(132, 132, 132))
+                .addGap(136, 136, 136))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +130,7 @@ public class IssuePrescriptionForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnClear))

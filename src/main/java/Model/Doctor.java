@@ -100,8 +100,7 @@ public class Doctor extends User {
 
         try {
 
-            List<String> lines =
-                    FileHelper.readAllLines("data/shifts.txt");
+            List<String> lines = FileHelper.readAllLines("data/shifts.txt");
                     
 
             String result = "";
