@@ -1,10 +1,7 @@
-MR001,TP097791,D001,fever
-MR001,TP097791,D001,fever
-MR001,P001,D001,fever
-MR001,P001,D001,fever
-MR001,P001,D001,fever
-MR001,P001,D001,fever
-MR001,C001,D001,fever
-MR001,C001,D001,fever
-MR001,C001,D001,fever
-MR001,C001,D001,fever
+MR1,P001,D001,fever
+MR2,P001,D001,fever
+MR3,P002,D001,viral cough
+MR4,P002,D002,viral fever
+MR5,P002,D001,ligament injury
+MR6,P002,D001,ligament injury
+MR7,P002,D001,ligament injury

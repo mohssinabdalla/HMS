@@ -2,8 +2,10 @@ package model;
 
 import service.PatientAppointmentService;
 import service.PatientFeedbackService;
+import exceptions.BookingConflictException;
+import exceptions.AppointmentNotFoundException;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Scanner;;
 
 /**
  * Represents a Patient in the Hospital Management System.
@@ -47,9 +49,7 @@ public class Patient extends User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    // -------------------------
-    // Profile Update
-    // -------------------------
+
 
     @Override
     public boolean updateOwnProfile(String fullName,
@@ -76,13 +76,9 @@ public class Patient extends User {
     }
     @Override
     public void loadExtraFields(String[] extraFields){}
-    // -------------------------
-    // Patient Operations
-    // -------------------------
 
-    /**
-     * Allows the Patient to book an appointment.
-     */
+
+  
     public void bookAppointment() {
 
         Scanner scanner = new Scanner(System.in);
@@ -104,12 +100,19 @@ public class Patient extends User {
         Appointment appointment = new Appointment(
                 appointmentId, patientId, doctorId, date, time);
 
-        boolean success = service.bookAppointment(appointment);
+        try {
+            boolean success = service.bookAppointment(appointment);
 
-        if (success) {
-            System.out.println("Appointment booked successfully. ID: " + appointmentId);
-        } else {
-            System.out.println("Could not book appointment.");
+            if (success) {
+                System.out.println(
+                        "Appointment booked successfully. ID: " + appointmentId
+            );
+            } else {
+                System.out.println("Could not book appointment.");
+            }
+
+        } catch (BookingConflictException e) {
+            System.out.println("Booking failed: " + e.getMessage());
         }
     }
 
@@ -140,17 +143,28 @@ public class Patient extends User {
         System.out.println("Enter new time (e.g. 14:00): ");
         String newTime = scanner.nextLine().trim();
 
-        boolean success = service.rescheduleAppointment(appointmentId, newDate, newTime);
-        if (success) {
-            System.out.println("Appointment " + appointmentId + " rescheduled successfully.");
-        } else {
-            System.out.println("Unable to reschedule appointment.");
+        try {
+            boolean success = service.rescheduleAppointment(
+                appointmentId,
+                newDate,
+                newTime
+            );
+
+            if (success) {
+                System.out.println(
+                        "Appointment " + appointmentId
+                        + " rescheduled successfully."
+                );
+            } else {
+                System.out.println("Unable to reschedule appointment.");
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            System.out.println("Reschedule failed: " + e.getMessage());
         }
     }
 
-    /**
-     * Allows the Patient to view their existing appointments, then select one to cancel.
-     */
+   
     public void cancelAppointment() {
         Scanner scanner = new Scanner(System.in);
         PatientAppointmentService service = new PatientAppointmentService();
@@ -169,26 +183,31 @@ public class Patient extends User {
         System.out.println("\nEnter Appointment ID to cancel (e.g. APT001): ");
         String appointmentId = scanner.nextLine().trim();
 
-        boolean success = service.cancelAppointment(appointmentId);
-        if (success) {
-            System.out.println("Appointment " + appointmentId + " cancelled successfully.");
-        } else {
-            System.out.println("Unable to cancel appointment.");
+        try {
+            boolean success = service.cancelAppointment(appointmentId);
+
+            if (success) {
+            System.out.println(
+                    "Appointment " + appointmentId
+                    + " cancelled successfully."
+            );
+            } else {
+                System.out.println("Unable to cancel appointment.");
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            System.out.println("Cancellation failed: " + e.getMessage());
         }
     }
 
-    /**
-     * Allows the Patient to view medical history.
-     */
+   
     public void viewMedicalHistory() {
         System.out.println(
                 "Patient " + patientId + " can view medical history."
         );
     }
 
-    /**
-     * Allows the Patient to submit feedback.
-     */
+   
     public void submitFeedback() {
 
         Scanner scanner = new Scanner(System.in);
@@ -206,19 +225,25 @@ public class Patient extends User {
 
         Feedback feedback = new Feedback(feedbackId, rating, comment);
 
-        boolean success = service.submitFeedback(feedback, patientId);
+        try {
+            boolean success = service.submitFeedback(feedback, patientId);
 
-        if (success) {
-            System.out.println("Feedback submitted successfully. ID: " + feedbackId);
-        } else {
-            System.out.println("Could not submit feedback.");
+            if (success) {
+                System.out.println(
+                    "Feedback submitted successfully. ID: " + feedbackId
+                );
+            } else {
+                System.out.println("Could not submit feedback.");
+            }
+
+        } catch (exceptions.InvalidRatingException e) {
+
+            System.out.println(
+                "Invalid rating: " + e.getMessage()
+            );
         }
     }
-
-    // -------------------------
-    // File Persistence
-    // -------------------------
-
+    
     @Override
     public String toFileString() {
         return super.toFileString() + ","

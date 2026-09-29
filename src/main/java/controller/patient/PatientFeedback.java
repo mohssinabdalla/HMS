@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import javax.swing.JOptionPane;
 import model.Feedback;
 import service.PatientFeedbackService;
+import model.Patient;
 
 /**
  *
@@ -16,19 +17,30 @@ public class PatientFeedback extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientFeedback.class.getName());
 
-    /**
-     * Creates new form PatientFeedback
-     */
+    private Patient currentPatient;
+
     public PatientFeedback() {
         initComponents();
         cmbRating.removeAllItems();
-
         cmbRating.addItem("1");
         cmbRating.addItem("2");
         cmbRating.addItem("3");
         cmbRating.addItem("4");
         cmbRating.addItem("5");
     }
+    public PatientFeedback(Patient patient) {
+        initComponents();
+        cmbRating.removeAllItems();
+        cmbRating.addItem("1");
+        cmbRating.addItem("2");
+        cmbRating.addItem("3");
+        cmbRating.addItem("4");
+        cmbRating.addItem("5");
+
+        this.currentPatient = patient;
+        txtPatientId.setText(patient.getPatientId());
+        txtPatientId.setEditable(false);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -201,37 +213,40 @@ public class PatientFeedback extends javax.swing.JFrame {
                 rating,
                 comment
             );
+        
+        
+        try {
+            boolean success = service.submitFeedback(feedback, patientId);
 
-        boolean success =
-            service.submitFeedback(feedback, patientId);
+            if (success) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Feedback submitted successfully."
+                );
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Could not submit feedback."
+                );
+            }
 
-        if (success) {
+        } catch (exceptions.InvalidRatingException e) {
+
             JOptionPane.showMessageDialog(
                 this,
-                "Feedback submitted successfully!\n"
-                + "Feedback ID: " + feedbackId,
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-
-        txtPatientId.setText("");
-        cmbRating.setSelectedIndex(0);
-        txtComment.setText("");
-
-    } else {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Failed to submit feedback.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
+                e.getMessage(),
+                "Invalid Rating",
+                JOptionPane.WARNING_MESSAGE
             );
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        PatientDashboard dashboard = new PatientDashboard();
-        dashboard.setVisible(true);
+        if (currentPatient != null) {
+            new controller.patient.PatientDashboard(currentPatient).setVisible(true);
+        } else {
+            new controller.patient.PatientDashboard().setVisible(true);
+        }
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
