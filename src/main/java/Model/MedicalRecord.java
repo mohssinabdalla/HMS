@@ -36,6 +36,10 @@ public class MedicalRecord {
         return diagnosis;
     }
     
+    public String getDoctorId() {
+        return doctorId;
+    }
+    
     public void viewDetails() {
        
     }

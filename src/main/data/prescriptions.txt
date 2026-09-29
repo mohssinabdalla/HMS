@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 RX001,P001,D001,you want to rest more than 2 weeks
 RX001,C001,D001,you want to rest more than 2 weeks
 RX001,P001,D001,paracetamol 500mg - 2 time in a week
+=======
+RX1,P001,D001,paracetamol 500mg - 2 in weekly
+RX2,P002,D001,dolo- daily two tableted
+RX3,P002,D001,Cetirizine 10mg - 1 tablet, once daily
+RX4,P002,D001,patient want to take keyhole surgery
+RX5,P002,D001,patient want to take rest for 1 month
+>>>>>>> main
+RX12,P001,D001,paracetamol 500g - daily

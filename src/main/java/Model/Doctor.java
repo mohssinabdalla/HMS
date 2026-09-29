@@ -194,7 +194,7 @@ public class Doctor extends User {
         }
 
         VitalSign vital = new VitalSign(
-                nextId("data/vitals.txt", "v"),
+                nextId("src/main/data/vitals.txt", "v"),
                 patientId,
                 doctorId,
                 bloodPressure,
@@ -203,7 +203,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/vitals.txt",
+                "src/main/data/vitals.txt",
                 vital.toFileLine()
         );
     }
@@ -266,14 +266,14 @@ public class Doctor extends User {
 
         MedicalRecord record = new MedicalRecord(
                 
-                nextId("data/medicalrecords.txt","MR"),
+                nextId("src/main/data/medicalrecords.txt","MR"),
                 patientId,
                 doctorId,
                 diagnosis
         );
 
         return FileHelper.appendLine(
-                "data/medicalrecords.txt",
+                "src/main/data/medicalrecords.txt",
                 record.toFileLine()
         );
     }
@@ -296,14 +296,14 @@ public class Doctor extends User {
         }
 
         Prescription prescription = new Prescription(
-                nextId("data/prescriptions.txt", "RX"),
+                nextId("src/main/data/prescriptions.txt", "RX"),
                 patientId,
                 doctorId,
                 medicationList
         );
 
         return FileHelper.appendLine(
-                "data/prescriptions.txt",
+                "src/main/data/prescriptions.txt",
                 prescription.toFileLine()
         );
     }
@@ -324,7 +324,7 @@ public class Doctor extends User {
         }
 
         LabRequest request = new LabRequest(
-                nextId("data/labrequests.txt", "LR"),
+                nextId("src/main/data/labrequests.txt", "LR"),
                 patientId,
                 doctorId,
                 testType,
@@ -332,7 +332,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/labrequests.txt",
+               "src/main/data/labrequests.txt",
                 request.toFileLine()
         );
     }
@@ -349,7 +349,7 @@ public class Doctor extends User {
         }
 
         String consultationId = nextId(
-                "data/consultations.txt", "C");
+               "src/main/data/consultations.txt", "C");
 
         String line = String.join(
                 ",",
@@ -360,7 +360,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/consultations.txt",
+                "src/main/data/consultations.txt",
                 line
         );
     }
@@ -376,7 +376,7 @@ public class Doctor extends User {
 
             List<String> lines =
                     FileHelper.readAllLines(
-                            "data/medicalrecords.txt");
+                           "src/main/data/medicalrecords.txt");
 
             StringBuilder result = new StringBuilder();
 
@@ -415,7 +415,7 @@ public class Doctor extends User {
 
             List<String> lines =
                     FileHelper.readAllLines(
-                            "data/labrequests.txt");
+                            "src/main/data/labrequests.txt");
 
             List<String> updated = new ArrayList<>();
 
@@ -445,7 +445,7 @@ public class Doctor extends User {
                         "Lab request not found: " + requestId);
             }
 
-            return FileHelper.writeAllLines("data/labrequests.txt", updated);
+            return FileHelper.writeAllLines("src/main/data/labrequests.txt", updated);
 
         } catch (DataFileNotFoundException e) {
 

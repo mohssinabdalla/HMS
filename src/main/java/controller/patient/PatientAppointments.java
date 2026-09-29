@@ -2,11 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import model.Appointment;
+import model.Patient;
 import service.PatientAppointmentService;
 import javax.swing.table.DefaultTableModel;
+import exceptions.AppointmentNotFoundException;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -15,14 +17,27 @@ import javax.swing.JOptionPane;
  * @author rinsr
  */
 public class PatientAppointments extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientAppointments.class.getName());
+
+    private Patient loggedInPatient;
+
+    private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(PatientAppointments.class.getName());
 
     /**
      * Creates new form PatientAppointments
      */
     public PatientAppointments() {
         initComponents();
+    }
+    public PatientAppointments(Patient patient) {
+        initComponents();
+
+        this.loggedInPatient = patient;
+
+        if (patient != null) {
+            txtPatientId.setText(patient.getPatientId());
+            txtPatientId.setEditable(false);
+        }
     }
 
     /**
@@ -146,30 +161,49 @@ public class PatientAppointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        String patientId = txtPatientId.getText().trim();
+        String patientId;
+
+        if (loggedInPatient != null) {
+            patientId = loggedInPatient.getPatientId();
+        } else {
+            patientId = txtPatientId.getText().trim();
+        }
 
         if (patientId.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a Patient ID.");
+            JOptionPane.showMessageDialog(
+                this,
+                "Patient ID not found."
+            );
             return;
         }
 
-        PatientAppointmentService service = new PatientAppointmentService();
-        List<Appointment> appointments = service.getAppointmentsByPatient(patientId);
+        PatientAppointmentService service =
+            new PatientAppointmentService();
 
-        DefaultTableModel tableModel = new DefaultTableModel(
-            new Object[][] {},
-            new String[] {"Appointment ID", "Doctor ID", "Date", "Time", "Status"}
-        );
+        List<Appointment> appointments =
+            service.getAppointmentsByPatient(patientId);
 
-        for (Appointment appointment : appointments) {
-            tableModel.addRow(new Object[] {
-                appointment.getAppointmentId(),
-                appointment.getDoctorId(),
-                appointment.getDate(),
-                appointment.getTime(),
-                appointment.getStatus()
-            });
-        }
+        DefaultTableModel tableModel =
+            new DefaultTableModel(
+                new Object[][] {},
+                new String[] {
+                    "Appointment ID",
+                    "Doctor ID",
+                    "Date",
+                    "Time",
+                    "Status"
+                }
+            );
+
+    for (Appointment appointment : appointments) {
+        tableModel.addRow(new Object[] {
+            appointment.getAppointmentId(),
+            appointment.getDoctorId(),
+            appointment.getDate(),
+            appointment.getTime(),
+            appointment.getStatus()
+        });
+    }
 
         tblAppointments.setModel(tableModel);
     }//GEN-LAST:event_btnViewActionPerformed
@@ -195,18 +229,41 @@ public class PatientAppointments extends javax.swing.JFrame {
         }
 
         PatientAppointmentService service = new PatientAppointmentService();
-        boolean success = service.rescheduleAppointment(appointmentId, newDate, newTime);
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Appointment rescheduled.");
-            btnViewActionPerformed(evt);
-        } else {
-            JOptionPane.showMessageDialog(this, "Could not reschedule (already cancelled or not found).");
+        try {
+            boolean success = service.rescheduleAppointment(
+                appointmentId,
+                newDate,
+                newTime
+        );
+
+            if (success) {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Appointment rescheduled."
+                );
+                btnViewActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not reschedule because the appointment is not currently booked."
+                );
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Appointment Not Found",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_btnRescheduleActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.PatientDashboard dashboard = new controller.PatientDashboard();
+        PatientDashboard dashboard =
+            new PatientDashboard(loggedInPatient);
+
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
@@ -230,13 +287,30 @@ public class PatientAppointments extends javax.swing.JFrame {
         }
 
         PatientAppointmentService service = new PatientAppointmentService();
-        boolean success = service.cancelAppointment(appointmentId);
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Appointment cancelled.");
-            btnViewActionPerformed(evt);
-        } else {
-            JOptionPane.showMessageDialog(this, "Could not cancel (already cancelled or not found).");
+        try {
+            boolean success = service.cancelAppointment(appointmentId);
+
+            if (success) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Appointment cancelled."
+              );
+                btnViewActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not cancel because the appointment is not currently booked."
+                );
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Appointment Not Found",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
