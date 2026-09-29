@@ -62,29 +62,36 @@ public class Doctor extends User {
         try {
 
             List<String> lines =
-                    FileHelper.readAllLines("data/users.txt");
+                    FileHelper.readAllLines("src/main/data/UsersData/doctors.txt");
 
-            List<String> updated =
-                    new ArrayList<>();
+            List<String> updated = new ArrayList<>();
+            boolean found = false;
 
             for (String line : lines) {
 
                 if (line.startsWith(userId + ",")) {
                     updated.add(toFileString());
+                    found = true;
                 } else {
                     updated.add(line);
                 }
             }
+            if (! found) {
+                 System.out.println("Doctor not found: " + userId);
+                return false;
+                
+            }
 
             return FileHelper.writeAllLines(
-                    "data/users.txt",
+                    "src/main/data/UsersData/doctors.txt",
+                    
                     updated
             );
 
         } catch (DataFileNotFoundException e) {
 
             System.out.println(
-                    "Users file not found: "
+                    "Dooctors file not found: "
                     + e.getMessage()
             );
 
@@ -100,24 +107,39 @@ public class Doctor extends User {
 
         try {
 
-            List<String> lines = FileHelper.readAllLines("data/shifts.txt");
+            List<String> lines = FileHelper.readAllLines("src/main/data/rosters.txt");
                     
 
-            String result = "";
+            StringBuilder result = new StringBuilder();
                     
 
             for (String line : lines) {
-                if (line.contains(doctorId)) {
-                    result += line + "\n";
-                            
+                String[] parts = line.split(",");
+                
+            if (parts.length >= 4 && parts[0].trim().equalsIgnoreCase(fullName)) {
+                result.append("Date: ")
+                        .append(parts[1].trim())
+                        .append("\n");
+
+                result.append("Timing: ")
+                        .append(parts[2].trim())
+                        .append("\n");
+
+                result.append("Department: ")
+                        .append(parts[3].trim())
+                        .append("\n");
+
+                result.append("-------------------------")
+                        .append("\n");
                 }
             }
+            if (result.length() == 0) { return "No shift assigned.";}
 
-            return result;
+            return result.toString();
 
         } catch (DataFileNotFoundException e) {
 
-            return "";
+            return "No shift roaster found";
         }
     }
 
