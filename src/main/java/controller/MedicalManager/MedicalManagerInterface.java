@@ -16,7 +16,7 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
        updateWelcomeMessage();
     }
 
-    // Parameterized constructor used after login
+    //constructor used after login
     public MedicalManagerInterface(MedicalManager manager) {
         this.currentManager = manager;
         initComponents();
@@ -305,7 +305,7 @@ public class MedicalManagerInterface extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(() -> new MedicalManagerInterface().setVisible(true));
     }
 

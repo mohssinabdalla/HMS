@@ -14,10 +14,10 @@ public class HospitalMetricsReport extends Report {
         System.out.println("Generated Date: " + this.dateGenerated);
         System.out.println("Metrics: Total Patient Admissions, Occupancy Rate, Active Shift Count.");
         
-        // System.out.println("debug: metrics generated");
+        
     }
     
-    // Method to return text formatted for GUI dialogs
+    // method to return text formatted for GUI dialogs
     public String getReportDetails() {
         return """
                === Hospital Metrics Report ===

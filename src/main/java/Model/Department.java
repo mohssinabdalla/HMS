@@ -18,7 +18,7 @@ public class Department {
         return deptId + "," + name + "," + desc;
     }
     
-    // --- getters and setters down here ---
+    // --- getter and setter here ---
 
     public String getDepartmentId() { 
         return deptId; 
