@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import model.Patient;
 import service.PatientDoctorService;
 import service.PatientAppointmentService;
+import exceptions.BookingConflictException;
 import model.Appointment;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -268,26 +269,33 @@ public class PatientBookAppointment extends javax.swing.JFrame {
                 time
             );
 
-        boolean success =
-            service.bookAppointment(appointment);
+        try {
+            boolean success = service.bookAppointment(appointment);
 
-        if (success) {
+            if (success) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Appointment booked successfully. ID: " + appointmentId
+                );
 
-            JOptionPane.showMessageDialog(
+                cmbDoctor.setSelectedIndex(-1);
+                txtDate.setText("");
+                txtTime.setText("");
+
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Could not book appointment."
+                );
+            }
+
+        } catch (BookingConflictException e) {
+
+        JOptionPane.showMessageDialog(
                 this,
-                "Appointment booked successfully.\n"
-                + "Appointment ID: "
-                + appointmentId
-            );
-
-            txtDate.setText("");
-            txtTime.setText("");
-
-        } else {
-
-            JOptionPane.showMessageDialog(
-                this,
-                "Could not book appointment."
+                e.getMessage(),
+                "Booking Conflict",
+                JOptionPane.WARNING_MESSAGE
             );
         }
     }//GEN-LAST:event_btnBookActionPerformed

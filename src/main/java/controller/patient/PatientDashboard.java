@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
+import controller.LoginScreen;
+import controller.patient.PatientAppointments;
 import javax.swing.JOptionPane;
 import model.Patient;
 
@@ -115,10 +117,9 @@ public class PatientDashboard extends javax.swing.JFrame {
                             .addComponent(btnFeedback, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(150, 150, 150)
-                        .addComponent(lblTitle))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(lblWelcome)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblWelcome)
+                            .addComponent(lblTitle))))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -185,18 +186,18 @@ public class PatientDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void openProfile() {
-        controller.PatientProfile profile;
+        controller.patient.PatientProfile profile;
         if (loggedInPatient != null) {
-            profile = new controller.PatientProfile(loggedInPatient);
+            profile = new controller.patient.PatientProfile(loggedInPatient);
         } else {
-            profile = new controller.PatientProfile();
+            profile = new controller.patient.PatientProfile();
         }
         profile.setVisible(true);
         this.dispose();
     }
 
     private void openSearchDoctor() {
-        controller.PatientSearchDoctor searchDoctor = new controller.PatientSearchDoctor();
+        controller.patient.PatientSearchDoctor searchDoctor = new controller.patient.PatientSearchDoctor();
         searchDoctor.setVisible(true);
         this.dispose();
     }
@@ -220,9 +221,9 @@ public class PatientDashboard extends javax.swing.JFrame {
  
 
     private void openBookAppointment() {
-        controller.PatientBookAppointment bookAppointment = (loggedInPatient != null)
-            ? new controller.PatientBookAppointment(loggedInPatient)
-            : new controller.PatientBookAppointment();
+        controller.patient.PatientBookAppointment bookAppointment = (loggedInPatient != null)
+            ? new controller.patient.PatientBookAppointment(loggedInPatient)
+            : new controller.patient.PatientBookAppointment();
         bookAppointment.setVisible(true);
         this.dispose();
     }

@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import model.Appointment;
 import model.Patient;
 import service.PatientAppointmentService;
 import javax.swing.table.DefaultTableModel;
+import exceptions.AppointmentNotFoundException;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -228,13 +229,34 @@ public class PatientAppointments extends javax.swing.JFrame {
         }
 
         PatientAppointmentService service = new PatientAppointmentService();
-        boolean success = service.rescheduleAppointment(appointmentId, newDate, newTime);
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Appointment rescheduled.");
-            btnViewActionPerformed(evt);
-        } else {
-            JOptionPane.showMessageDialog(this, "Could not reschedule (already cancelled or not found).");
+        try {
+            boolean success = service.rescheduleAppointment(
+                appointmentId,
+                newDate,
+                newTime
+        );
+
+            if (success) {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Appointment rescheduled."
+                );
+                btnViewActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not reschedule because the appointment is not currently booked."
+                );
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Appointment Not Found",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_btnRescheduleActionPerformed
 
@@ -265,13 +287,30 @@ public class PatientAppointments extends javax.swing.JFrame {
         }
 
         PatientAppointmentService service = new PatientAppointmentService();
-        boolean success = service.cancelAppointment(appointmentId);
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Appointment cancelled.");
-            btnViewActionPerformed(evt);
-        } else {
-            JOptionPane.showMessageDialog(this, "Could not cancel (already cancelled or not found).");
+        try {
+            boolean success = service.cancelAppointment(appointmentId);
+
+            if (success) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Appointment cancelled."
+              );
+                btnViewActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not cancel because the appointment is not currently booked."
+                );
+            }
+
+        } catch (AppointmentNotFoundException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Appointment Not Found",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 

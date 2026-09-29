@@ -4,6 +4,8 @@ import model.Appointment;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import exceptions.BookingConflictException;
+import exceptions.AppointmentNotFoundException;
 
 /**
  * Handles appointment operations performed by a Patient.
@@ -27,7 +29,8 @@ public class PatientAppointmentService {
     /**
      * Books a new appointment.
      */
-    public boolean bookAppointment(Appointment appointment) {
+    public boolean bookAppointment(Appointment appointment)
+            throws BookingConflictException {
 
         if (appointment == null) {
             return false;
@@ -43,7 +46,24 @@ public class PatientAppointmentService {
 
         // Prevent duplicate appointment IDs.
         if (findAppointment(appointment.getAppointmentId()) != null) {
-            return false;
+            throw new BookingConflictException(
+                "Appointment ID already exists: "
+                + appointment.getAppointmentId()
+            );
+        }
+        for (Appointment existing : appointments) {
+            if (existing.getStatus().equals("Booked")
+                    && existing.getDoctorId().equals(appointment.getDoctorId())
+                    && existing.getDate().equals(appointment.getDate())
+                    && existing.getTime().equals(appointment.getTime())) {
+
+                throw new BookingConflictException(
+                    "Doctor " + appointment.getDoctorId()
+                    + " is already booked on "
+                    + appointment.getDate()
+                    + " at " + appointment.getTime()
+                );
+            }
         }
 
         appointments.add(appointment);
@@ -93,13 +113,16 @@ public class PatientAppointmentService {
      */
     public boolean rescheduleAppointment(String appointmentId,
                                          String newDate,
-                                         String newTime) {
+                                         String newTime) 
+            throws AppointmentNotFoundException {
 
         Appointment appointment =
                 findAppointment(appointmentId);
 
         if (appointment == null) {
-            return false;
+            throw new AppointmentNotFoundException(
+                "Appointment not found: " + appointmentId
+            );
         }
 
         if (!appointment.getStatus().equals("Booked")) {
@@ -116,13 +139,17 @@ public class PatientAppointmentService {
     /**
      * Cancels an appointment.
      */
-    public boolean cancelAppointment(String appointmentId) {
+    public boolean cancelAppointment(String appointmentId) 
+            throws AppointmentNotFoundException {
+
 
         Appointment appointment =
                 findAppointment(appointmentId);
 
         if (appointment == null) {
-            return false;
+            throw new AppointmentNotFoundException(
+                "Appointment not found: " + appointmentId
+            );
         }
 
         if (!appointment.getStatus().equals("Booked")) {

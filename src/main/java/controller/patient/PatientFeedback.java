@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import javax.swing.JOptionPane;
 import model.Feedback;
@@ -213,38 +213,39 @@ public class PatientFeedback extends javax.swing.JFrame {
                 rating,
                 comment
             );
+        
+        
+        try {
+            boolean success = service.submitFeedback(feedback, patientId);
 
-        boolean success =
-            service.submitFeedback(feedback, patientId);
+            if (success) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Feedback submitted successfully."
+                );
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Could not submit feedback."
+                );
+            }
 
-        if (success) {
+        } catch (exceptions.InvalidRatingException e) {
+
             JOptionPane.showMessageDialog(
                 this,
-                "Feedback submitted successfully!\n"
-                + "Feedback ID: " + feedbackId,
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-
-        cmbRating.setSelectedIndex(0);
-        txtComment.setText("");
-
-    } else {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Failed to submit feedback.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
+                e.getMessage(),
+                "Invalid Rating",
+                JOptionPane.WARNING_MESSAGE
             );
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         if (currentPatient != null) {
-            new controller.PatientDashboard(currentPatient).setVisible(true);
+            new controller.patient.PatientDashboard(currentPatient).setVisible(true);
         } else {
-            new controller.PatientDashboard().setVisible(true);
+            new controller.patient.PatientDashboard().setVisible(true);
         }
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed

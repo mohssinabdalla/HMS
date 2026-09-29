@@ -146,7 +146,7 @@ public class LoginScreen extends javax.swing.JFrame {
              adminDashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.Patient) {
-            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+            controller.patient.PatientDashboard dashboard = new controller.patient.PatientDashboard((model.Patient) loggedInUser);
             dashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.MedicalManager) {

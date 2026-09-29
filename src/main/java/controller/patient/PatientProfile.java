@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import model.Patient;
 import service.PatientProfileService;
@@ -220,9 +220,9 @@ public class PatientProfile extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         if (currentPatient != null) {
-            new controller.PatientDashboard(currentPatient).setVisible(true);
+            new controller.patient.PatientDashboard(currentPatient).setVisible(true);
         } else {
-            new controller.PatientDashboard().setVisible(true);
+            new controller.patient.PatientDashboard().setVisible(true);
         }
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed

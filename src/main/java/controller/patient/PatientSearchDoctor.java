@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
 import service.PatientDoctorService;
 import javax.swing.table.DefaultTableModel;
@@ -137,7 +137,7 @@ public class PatientSearchDoctor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.PatientDashboard dashboard = new controller.PatientDashboard();
+        controller.patient.PatientDashboard dashboard = new controller.patient.PatientDashboard();
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed

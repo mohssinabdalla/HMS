@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import exceptions.InvalidRatingException;
 
 /**
  * Handles Patient feedback storage.
@@ -21,10 +22,15 @@ public class PatientFeedbackService {
     /**
      * Saves feedback into feedback.txt and records the action in auditlog.txt.
      */
-    public boolean submitFeedback(Feedback feedback, String patientId) {
-
+    public boolean submitFeedback(Feedback feedback, String patientId) 
+            throws InvalidRatingException {
         if (feedback == null || patientId == null || patientId.isBlank()) {
             return false;
+        }
+        if (feedback.getRating() < 1 || feedback.getRating() > 5) {
+            throw new InvalidRatingException(
+                "Rating must be between 1 and 5."
+            );
         }
 
         try (FileWriter fw = new FileWriter(FEEDBACK_FILE, true);
