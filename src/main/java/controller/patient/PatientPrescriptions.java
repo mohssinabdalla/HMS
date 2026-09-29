@@ -130,7 +130,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
         lblPatientId = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrescriptions = new javax.swing.JTable();
-        btnViewPrescription = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -153,8 +152,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblPrescriptions);
 
-        btnViewPrescription.setText("View Prescription");
-
         btnBack.setText("Back");
         btnBack.addActionListener(this::btnBackActionPerformed);
 
@@ -164,20 +161,17 @@ public class PatientPrescriptions extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(114, 114, 114)
-                .addComponent(btnViewPrescription)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(156, 156, 156))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(lblPatientId))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(318, 318, 318)
-                        .addComponent(lblTitle)))
-                .addContainerGap(345, Short.MAX_VALUE))
+                        .addComponent(lblTitle))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(231, 231, 231)
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(370, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,11 +181,9 @@ public class PatientPrescriptions extends javax.swing.JFrame {
                 .addComponent(lblPatientId)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnViewPrescription)
-                    .addComponent(btnBack))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBack)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -233,7 +225,6 @@ public class PatientPrescriptions extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnViewPrescription;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPatientId;
     private javax.swing.JLabel lblTitle;

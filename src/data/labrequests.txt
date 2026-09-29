@@ -1,5 +1,0 @@
-LR1,P001,D001,Urine Test,Pending
-LR2,P002,D001,Blood Test,Pending
-LR3,P002,D001,Urine Test,Pending
-LR4,P002,D001,MRI Scan,Pending
-LR5,P002,D001,MRI Scan,Pending
