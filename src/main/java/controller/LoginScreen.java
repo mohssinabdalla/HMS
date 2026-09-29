@@ -4,6 +4,8 @@
  */
 package controller;
 
+import controller.Doctor.DoctorDashboard;
+import controller.Doctor.DoctorDashboard;
 import exceptions.DataFileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -141,7 +143,18 @@ public class LoginScreen extends javax.swing.JFrame {
             return;
         }
         
-        if (loggedInUser instanceof model.Admin) {
+
+        JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
+        //open Doctor Dashboard
+        if (loggedInUser instanceof model.Doctor) {
+        model.Doctor doctor = (model.Doctor) loggedInUser;
+        
+        DoctorDashboard dashboard = new DoctorDashboard(doctor);
+        dashboard.setVisible(true);
+        this.dispose();
+        
+
+        } else if (loggedInUser instanceof model.Admin) {
              controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard();
              adminDashboard.setVisible(true);
             this.dispose();
@@ -157,15 +170,22 @@ public class LoginScreen extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         }
-    }//GEN-LAST:event_loginBtnActionPerformed
     
+ 
+//GEN-LAST:event_loginBtnActionPerformed
+    
+
+
+}
     private AuthService buildAuthService() {
         Map<String, Map<String, User>> allUsers = new HashMap<>();
         
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "C:\\Users\\rinsr\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
-        loadRoleSafely(allUsers, "C:\\Users\\ASUS\\OneDrive - Asia Pacific University of Technology And Innovation (APU)\\Desktop\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+
+        loadRoleSafely(allUsers, "C:\\Users\\mommi\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+
 
         return new AuthService(allUsers);
     }
