@@ -2,16 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package controller;
+package controller.patient;
 
+import controller.LoginScreen;
+import controller.patient.PatientAppointments;
 import javax.swing.JOptionPane;
 import model.Patient;
 
 public class PatientDashboard extends javax.swing.JFrame {
     
+    private Patient loggedInPatient;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PatientDashboard.class.getName());
     
-    private Patient loggedInPatient;
     /**
      * Creates new form PatientDashboard
      */
@@ -79,6 +82,7 @@ public class PatientDashboard extends javax.swing.JFrame {
         btnMedicalHistory.setBackground(new java.awt.Color(255, 255, 153));
         btnMedicalHistory.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnMedicalHistory.setText("Medical History");
+        btnMedicalHistory.addActionListener(this::btnMedicalHistoryActionPerformed);
 
         btnFeedback.setBackground(new java.awt.Color(255, 255, 153));
         btnFeedback.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -88,10 +92,12 @@ public class PatientDashboard extends javax.swing.JFrame {
         btnPrescriptions.setBackground(new java.awt.Color(255, 255, 153));
         btnPrescriptions.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnPrescriptions.setText("Prescriptions");
+        btnPrescriptions.addActionListener(this::btnPrescriptionsActionPerformed);
 
         btnLogout.setBackground(new java.awt.Color(255, 255, 153));
         btnLogout.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnLogout.setText("Logout");
+        btnLogout.addActionListener(this::btnLogoutActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,10 +119,9 @@ public class PatientDashboard extends javax.swing.JFrame {
                             .addComponent(btnFeedback, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(150, 150, 150)
-                        .addComponent(lblTitle))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(lblWelcome)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblWelcome)
+                            .addComponent(lblTitle))))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -148,7 +153,7 @@ public class PatientDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfileActionPerformed
-            openProfile();
+        openProfile();
     }//GEN-LAST:event_btnProfileActionPerformed
 
     private void btnSearchDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDoctorActionPerformed
@@ -167,41 +172,93 @@ public class PatientDashboard extends javax.swing.JFrame {
         openBookAppointment();
     }//GEN-LAST:event_btnBookAppointmentActionPerformed
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to logout?",
+            "Logout",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            LoginScreen login = new LoginScreen();
+            login.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnPrescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrescriptionsActionPerformed
+        openPrescriptions();
+    }//GEN-LAST:event_btnPrescriptionsActionPerformed
+
+    private void btnMedicalHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMedicalHistoryActionPerformed
+        openMedicalHistory();
+    }//GEN-LAST:event_btnMedicalHistoryActionPerformed
+
     private void openProfile() {
-        controller.PatientProfile profile;
+        controller.patient.PatientProfile profile;
         if (loggedInPatient != null) {
-            profile = new controller.PatientProfile(loggedInPatient);
+            profile = new controller.patient.PatientProfile(loggedInPatient);
         } else {
-            profile = new controller.PatientProfile();
+            profile = new controller.patient.PatientProfile();
         }
         profile.setVisible(true);
         this.dispose();
     }
 
     private void openSearchDoctor() {
-        JOptionPane.showMessageDialog(
-            this,
-            "Doctor Search will open after Admin add doctors."
-        );
+        PatientSearchDoctor searchDoctor =
+            new PatientSearchDoctor(loggedInPatient);
+
+        searchDoctor.setVisible(true);
+        this.dispose();
     }
 
     private void openFeedback() {
-        PatientFeedback feedback = new PatientFeedback();
+        PatientFeedback feedback = (loggedInPatient != null)
+            ? new PatientFeedback(loggedInPatient)
+            : new PatientFeedback();
         feedback.setVisible(true);
         this.dispose();
     }
+   
 
     private void openAppointments() {
-        PatientAppointments appointments = new PatientAppointments();
+        PatientAppointments appointments = (loggedInPatient != null)
+            ? new PatientAppointments(loggedInPatient)
+            : new PatientAppointments();
         appointments.setVisible(true);
         this.dispose();
     }
+ 
 
     private void openBookAppointment() {
-        controller.PatientBookAppointment bookAppointment = new controller.PatientBookAppointment();
+        controller.patient.PatientBookAppointment bookAppointment = (loggedInPatient != null)
+            ? new controller.patient.PatientBookAppointment(loggedInPatient)
+            : new controller.patient.PatientBookAppointment();
         bookAppointment.setVisible(true);
         this.dispose();
     }
+    
+    private void openPrescriptions () {
+        PatientPrescriptions prescriptions =
+            new PatientPrescriptions(loggedInPatient);
+
+        prescriptions.setVisible(true);
+
+        this.dispose();
+    }
+    private void openMedicalHistory() {
+
+        PatientMedicalHistory history =
+            new PatientMedicalHistory(loggedInPatient);
+
+        history.setVisible(true);
+
+        this.dispose();
+    }
+    
+    
     /**
      * @param args the command line arguments
      */

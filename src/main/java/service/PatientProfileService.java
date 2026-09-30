@@ -12,10 +12,11 @@ import java.util.List;
 
 public class PatientProfileService {
 
-    private static final String USERS_FILE = "data/users.txt";
+    private static final String USERS_FILE = "src/main/data/UsersData/patients.txt";
 
     public String[] loadPatient(String patientId) {
         File file = new File(USERS_FILE);
+
         if (!file.exists()) {
             return null;
         }
@@ -24,7 +25,7 @@ public class PatientProfileService {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(",", -1);
-                if (parts.length >= 7 && parts[0].equals(patientId) && parts[6].equals("Patient")) {
+                if (parts.length >= 6 && parts[0].equals(patientId)) {
                     return parts;
                 }
             }
@@ -48,7 +49,7 @@ public class PatientProfileService {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(",", -1);
-                if (parts.length >= 7 && parts[0].equals(patientId) && parts[6].equals("Patient")) {
+                if (parts.length >= 6 && parts[0].equals(patientId)) {                    parts[3] = newFullName;
                     parts[3] = newFullName;
                     parts[4] = newEmail;
                     parts[5] = newPhone;

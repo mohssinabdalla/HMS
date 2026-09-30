@@ -157,7 +157,7 @@ public class LoginScreen extends javax.swing.JFrame {
             adminDashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.Patient) {
-            controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
+            controller.patient.PatientDashboard dashboard = new controller.patient.PatientDashboard((model.Patient) loggedInUser);
             dashboard.setVisible(true);
 
             this.dispose();
@@ -178,10 +178,16 @@ public class LoginScreen extends javax.swing.JFrame {
 
     private AuthService buildAuthService() {
         Map<String, Map<String, User>> allUsers = new HashMap<>();
+<<<<<<< HEAD
 
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
+=======
+        
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
+
+>>>>>>> f8049b5c4a35f260952059325839d7e543b6af6d
         loadRoleSafely(allUsers, "C:\\Users\\mommi\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
+        loadRoleSafely(allUsers, "src/main/data/UsersData/patients.txt", "Patient");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 
         return new AuthService(allUsers);

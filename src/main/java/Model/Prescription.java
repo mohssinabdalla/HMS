@@ -31,6 +31,10 @@ public class Prescription {
     public String getPatientId() {
         return patientId;
     }
+    
+    public String getDoctorId() {
+        return doctorId;
+    }
 
     public String getMedicationList() {
         return medicationList;
