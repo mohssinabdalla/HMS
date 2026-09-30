@@ -4,19 +4,69 @@
  */
 package controller.AdminControllers;
 
+import exceptions.DataFileNotFoundException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Admin;
+import model.AuditLogEntry;
+
 /**
  *
  * @author hp
  */
 public class ActivityLogScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ActivityLogScreen.class.getName());
     private model.Admin loggedInAdmin;
+    private DefaultTableModel model = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    private String[] columnName = {"Log ID", "User ID", "Action Type", "Target Entity", "Timestamp", "Details"};
+
     /**
      * Creates new form ActivityLogScreen
      */
+    public ActivityLogScreen(Admin loggedInAdmin) {
+        this();
+        this.loggedInAdmin = loggedInAdmin;
+        showAll();
+    }
+
     public ActivityLogScreen() {
         initComponents();
+        model.setColumnIdentifiers(columnName);
+    }
+
+    // Fills the table with the given entries (newest first, as returned by Admin)
+    private void loadTable(List<AuditLogEntry> entries) {
+        model.setRowCount(0);
+        for (AuditLogEntry e : entries) {
+            model.addRow(new String[]{
+                e.getLogId(),
+                e.getUserId(),
+                e.getActionType(),
+                e.getTargetEntity(),
+                e.getTimestamp(),
+                e.getDetails()
+            });
+        }
+    }
+
+    private void showAll() {
+        searchUserIdField.setText("");
+        if (loggedInAdmin == null) {
+            return;
+        }
+
+        try {
+            loadTable(loggedInAdmin.viewAllActivityLogs());
+        } catch (DataFileNotFoundException e) {
+            model.setRowCount(0); // no log file yet — nothing has been recorded
+        }
     }
 
     /**
@@ -41,20 +91,17 @@ public class ActivityLogScreen extends javax.swing.JFrame {
         userIDLb.setText("User ID:");
 
         searchButton.setText("Search by User ID");
+        searchButton.addActionListener(this::searchButtonActionPerformed);
 
         clearButton.setText("Show All");
+        clearButton.addActionListener(this::clearButtonActionPerformed);
 
-        acivityLogsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Log ID", "User ID", "Action Type", "Target Entity", "Timestamp", "Details"
+        acivityLogsTable.setModel(model);
+        acivityLogsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                acivityLogsTableMouseReleased(evt);
             }
-        ));
+        });
         jScrollPane1.setViewportView(acivityLogsTable);
 
         backBtn.setText("Back");
@@ -108,6 +155,43 @@ public class ActivityLogScreen extends javax.swing.JFrame {
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+         if (loggedInAdmin == null) {
+            JOptionPane.showMessageDialog(this, "No admin logged in. Open this screen from the dashboard.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String userId = searchUserIdField.getText().trim();
+        if (userId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter a User ID to search, or click Show All.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            List<AuditLogEntry> results = loggedInAdmin.searchActivityLogsByUser(userId);
+            loadTable(results);
+            if (results.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No log entries found for user " + userId + ".", "No Results", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (DataFileNotFoundException e) {
+            model.setRowCount(0);
+            JOptionPane.showMessageDialog(this, "No activity has been recorded yet.", "No Results", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        // TODO add your handling code here:
+        showAll();
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void acivityLogsTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_acivityLogsTableMouseReleased
+        // TODO add your handling code here:
+         int row = acivityLogsTable.getSelectedRow();
+        if (row == -1) return;
+        searchUserIdField.setText(String.valueOf(model.getValueAt(row, 1)));
+    }//GEN-LAST:event_acivityLogsTableMouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -132,8 +216,7 @@ public class ActivityLogScreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ActivityLogScreen().setVisible(true));
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable acivityLogsTable;

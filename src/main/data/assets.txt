@@ -1,0 +1,12 @@
+H001,ConsultationRoom,Block A - Room 101,Available,1
+H002,ConsultationRoom,Block A - Room 102,Occupied,1
+H003,ConsultationRoom,Block A - Room 103,Maintenance,1
+H004,ConsultationRoom,Block B - Room 201,Available,1
+H005,Ward,Level 3 - General Ward,Available,20
+H006,Ward,Level 4 - Pediatric Ward,Occupied,15
+H007,Ward,Level 5 - ICU,Available,8
+H008,Lab,Level 1 - Pathology Lab,Occupied,6
+H009,Lab,Level 1 - Hematology Lab,Maintenance,4
+H010,Imaging Room,Level 2 - X-Ray Room 1,Available,2
+H011,Imaging Room,Level 2 - MRI Suite,Occupied,1
+H012,Imaging Room,Level 2 - CT Scan Room,Available,1

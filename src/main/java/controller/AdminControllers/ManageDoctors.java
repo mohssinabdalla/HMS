@@ -4,6 +4,16 @@
  */
 package controller.AdminControllers;
 
+import exceptions.DataFileNotFoundException;
+import exceptions.DuplicateUserException;
+import exceptions.InvalidPhoneNumberException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import service.DataPaths;
+import service.FileHelper;
+
 /**
  *
  * @author hp
@@ -11,12 +21,38 @@ package controller.AdminControllers;
 public class ManageDoctors extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageDoctors.class.getName());
+    
     private model.Admin loggedInAdmin;
-    /**
-     * Creates new form ManageDoctors
-     */
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"User ID", "Username", "Password", "Full Name", "Email", "Phone"};
+    private static final String FILE_PATH = DataPaths.forRole("Doctor");
+    
+    public ManageDoctors(model.Admin loggedInAdmin) {
+        this();
+        this.loggedInAdmin = loggedInAdmin;
+    }
     public ManageDoctors() {
+      model.setColumnIdentifiers(columnName);
         initComponents();
+
+        usersTable.getColumnModel().getColumn(2).setMinWidth(0);
+        usersTable.getColumnModel().getColumn(2).setMaxWidth(0);
+        usersTable.getColumnModel().getColumn(2).setWidth(0);
+
+        userIdTf.setEditable(false);
+
+        try {
+            List<String> lines = FileHelper.readAllLines(FILE_PATH);
+            lines.sort((a, b) -> a.split(",")[0].compareTo(b.split(",")[0]));
+            for (String line : lines) {
+                String[] p = line.split(",");
+                if (p.length >= 6) {
+                    model.addRow(p);
+                }
+            }
+        } catch (DataFileNotFoundException e) {
+            // File doesn't exist yet — table just starts empty, no error shown here
+        }
     }
 
     /**
@@ -52,30 +88,32 @@ public class ManageDoctors extends javax.swing.JFrame {
         setName("Doctors"); // NOI18N
 
         clearBtn.setText("Clear");
+        clearBtn.addActionListener(this::clearBtnActionPerformed);
 
         addBtn.setText("Add");
+        addBtn.addActionListener(this::addBtnActionPerformed);
 
         phoneLb.setText("Phone");
 
         passwordLb.setText("Password:");
 
-        usersTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "User ID", "Username", "Password", "Full Name", "Email", "Phone"
+        usersTable.setModel(model);
+        usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                usersTableMouseReleased(evt);
             }
-        ));
+        });
         jScrollPane1.setViewportView(usersTable);
 
         editBtn.setText("Edit");
+        editBtn.addActionListener(this::editBtnActionPerformed);
 
         fullNameLb.setText("Full Name:");
 
         userIdLb.setText("Doctor ID:");
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(this::deleteBtnActionPerformed);
 
         usernameLb.setText("Username:");
 
@@ -173,6 +211,148 @@ public class ManageDoctors extends javax.swing.JFrame {
         AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // TODO add your handling code here:
+        String username = usernameTf.getText().trim();
+        String password = new String(passwordTf.getPassword());
+        String fullName = fullNameTf.getText().trim();
+        String email = emailTf.getText().trim();
+        String phone = phoneTf.getText().trim();
+
+        String userId = service.UserValidationHelper.generateNextId(FILE_PATH, "D");
+
+        model.Patient newPatient = new model.Patient(userId, username, password, fullName, email, phone);
+
+        try {
+            loggedInAdmin.createUser(newPatient, "Doctor");
+
+            // >>> row array must match columnName's column count (6, no department)
+            model.addRow(new String[]{userId, username, password, fullName, email, phone});
+            JOptionPane.showMessageDialog(this, fullName + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            userIdTf.setText("");
+            usernameTf.setText("");
+            passwordTf.setText("");
+            fullNameTf.setText("");
+            emailTf.setText("");
+            phoneTf.setText("");
+
+        } catch (exceptions.HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        // TODO add your handling code here:
+         int row = usersTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to edit first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = userIdTf.getText().trim();
+        String username = usernameTf.getText().trim();
+        String password = new String(passwordTf.getPassword());
+        String fullName = fullNameTf.getText().trim();
+        String email = emailTf.getText().trim();
+        String phone = phoneTf.getText().trim();
+
+        // >>> CHANGE #4d: same subclass swap as addBtn
+        model.Doctor updatedDoctor = new model.Doctor(userId, username, password, fullName, email, phone);
+
+        try {
+            loggedInAdmin.updateUser(updatedDoctor, loggedInAdmin);
+
+            // >>> only 6 columns — no departmentTf line
+            model.setValueAt(userId, row, 0);
+            model.setValueAt(username, row, 1);
+            model.setValueAt(password, row, 2);
+            model.setValueAt(fullName, row, 3);
+            model.setValueAt(email, row, 4);
+            model.setValueAt(phone, row, 5);
+
+            JOptionPane.showMessageDialog(this, fullName + " updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            userIdTf.setText("");
+            usernameTf.setText("");
+            passwordTf.setText("");
+            fullNameTf.setText("");
+            emailTf.setText("");
+            phoneTf.setText("");
+            usersTable.clearSelection();
+
+        } catch (exceptions.HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // TODO add your handling code here:
+        int row = usersTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Must click a row", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = userIdTf.getText().trim();
+        String fullName = fullNameTf.getText().trim();
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete " + fullName + "?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            // >>> CHANGE #4e: role string must match #3
+            loggedInAdmin.deleteUser(userId, "Doctor");
+
+            model.removeRow(row);
+            JOptionPane.showMessageDialog(this, fullName + " deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            userIdTf.setText("");
+            usernameTf.setText("");
+            passwordTf.setText("");
+            fullNameTf.setText("");
+            emailTf.setText("");
+            phoneTf.setText("");
+
+        } catch (exceptions.HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+        userIdTf.setText("");
+        usernameTf.setText("");
+        passwordTf.setText("");
+        fullNameTf.setText("");
+        emailTf.setText("");
+        phoneTf.setText("");
+        usersTable.clearSelection();
+    }//GEN-LAST:event_clearBtnActionPerformed
+
+    private void usersTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersTableMouseReleased
+        // TODO add your handling code here:
+        int row = usersTable.getSelectedRow();
+        if (row == -1) return;
+
+        // >>> only 6 columns now — no departmentTf line
+        userIdTf.setText(String.valueOf(usersTable.getValueAt(row, 0)));
+        usernameTf.setText(String.valueOf(usersTable.getValueAt(row, 1)));
+        passwordTf.setText(String.valueOf(usersTable.getValueAt(row, 2)));
+        fullNameTf.setText(String.valueOf(usersTable.getValueAt(row, 3)));
+        emailTf.setText(String.valueOf(usersTable.getValueAt(row, 4)));
+        phoneTf.setText(String.valueOf(usersTable.getValueAt(row, 5)));
+    }//GEN-LAST:event_usersTableMouseReleased
 
     /**
      * @param args the command line arguments

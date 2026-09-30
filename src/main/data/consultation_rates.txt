@@ -1,0 +1,15 @@
+R001,Cardiology,Junior,120.0,2026-01-01
+R002,Cardiology,Senior,200.0,2026-01-01
+R003,Cardiology,Consultant,320.0,2026-01-01
+R004,Neurology,Junior,130.0,2026-01-01
+R005,Neurology,Senior,210.0,2026-01-01
+R006,Neurology,Consultant,340.0,2026-03-15
+R007,Pediatrics,Junior,70.0,2026-01-01
+R008,Pediatrics,Senior,110.0,2026-01-01
+R009,Pediatrics,Consultant,180.0,2026-02-01
+R010,Orthopedics,Junior,100.0,2026-01-01
+R011,Orthopedics,Senior,170.0,2026-04-01
+R012,Orthopedics,Consultant,280.0,2026-04-01
+R013,General Medicine,Junior,50.0,2026-01-01
+R014,General Medicine,Senior,80.0,2026-01-01
+R015,General Medicine,Consultant,130.0,2026-07-01

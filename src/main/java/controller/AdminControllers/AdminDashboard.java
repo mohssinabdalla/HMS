@@ -3,30 +3,51 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package controller.AdminControllers;
+
 import model.Admin;
 import controller.LoginScreen;
+import service.FileHelper;
+import service.DataPaths;
+import exceptions.DataFileNotFoundException;
 
 /**
  *
  * @author hp
  */
 public class AdminDashboard extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminDashboard.class.getName());
-    private model.Admin loggedInAdmin; 
+    private model.Admin loggedInAdmin;
 
     /**
      * Creates new form AdminDashboard
+     *
      * @param admin
      */
     public AdminDashboard(Admin admin) {
         initComponents();
-         this.loggedInAdmin = admin;
+        this.loggedInAdmin = admin;
         welcomeLb.setText("Welcome, " + admin.getFullName());
+        refreshCounts();   
     }
 
     private AdminDashboard() {
         initComponents();
+    }
+
+    private void refreshCounts() {
+        adminsCountLb.setText(String.valueOf(countUsers("Admin")));
+        DoctorsCountLb.setText(String.valueOf(countUsers("Doctor")));
+        patientsCountLb.setText(String.valueOf(countUsers("Patient")));
+        jLabel3.setText(String.valueOf(countUsers("MedicalManager")));
+    }
+
+    private int countUsers(String role) {
+        try {
+            return FileHelper.readAllLines(DataPaths.forRole(role)).size();
+        } catch (DataFileNotFoundException e) {
+            return 0; // file doesn't exist yet — 0 users, not an error on this screen
+        }
     }
 
     /**
@@ -236,7 +257,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logoutBtn1)
-                .addGap(187, 187, 187)
+                .addGap(95, 95, 95)
                 .addComponent(welcomeLb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -304,14 +325,14 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         // TODO add your handling code here:
         this.dispose();
-        ActivityLogScreen activityLogScreen = new ActivityLogScreen();
+        ActivityLogScreen activityLogScreen = new ActivityLogScreen(loggedInAdmin);
         activityLogScreen.setVisible(true);
     }//GEN-LAST:event_viewActivityLogBtnActionPerformed
 
     private void manageAdminsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageAdminsBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        
+
         ManageAdmins manageAdmins = new ManageAdmins(loggedInAdmin);
         manageAdmins.setVisible(true);
     }//GEN-LAST:event_manageAdminsBtnActionPerformed
@@ -319,28 +340,28 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void allocateAssetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allocateAssetBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AllocateAssetScreen allocateAssetsScreen = new AllocateAssetScreen();
+        AllocateAssetScreen allocateAssetsScreen = new AllocateAssetScreen(loggedInAdmin);
         allocateAssetsScreen.setVisible(true);
     }//GEN-LAST:event_allocateAssetBtnActionPerformed
 
     private void configureRateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureRateBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ConsultationRateScreen consultationRateScreen = new ConsultationRateScreen();
+        ConsultationRateScreen consultationRateScreen = new ConsultationRateScreen(loggedInAdmin);
         consultationRateScreen.setVisible(true);
     }//GEN-LAST:event_configureRateBtnActionPerformed
 
     private void manageInsuranceBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageInsuranceBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        InsuranceNetworkScreen insuranceNetworkScreen = new InsuranceNetworkScreen();
+        InsuranceNetworkScreen insuranceNetworkScreen = new InsuranceNetworkScreen(loggedInAdmin);
         insuranceNetworkScreen.setVisible(true);
     }//GEN-LAST:event_manageInsuranceBtnActionPerformed
 
     private void assignDoctorBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignDoctorBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AssignDoctorScreen assignDoctorScreen = new AssignDoctorScreen();
+        AssignDoctorScreen assignDoctorScreen = new AssignDoctorScreen(loggedInAdmin);
         assignDoctorScreen.setVisible(true);
     }//GEN-LAST:event_assignDoctorBtnActionPerformed
 
@@ -353,31 +374,30 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
-        EditProfileScreen profile = new EditProfileScreen(new model.Admin("!","!","!","1","1","1","1"));
+        EditProfileScreen profile = new EditProfileScreen(loggedInAdmin);
         profile.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void manageManagersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageManagersBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ManageMedicalManagers manageManagers = new ManageMedicalManagers();
+        ManageMedicalManagers manageManagers = new ManageMedicalManagers(loggedInAdmin);
         manageManagers.setVisible(true);
     }//GEN-LAST:event_manageManagersBtnActionPerformed
 
     private void manageDoctorBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageDoctorBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ManageDoctors manageDoctors = new ManageDoctors();
+        ManageDoctors manageDoctors = new ManageDoctors(loggedInAdmin);
         manageDoctors.setVisible(true);
     }//GEN-LAST:event_manageDoctorBtnActionPerformed
 
     private void managePatientsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managePatientsBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ManagePatiens managePatiens = new ManagePatiens();
+        ManagePatiens managePatiens = new ManagePatiens(loggedInAdmin);
         managePatiens.setVisible(true);
     }//GEN-LAST:event_managePatientsBtnActionPerformed
-   
 
     /**
      * @param args the command line arguments

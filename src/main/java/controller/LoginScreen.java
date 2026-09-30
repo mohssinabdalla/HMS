@@ -19,9 +19,10 @@ import service.UserFileLoader;
  * @author hp
  */
 public class LoginScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginScreen.class.getName());
     private AuthService authService;
+
     /**
      * Creates new form LoginScreen
      */
@@ -132,29 +133,28 @@ public class LoginScreen extends javax.swing.JFrame {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         String username = userNameTf.getText().trim();
         String password = new String(passwordTf.getPassword());
-        String selectedType = (String) userTypeDropdown.getSelectedItem();   
-        
+        String selectedType = (String) userTypeDropdown.getSelectedItem();
+
         User loggedInUser = authService.login(username, password, selectedType);
-        
-          if (loggedInUser == null) {
+
+        if (loggedInUser == null) {
             JOptionPane.showMessageDialog(this,
                     "Invalid username or password for the selected user type.",
                     "Login Failed", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
 
         JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFullName() + " (" + loggedInUser.getRole() + ")!");
         //open Doctor Dashboard
         if (loggedInUser instanceof model.Doctor) {
-        model.Doctor doctor = (model.Doctor) loggedInUser;
-        
-        DoctorDashboard dashboard = new DoctorDashboard(doctor);
-        dashboard.setVisible(true);
-        this.dispose();
+            model.Doctor doctor = (model.Doctor) loggedInUser;
+
+            DoctorDashboard dashboard = new DoctorDashboard(doctor);
+            dashboard.setVisible(true);
+            this.dispose();
         } else if (loggedInUser instanceof model.Admin) {
-             controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard((model.Admin) loggedInUser);
-             adminDashboard.setVisible(true);
+            controller.AdminControllers.AdminDashboard adminDashboard = new controller.AdminControllers.AdminDashboard((model.Admin) loggedInUser);
+            adminDashboard.setVisible(true);
             this.dispose();
         } else if (loggedInUser instanceof model.Patient) {
             controller.PatientDashboard dashboard = new controller.PatientDashboard((model.Patient) loggedInUser);
@@ -162,32 +162,31 @@ public class LoginScreen extends javax.swing.JFrame {
 
             this.dispose();
         } else if (loggedInUser instanceof model.MedicalManager) {
-            controller.MedicalManager.MedicalManagerInterface dashboard = 
-                new controller.MedicalManager.MedicalManagerInterface((model.MedicalManager) loggedInUser);
+            controller.MedicalManager.MedicalManagerInterface dashboard
+                    = new controller.MedicalManager.MedicalManagerInterface((model.MedicalManager) loggedInUser);
             dashboard.setVisible(true);
             this.dispose();
-        } 
-         else {
+        } else {
             JOptionPane.showMessageDialog(this, "Unknown user role — no dashboard available.", "Error", JOptionPane.ERROR_MESSAGE);
         }
- 
+
 //GEN-LAST:event_loginBtnActionPerformed
     
 
 
-}
+    }
+
     private AuthService buildAuthService() {
         Map<String, Map<String, User>> allUsers = new HashMap<>();
-        
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\admins.txt", "Admin");
+
+        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
         loadRoleSafely(allUsers, "C:\\Users\\mommi\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\patients.txt", "Patient");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 
-
         return new AuthService(allUsers);
     }
-    
+
     private void loadRoleSafely(Map<String, Map<String, User>> allUsers, String filePath, String role) {
         try {
             allUsers.put(role, UserFileLoader.loadUsersFromFile(filePath, role));
@@ -196,7 +195,7 @@ public class LoginScreen extends javax.swing.JFrame {
             allUsers.put(role, new HashMap<>());
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */

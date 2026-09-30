@@ -33,7 +33,9 @@ public abstract class User {
     public String getEmail() { return email; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getRole() { return role; }
-
+    public String getPassword() {       
+        return password;
+    }
     // ---- Shared behavior ----
     public String getProfile() {
         return "ID: " + userId + " | Name: " + fullName + " | Role: " + role

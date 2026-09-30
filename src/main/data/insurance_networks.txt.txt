@@ -1,0 +1,7 @@
+N001,MediShield Plus,80.0,Active
+N002,CarePoint Insurance,70.0,Active
+N003,LifeGuard Health,90.0,Active
+N004,UnityCare Assurance,60.0,Inactive
+N005,Horizon Medical Cover,85.0,Active
+N006,SafeHaven Health,75.0,Inactive
+ 

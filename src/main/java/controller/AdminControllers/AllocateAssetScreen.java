@@ -4,21 +4,62 @@
  */
 package controller.AdminControllers;
 
+import exceptions.DataFileNotFoundException;
+import exceptions.HMSException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.HospitalAsset;
+import service.DataPaths;
+import service.UserValidationHelper;
+
 /**
  *
  * @author hp
  */
 public class AllocateAssetScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AllocateAssetScreen.class.getName());
     private model.Admin loggedInAdmin;
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Asset ID", "Asset Type", "Location", "Status", "Capacity"};
+
     /**
      * Creates new form AllocateAssetScreen
      */
+
+    public AllocateAssetScreen(model.Admin loggedInAdmin) {
+        this();
+        this.loggedInAdmin = loggedInAdmin;
+        assetIdTf.setEditable(false);
+        loadTable();
+    }
+
     public AllocateAssetScreen() {
+        model.setColumnIdentifiers(columnName);
         initComponents();
     }
 
+    // Loads the table from the file, going through Admin (no direct file access here)
+    private void loadTable() {
+        model.setRowCount(0);
+        if (loggedInAdmin == null) return;
+
+        try {
+            List<HospitalAsset> assets = loggedInAdmin.viewAllHospitalAssets();
+            for (HospitalAsset a : assets) {
+                model.addRow(new String[]{
+                    a.getAssetId(),
+                    a.getAssetType(),
+                    a.getLocation(),
+                    a.getStatus(),
+                    String.valueOf(a.getCapacity())
+                });
+            }
+        } catch (DataFileNotFoundException e) {
+            // File doesn't exist yet — table just starts empty
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,23 +103,25 @@ public class AllocateAssetScreen extends javax.swing.JFrame {
 
         statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Occupied", "Maintenance" }));
 
-        assetsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Asset ID", "Asset Type", "Location", "Status", "Capacity"
+        assetsTable.setModel(model);
+        assetsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                assetsTableMouseReleased(evt);
             }
-        ));
+        });
         jScrollPane1.setViewportView(assetsTable);
 
         addBtn.setText("Add");
+        addBtn.addActionListener(this::addBtnActionPerformed);
 
         editBtn.setText("Edit");
+        editBtn.addActionListener(this::editBtnActionPerformed);
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(this::deleteBtnActionPerformed);
 
         clearBtn.setText("Clear");
+        clearBtn.addActionListener(this::clearBtnActionPerformed);
 
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
@@ -113,7 +156,7 @@ public class AllocateAssetScreen extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(backBtn)
-                        .addGap(154, 154, 154)
+                        .addGap(190, 190, 190)
                         .addComponent(addBtn)
                         .addGap(18, 18, 18)
                         .addComponent(editBtn)
@@ -147,7 +190,7 @@ public class AllocateAssetScreen extends javax.swing.JFrame {
                     .addComponent(addBtn)
                     .addComponent(editBtn)
                     .addComponent(deleteBtn)
-                    .addComponent(clearBtn, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(clearBtn, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(backBtn))
                 .addContainerGap())
         );
@@ -162,6 +205,140 @@ public class AllocateAssetScreen extends javax.swing.JFrame {
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
 
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // TODO add your handling code here:
+        String assetType = (String) assetTypeCb.getSelectedItem();
+        String location = locationTf.getText().trim();
+        String status = (String) statusCb.getSelectedItem();
+        String capacityText = capacityTf.getText().trim();
+
+        if (location.isEmpty() || capacityText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Location and Capacity are required.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int capacity;
+        try {
+            capacity = Integer.parseInt(capacityText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Capacity must be a whole number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // ID is auto-generated, never typed by the user
+            String assetId = UserValidationHelper.generateNextId(DataPaths.forEntity("HospitalAsset"), "H");
+            HospitalAsset asset = HospitalAsset.create(assetType, assetId, location, status, capacity);
+
+            loggedInAdmin.addHospitalAsset(asset);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, assetType + " at " + location + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        // TODO add your handling code here:
+        int row = assetsTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to edit first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String assetId = assetIdTf.getText().trim();
+        String assetType = (String) assetTypeCb.getSelectedItem();
+        String location = locationTf.getText().trim();
+        String status = (String) statusCb.getSelectedItem();
+        String capacityText = capacityTf.getText().trim();
+
+        if (location.isEmpty() || capacityText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Location and Capacity are required.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int capacity;
+        try {
+            capacity = Integer.parseInt(capacityText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Capacity must be a whole number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            HospitalAsset asset = HospitalAsset.create(assetType, assetId, location, status, capacity);
+
+            loggedInAdmin.updateHospitalAsset(asset);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, assetType + " at " + location + " updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // TODO add your handling code here:
+         int row = assetsTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Must click a row", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String assetId = String.valueOf(model.getValueAt(row, 0));
+        String label = model.getValueAt(row, 1) + " at " + model.getValueAt(row, 2);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete " + label + "?",
+                "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        try {
+            loggedInAdmin.deleteHospitalAsset(assetId);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, label + " deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+                clearFields();
+    }//GEN-LAST:event_clearBtnActionPerformed
+
+    private void assetsTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_assetsTableMouseReleased
+        // TODO add your handling code here:
+        int row = assetsTable.getSelectedRow();
+        if (row == -1) return;
+        assetIdTf.setText(String.valueOf(model.getValueAt(row, 0)));
+        assetTypeCb.setSelectedItem(String.valueOf(model.getValueAt(row, 1)));
+        locationTf.setText(String.valueOf(model.getValueAt(row, 2)));
+        statusCb.setSelectedItem(String.valueOf(model.getValueAt(row, 3)));
+        capacityTf.setText(String.valueOf(model.getValueAt(row, 4)));
+    }//GEN-LAST:event_assetsTableMouseReleased
+                              
+
+    private void clearFields() {
+        assetIdTf.setText("");
+        assetTypeCb.setSelectedIndex(0);
+        locationTf.setText("");
+        statusCb.setSelectedIndex(0);
+        capacityTf.setText("");
+        assetsTable.clearSelection();
+    }
     /**
      * @param args the command line arguments
      */

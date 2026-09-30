@@ -4,19 +4,107 @@
  */
 package controller.AdminControllers;
 
+import com.mycompany.hms.HMS;
+import static controller.AdminControllers.AdminDashboard.main;
+import exceptions.DataFileNotFoundException;
+import exceptions.HMSException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Admin;
+import model.DoctorAssignment;
+import service.DataPaths;
+import service.UserValidationHelper;
+
 /**
  *
  * @author hp
  */
 public class AssignDoctorScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AssignDoctorScreen.class.getName());
-    private model.Admin loggedInAdmin;
+    private Admin loggedInAdmin;
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Assignment ID", "Doctor ID", "Manager ID", "Assigned Date", "Status"};
+
     /**
      * Creates new form AssignDoctorScreen
      */
+    public AssignDoctorScreen(Admin loggedInAdmin) {
+        this();
+        this.loggedInAdmin = loggedInAdmin;
+        loadCombos();
+        loadTable();
+    }
+
     public AssignDoctorScreen() {
+        model.setColumnIdentifiers(columnName);
         initComponents();
+//        assignBtn.addActionListener(this::assignBtnActionPerformed);
+        refreshBtn.addActionListener(this::refreshBtnActionPerformed);
+    }
+// Fills both dropdowns from the doctor / manager files, going through Admin
+
+    private void loadCombos() {
+        doctorCb.removeAllItems();
+        managerCb.removeAllItems();
+        if (loggedInAdmin == null) {
+            return;
+        }
+
+        try {
+            for (String[] d : loggedInAdmin.viewUserSummaries(Admin.ROLE_DOCTOR)) {
+                doctorCb.addItem(d[0] + " - " + d[1]);
+            }
+        } catch (DataFileNotFoundException e) {
+            // no doctors file yet — dropdown stays empty
+        }
+        try {
+            for (String[] m : loggedInAdmin.viewUserSummaries(Admin.ROLE_MANAGER)) {
+                managerCb.addItem(m[0] + " - " + m[1]);
+            }
+        } catch (DataFileNotFoundException e) {
+            // no managers file yet — dropdown stays empty
+        }
+    }
+
+    // Loads the assignments table from the file, going through Admin
+    private void loadTable() {
+        model.setRowCount(0);
+        if (loggedInAdmin == null) {
+            return;
+        }
+
+        try {
+            List<DoctorAssignment> assignments = loggedInAdmin.viewAllAssignments();
+            for (DoctorAssignment a : assignments) {
+                model.addRow(new String[]{
+                    a.getAssignmentId(),
+                    a.getDoctorId(),
+                    a.getManagerId(),
+                    a.getAssignedDate().toString(),
+                    a.getStatus()
+                });
+            }
+        } catch (DataFileNotFoundException e) {
+            // File doesn't exist yet — table just starts empty
+        }
+    }
+
+    // "D001 - Dr Ahmad" -> "D001"
+    private String idOf(Object comboItem) {
+        String text = String.valueOf(comboItem);
+        int cut = text.indexOf(" - ");
+        return cut == -1 ? text : text.substring(0, cut);
+    }
+
+    private void selectById(javax.swing.JComboBox<String> cb, String id) {
+        for (int i = 0; i < cb.getItemCount(); i++) {
+            if (cb.getItemAt(i).startsWith(id + " - ")) {
+                cb.setSelectedIndex(i);
+                return;
+            }
+        }
     }
 
     /**
@@ -34,9 +122,10 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
         managerCb = new javax.swing.JComboBox<>();
         doctorCb = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        assignmentsTable = new javax.swing.JTable();
         refreshBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+        endAssignmentBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,24 +134,24 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
         jLabel2.setText("Medical Manager:");
 
         assignBtn.setText("Assign");
+        assignBtn.addActionListener(this::assignBtnActionPerformed);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Assignment ID", "Doctor ID", "Manager ID", "Assigned Date", "Status"
+        assignmentsTable.setModel(model);
+        assignmentsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                assignmentsTableMouseReleased(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(assignmentsTable);
 
         refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(this::refreshBtnActionPerformed);
 
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
+
+        endAssignmentBtn.setText("End Assignment");
+        endAssignmentBtn.addActionListener(this::endAssignmentBtnActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,22 +160,28 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(refreshBtn)
-                            .addGap(85, 85, 85)
-                            .addComponent(doctorLb)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(doctorCb, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(85, 85, 85)
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(managerCb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(85, 85, 85)
-                            .addComponent(assignBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(backBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(backBtn)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(refreshBtn)
+                                .addGap(54, 54, 54)
+                                .addComponent(doctorLb)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(doctorCb, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(managerCb, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(assignBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(endAssignmentBtn)
+                                .addGap(0, 5, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,12 +193,13 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
                     .addComponent(assignBtn)
                     .addComponent(managerCb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(doctorCb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshBtn))
-                .addGap(18, 18, 18)
+                    .addComponent(refreshBtn)
+                    .addComponent(endAssignmentBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backBtn)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -115,6 +211,88 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
         AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void assignmentsTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_assignmentsTableMouseReleased
+        // TODO add your handling code here:
+        int row = assignmentsTable.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        selectById(doctorCb, String.valueOf(model.getValueAt(row, 1)));
+        selectById(managerCb, String.valueOf(model.getValueAt(row, 2)));
+    }//GEN-LAST:event_assignmentsTableMouseReleased
+
+    private void assignBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignBtnActionPerformed
+        // TODO add your handling code here:
+        if (loggedInAdmin == null) {
+            JOptionPane.showMessageDialog(this, "No admin logged in. Open this screen from the dashboard.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Object doctorItem = doctorCb.getSelectedItem();
+        Object managerItem = managerCb.getSelectedItem();
+        if (doctorItem == null || managerItem == null) {
+            JOptionPane.showMessageDialog(this, "No doctors or medical managers available. Add them first, then click Refresh.", "Nothing to Assign", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String doctorId = idOf(doctorItem);
+        String managerId = idOf(managerItem);
+
+        try {
+            // ID is auto-generated, never typed by the user
+            String assignmentId = UserValidationHelper.generateNextId(DataPaths.forEntity("DoctorAssignment"), "G");
+            DoctorAssignment assignment = new DoctorAssignment(assignmentId, doctorId, managerId);
+
+            loggedInAdmin.assignDoctorToManager(assignment);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Doctor " + doctorId + " assigned to manager " + managerId, "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_assignBtnActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        // TODO add your handling code here:
+        loadCombos();
+        loadTable();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void endAssignmentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endAssignmentBtnActionPerformed
+        // TODO add your handling code here:
+        int row = assignmentsTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select an assignment row first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String assignmentId = String.valueOf(model.getValueAt(row, 0));
+        String status = String.valueOf(model.getValueAt(row, 4));
+
+        if (DoctorAssignment.STATUS_ENDED.equals(status)) {
+            JOptionPane.showMessageDialog(this, "This assignment is already ended.", "Already Ended", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "End assignment " + assignmentId + "?",
+                "Confirm End Assignment", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            loggedInAdmin.endAssignment(assignmentId);
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Assignment ended successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (exceptions.HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_endAssignmentBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,12 +321,13 @@ public class AssignDoctorScreen extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton assignBtn;
+    private javax.swing.JTable assignmentsTable;
     private javax.swing.JButton backBtn;
     private javax.swing.JComboBox<String> doctorCb;
     private javax.swing.JLabel doctorLb;
+    private javax.swing.JButton endAssignmentBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> managerCb;
     private javax.swing.JButton refreshBtn;
     // End of variables declaration//GEN-END:variables

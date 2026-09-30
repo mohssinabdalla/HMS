@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class AuditLog {
 
-    private static final String LOG_FILE = "data/auditlog.txt";
+    private static final String LOG_FILE = service.DataPaths.forEntity("AuditLog");
 
     public boolean logAction(String userId, String actionType, String targetEntity, String details) {
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());

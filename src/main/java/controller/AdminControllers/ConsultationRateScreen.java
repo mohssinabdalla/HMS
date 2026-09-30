@@ -4,19 +4,69 @@
  */
 package controller.AdminControllers;
 
+import exceptions.DataFileNotFoundException;
+import exceptions.HMSException;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.ConsultationRate;
+import service.DataPaths;
+import service.UserValidationHelper;
+
 /**
  *
  * @author hp
  */
 public class ConsultationRateScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ConsultationRateScreen.class.getName());
     private model.Admin loggedInAdmin;
-    /** 
+    private DefaultTableModel model = new DefaultTableModel();
+    private String[] columnName = {"Rate ID", "Department ID", "Doctor Level", "Base Amount", "Effective Date"};
+
+    /**
      * Creates new form ConsultationRateScreen
      */
+    public ConsultationRateScreen(model.Admin loggedInAdmin) {
+        this();
+        this.loggedInAdmin = loggedInAdmin;
+        rateIdTf.setEditable(false);
+        loadTable();
+    }
+
     public ConsultationRateScreen() {
+        model.setColumnIdentifiers(columnName);
         initComponents();
+
+        // Registered here (not in initComponents) so NetBeans can't erase it
+        ratesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ratesTableMouseReleased(evt);
+            }
+        });
+    }
+
+    private void loadTable() {
+        model.setRowCount(0);
+        if (loggedInAdmin == null) {
+            return;
+        }
+
+        try {
+            List<ConsultationRate> rates = loggedInAdmin.viewAllConsultationRates();
+            for (ConsultationRate r : rates) {
+                model.addRow(new String[]{
+                    r.getRateId(),
+                    r.getDepartmentId(),
+                    r.getDoctorLevel(),
+                    String.valueOf(r.getBaseAmount()),
+                    r.getEffectiveDate().toString()
+                });
+            }
+        } catch (DataFileNotFoundException e) {
+            // File doesn't exist yet — table just starts empty
+        }
     }
 
     /**
@@ -50,29 +100,31 @@ public class ConsultationRateScreen extends javax.swing.JFrame {
 
         doctorLevelLb.setText("Doctor Level:");
 
-        ratesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Rate ID", "Department ID", "Doctor Level", "Base Amount", "Effective Date"
+        ratesTable.setModel(model);
+        ratesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ratesTableMouseReleased(evt);
             }
-        ));
+        });
         jScrollPane1.setViewportView(ratesTable);
 
         baseAmountLb.setText("Base Amount:");
 
         addBtn.setText("Add");
+        addBtn.addActionListener(this::addBtnActionPerformed);
 
         effectiveDateLb.setText("Effective Date (yyyy-MM-dd)");
 
         editBtn.setText("Edit");
+        editBtn.addActionListener(this::editBtnActionPerformed);
 
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(this::deleteBtnActionPerformed);
 
         rateIdLb.setText("Rate ID:");
 
         clearBtn.setText("Clear");
+        clearBtn.addActionListener(this::clearBtnActionPerformed);
 
         departmentIdLb.setText("Department ID:");
 
@@ -159,9 +211,148 @@ public class ConsultationRateScreen extends javax.swing.JFrame {
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        AdminDashboard adminDashboard = new AdminDashboard((model.Admin) loggedInAdmin);
+        AdminDashboard adminDashboard = new AdminDashboard(loggedInAdmin);
         adminDashboard.setVisible(true);
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        // TODO add your handling code here:
+        String departmentId = departmentIdTf.getText().trim();
+        String doctorLevel = (String) doctorLevelCb.getSelectedItem();
+        String amountText = baseAmountTf.getText().trim();
+        String dateText = effectiveDateTf.getText().trim();
+
+        if (departmentId.isEmpty() || amountText.isEmpty() || dateText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Department ID, Base Amount and Effective Date are required.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double amount;
+        try {
+            amount = Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Base Amount must be a valid number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            LocalDate date = ConsultationRate.parseDate(dateText);
+            // ID is auto-generated, never typed by the user
+            String rateId = UserValidationHelper.generateNextId(DataPaths.forEntity("ConsultationRate"), "R");
+            ConsultationRate rate = new ConsultationRate(rateId, departmentId, doctorLevel, amount, date);
+
+            loggedInAdmin.addConsultationRate(rate);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Rate for " + departmentId + " / " + doctorLevel + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        // TODO add your handling code here:
+        int row = ratesTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to edit first.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String rateId = rateIdTf.getText().trim();
+        String departmentId = departmentIdTf.getText().trim();
+        String doctorLevel = (String) doctorLevelCb.getSelectedItem();
+        String amountText = baseAmountTf.getText().trim();
+        String dateText = effectiveDateTf.getText().trim();
+
+        if (departmentId.isEmpty() || amountText.isEmpty() || dateText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Department ID, Base Amount and Effective Date are required.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double amount;
+        try {
+            amount = Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Base Amount must be a valid number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            LocalDate date = ConsultationRate.parseDate(dateText);
+            ConsultationRate rate = new ConsultationRate(rateId, departmentId, doctorLevel, amount, date);
+
+            loggedInAdmin.updateConsultationRate(rate);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Rate for " + departmentId + " / " + doctorLevel + " updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        // TODO add your handling code here:
+        int row = ratesTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Must click a row", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String rateId = String.valueOf(model.getValueAt(row, 0));
+        String label = model.getValueAt(row, 1) + " / " + model.getValueAt(row, 2);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete the rate for " + label + "?",
+                "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            loggedInAdmin.deleteConsultationRate(rateId);
+
+            loadTable();
+            JOptionPane.showMessageDialog(this, "Rate for " + label + " deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+
+        } catch (HMSException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+        clearFields();
+    }//GEN-LAST:event_clearBtnActionPerformed
+
+    private void ratesTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ratesTableMouseReleased
+        // TODO add your handling code here:
+        int row = ratesTable.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        rateIdTf.setText(String.valueOf(model.getValueAt(row, 0)));
+        departmentIdTf.setText(String.valueOf(model.getValueAt(row, 1)));
+        doctorLevelCb.setSelectedItem(String.valueOf(model.getValueAt(row, 2)));
+        baseAmountTf.setText(String.valueOf(model.getValueAt(row, 3)));
+        effectiveDateTf.setText(String.valueOf(model.getValueAt(row, 4)));
+    }//GEN-LAST:event_ratesTableMouseReleased
+    private void clearFields() {
+        rateIdTf.setText("");
+        departmentIdTf.setText("");
+        doctorLevelCb.setSelectedIndex(0);
+        baseAmountTf.setText("");
+        effectiveDateTf.setText("");
+        ratesTable.clearSelection();
+    }
 
     /**
      * @param args the command line arguments
