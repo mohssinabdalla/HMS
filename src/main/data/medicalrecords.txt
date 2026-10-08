@@ -19,3 +19,5 @@ MR6,P002,D001,ligament injury
 MR7,P002,D001,ligament injury
 >>>>>>> main
 MR21,P001,D001,fever
+MR22,P001,D001,fever
+MR23,P001,D001,fever
