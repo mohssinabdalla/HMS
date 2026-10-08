@@ -1,2 +1,7 @@
+<<<<<<< Updated upstream
 D001,drchen,doctor123,Dr Chen,chen@apu.edu,0123456780
 D002,drlim,doctor456,Dr Lim,lim@apu.edu,0123456781,Doctor
+=======
+D001,drchen,doctor123,Dr Chen,chen@apu,0123456780,Doctor
+D002,drlim,doctor456,Dr Chen,chen@apu.edu,0123456780,Doctor
+>>>>>>> Stashed changes
