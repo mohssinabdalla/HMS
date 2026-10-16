@@ -1,5 +1,5 @@
 H001,ConsultationRoom,Block A - Room 101,Available,1
-H002,ConsultationRoom,Block A - Room 102,Occupied,1
+H002,Lab,Block A - Room 102,Available,1
 H003,ConsultationRoom,Block A - Room 103,Maintenance,1
 H004,ConsultationRoom,Block B - Room 201,Available,1
 H005,Ward,Level 3 - General Ward,Available,20
