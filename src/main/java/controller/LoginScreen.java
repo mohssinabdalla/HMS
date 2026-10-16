@@ -181,7 +181,7 @@ public class LoginScreen extends javax.swing.JFrame {
 
 
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\doctors.txt", "Doctor");
+        loadRoleSafely(allUsers, "C:\\Users\\mommi\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
         loadRoleSafely(allUsers, "src/main/data/UsersData/patients.txt", "Patient");
         loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
 

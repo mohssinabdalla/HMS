@@ -54,7 +54,7 @@ public class PatientMedicalHistory extends javax.swing.JFrame {
 
             List<String> lines =
                 FileHelper.readAllLines(
-                    "src/main/data/medicalrecords.txt"
+                    service.DataPaths.forEntity("MedicalRecord")
                 );
 
             for (String line : lines) {

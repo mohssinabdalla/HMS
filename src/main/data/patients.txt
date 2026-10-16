@@ -1,6 +1,0 @@
-P001,patient1,patient123,Ali Hassan,ali@apu.edu,0123456782
-P002,patient2,patient456,Mei Ling,mei@apu.edu,0123456783
-P001,patient1,patient123,Ali Hassan,ali@apu.edu,0123456782
-P002,patient2,patient456,Mei Ling,mei@apu.edu,0123456783
-P001,patient1,patient123,Ali Hassan,ali@apu.edu,0123456782
-P002,patient2,patient456,Mei Ling,mei@apu.edu,0123456783

@@ -4,6 +4,8 @@
 
 package com.mycompany.hms;
 
+import controller.LoginScreen;
+
 /**
  *
  * @author hp
@@ -11,6 +13,6 @@ package com.mycompany.hms;
 public class HMS {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        java.awt.EventQueue.invokeLater(() -> new LoginScreen().setVisible(true));
     }
 }

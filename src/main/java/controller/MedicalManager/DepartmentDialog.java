@@ -136,7 +136,7 @@ public class DepartmentDialog extends javax.swing.JDialog {
             return;
         }
 
-        java.io.File file = new java.io.File("src/main/data/departments.txt");
+        java.io.File file = new java.io.File(service.DataPaths.forEntity("Department"));
         java.util.List<String> lines = new java.util.ArrayList<>();
         boolean idExists = false;
 
