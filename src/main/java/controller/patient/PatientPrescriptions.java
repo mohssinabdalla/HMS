@@ -49,7 +49,7 @@ public class PatientPrescriptions extends javax.swing.JFrame {
 
             List<String> lines =
                 FileHelper.readAllLines(
-                    "src/main/data/prescriptions.txt"
+                    service.DataPaths.forEntity("Prescription")
                 );
 
             for (String line : lines) {

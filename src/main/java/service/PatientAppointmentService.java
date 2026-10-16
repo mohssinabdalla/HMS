@@ -14,7 +14,7 @@ import exceptions.AppointmentNotFoundException;
  */
 public class PatientAppointmentService {
 
-    private static final String APPOINTMENT_FILE = "src/main/data/appointments.txt";
+    private static final String APPOINTMENT_FILE = DataPaths.forEntity("Appointment");
 
     private List<Appointment> appointments;
 

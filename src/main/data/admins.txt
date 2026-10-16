@@ -1,4 +1,0 @@
-A001,Admin,admin123,Mohssin Abdalla,mohssinabdalla@apu.edu,0123456789,IT
-A002,mohssin,mohssin123,Mohssin Abdalla Mohamed,mohssinabdalla@apu.edu,0123456789,IT
-A003,lim,lim456,Lim Chuk,limchuck@apu.edu,0123456790,Operations
-A004,rishan,r123,Rishan Ahmed,rishan@gmail.com,12344567,IT

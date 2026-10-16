@@ -212,7 +212,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
             }
 
             // 5) To file (src/main/data/rosters.txt)
-            java.io.File file = new java.io.File("src/main/data/rosters.txt");
+            java.io.File file = new java.io.File(service.DataPaths.forEntity("Roster"));
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
             }
@@ -297,7 +297,7 @@ public class ShiftRosterDialog extends javax.swing.JDialog {
     private void populateDepartmentComboBox() {
         cmbDepartment.removeAllItems(); 
 
-        java.io.File file = new java.io.File("src/main/data/departments.txt");
+        java.io.File file = new java.io.File(service.DataPaths.forEntity("Department"));
         if (!file.exists()) {
             cmbDepartment.addItem("Emergency");
             cmbDepartment.addItem("Cardiology");

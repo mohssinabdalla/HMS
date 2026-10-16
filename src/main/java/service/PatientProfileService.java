@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PatientProfileService {
 
-    private static final String USERS_FILE = "src/main/data/UsersData/patients.txt";
+    private static final String USERS_FILE = DataPaths.forRole("Patient");
 
     public String[] loadPatient(String patientId) {
         File file = new File(USERS_FILE);

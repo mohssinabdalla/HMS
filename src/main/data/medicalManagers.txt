@@ -1,2 +1,0 @@
-M001,mohssin,m,Mr Mohssin,mohssin@apu.edu,0123456784,M001
-M002,mohssin,m,Mr Mohssin,mohssin@apu.edu,0123456784,M001
