@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PatientDoctorService {
 
-private static final String DOCTORS_FILE = "src/main/data/UsersData/doctors.txt";
+private static final String DOCTORS_FILE = DataPaths.forRole("Doctor");
 
     /** Returns every doctor as a raw String[] of columns: userId,username,password,fullName,email,phoneNumber */
     public List<String[]> listAllDoctors() {

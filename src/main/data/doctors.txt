@@ -1,2 +1,0 @@
-D001,mohssin,doctor123,Dr Mohssin,chen@apu.edu,0123456780,D001,
-D002,jo,doctor123,Dr Jhon,jhon@apu.edu,0123456780

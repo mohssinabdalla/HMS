@@ -14,7 +14,7 @@ import exceptions.InvalidRatingException;
  */
 public class PatientFeedbackService {
 
-    private static final String FEEDBACK_FILE = "src/main/data/feedback.txt";
+    private static final String FEEDBACK_FILE = DataPaths.forEntity("Feedback");
     
     public PatientFeedbackService() {
     }

@@ -180,10 +180,10 @@ public class LoginScreen extends javax.swing.JFrame {
         Map<String, Map<String, User>> allUsers = new HashMap<>();
 
 
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\admins.txt", "Admin");
-        loadRoleSafely(allUsers, "C:\\Users\\mommi\\OneDrive\\Documents\\GitHub\\HMS\\src\\main\\data\\UsersData\\doctors.txt", "Doctor");
-        loadRoleSafely(allUsers, "src/main/data/UsersData/patients.txt", "Patient");
-        loadRoleSafely(allUsers, "D:\\Univesity\\Semester 3\\OODJ\\Assignment\\HMS\\src\\main\\data\\UsersData\\medicalManagers.txt", "MedicalManager");
+        loadRoleSafely(allUsers, service.DataPaths.forRole("Admin"), "Admin");
+        loadRoleSafely(allUsers, service.DataPaths.forRole("Doctor"), "Doctor");
+        loadRoleSafely(allUsers, service.DataPaths.forRole("Patient"), "Patient");
+        loadRoleSafely(allUsers, service.DataPaths.forRole("MedicalManager"), "MedicalManager");
 
         return new AuthService(allUsers);
     }

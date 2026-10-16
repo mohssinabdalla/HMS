@@ -13,8 +13,8 @@ import java.util.List;
 
 public class MedicalDataService {
 
-    private static final String DEPT_FILE = "src/main/data/departments.txt";
-    private static final String ROSTER_FILE = "src/main/data/rosters.txt";
+    private static final String DEPT_FILE = DataPaths.forEntity("Department");
+    private static final String ROSTER_FILE = DataPaths.forEntity("Roster");
 
     public static void saveDepartment(Department newDept) {
         File deptFile = new File(DEPT_FILE);

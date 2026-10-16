@@ -62,7 +62,7 @@ public class Doctor extends User {
         try {
 
             List<String> lines =
-                    FileHelper.readAllLines("src/main/data/UsersData/doctors.txt");
+                    FileHelper.readAllLines(service.DataPaths.forRole("Doctor"));
 
             List<String> updated = new ArrayList<>();
             boolean found = false;
@@ -83,7 +83,7 @@ public class Doctor extends User {
             }
 
             return FileHelper.writeAllLines(
-                    "src/main/data/UsersData/doctors.txt",
+                    service.DataPaths.forRole("Doctor"),
                     
                     updated
             );
@@ -107,7 +107,7 @@ public class Doctor extends User {
 
         try {
 
-            List<String> lines = FileHelper.readAllLines("src/main/data/rosters.txt");
+            List<String> lines = FileHelper.readAllLines(service.DataPaths.forEntity("Roster"));
                     
 
             StringBuilder result = new StringBuilder();
@@ -194,7 +194,7 @@ public class Doctor extends User {
         }
 
         VitalSign vital = new VitalSign(
-                nextId("data/vitals.txt", "v"),
+                nextId(service.DataPaths.forEntity("VitalSign"), "v"),
                 patientId,
                 doctorId,
                 bloodPressure,
@@ -203,7 +203,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/vitals.txt",
+                service.DataPaths.forEntity("VitalSign"),
                 vital.toFileLine()
         );
     }
@@ -266,14 +266,14 @@ public class Doctor extends User {
 
         MedicalRecord record = new MedicalRecord(
                 
-                nextId("data/medicalrecords.txt","MR"),
+                nextId(service.DataPaths.forEntity("MedicalRecord"),"MR"),
                 patientId,
                 doctorId,
                 diagnosis
         );
 
         return FileHelper.appendLine(
-                "data/medicalrecords.txt",
+                service.DataPaths.forEntity("MedicalRecord"),
                 record.toFileLine()
         );
     }
@@ -296,14 +296,14 @@ public class Doctor extends User {
         }
 
         Prescription prescription = new Prescription(
-                nextId("data/prescriptions.txt", "RX"),
+                nextId(service.DataPaths.forEntity("Prescription"), "RX"),
                 patientId,
                 doctorId,
                 medicationList
         );
 
         return FileHelper.appendLine(
-                "data/prescriptions.txt",
+                service.DataPaths.forEntity("Prescription"),
                 prescription.toFileLine()
         );
     }
@@ -324,7 +324,7 @@ public class Doctor extends User {
         }
 
         LabRequest request = new LabRequest(
-                nextId("data/labrequests.txt", "LR"),
+                nextId(service.DataPaths.forEntity("LabRequest"), "LR"),
                 patientId,
                 doctorId,
                 testType,
@@ -332,7 +332,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/labrequests.txt",
+                service.DataPaths.forEntity("LabRequest"),
                 request.toFileLine()
         );
     }
@@ -349,7 +349,7 @@ public class Doctor extends User {
         }
 
         String consultationId = nextId(
-                "data/consultations.txt", "C");
+                service.DataPaths.forEntity("Consultation"), "C");
 
         String line = String.join(
                 ",",
@@ -360,7 +360,7 @@ public class Doctor extends User {
         );
 
         return FileHelper.appendLine(
-                "data/consultations.txt",
+                service.DataPaths.forEntity("Consultation"),
                 line
         );
     }
@@ -376,7 +376,7 @@ public class Doctor extends User {
 
             List<String> lines =
                     FileHelper.readAllLines(
-                            "data/medicalrecords.txt");
+                            service.DataPaths.forEntity("MedicalRecord"));
 
             StringBuilder result = new StringBuilder();
 
@@ -415,7 +415,7 @@ public class Doctor extends User {
 
             List<String> lines =
                     FileHelper.readAllLines(
-                            "data/labrequests.txt");
+                            service.DataPaths.forEntity("LabRequest"));
 
             List<String> updated = new ArrayList<>();
 
@@ -445,7 +445,7 @@ public class Doctor extends User {
                         "Lab request not found: " + requestId);
             }
 
-            return FileHelper.writeAllLines("data/labrequests.txt", updated);
+            return FileHelper.writeAllLines(service.DataPaths.forEntity("LabRequest"), updated);
 
         } catch (DataFileNotFoundException e) {
 
